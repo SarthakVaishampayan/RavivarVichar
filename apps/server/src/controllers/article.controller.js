@@ -3,6 +3,7 @@ const { sendSuccess, sendError } = require('../utils/apiResponse');
 const catchAsync = require('../utils/catchAsync');
 const paginate = require('../utils/paginate');
 const generateSlug = require('../utils/generateSlug');
+const { isAuthenticated } = require('../utils/optionalAuth');
 const ActivityLog = require('../models/ActivityLog');
 
 const logActivity = async (action, resource, resourceId, user, details) => {
@@ -16,8 +17,8 @@ const getAll = catchAsync(async (req, res) => {
   if (status) filter.status = status;
   if (category) filter.category = category;
   if (featured) filter.featured = featured === 'true';
-  // Public: only published. Admin: all statuses
-  if (!req.user) filter.status = 'published';
+  // Public: only published. Authenticated admin: all statuses
+  if (!isAuthenticated(req)) filter.status = 'published';
 
   const result = await paginate(Article, filter, {
     page: req.query.page,

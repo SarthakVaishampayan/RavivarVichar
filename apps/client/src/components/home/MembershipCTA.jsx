@@ -30,10 +30,10 @@ export default function MembershipCTA() {
               Join our community of change-makers. Members gain access to research publications, program updates, and opportunities to collaborate on ground-level projects.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="primary" to="/collaborate" arrow>
+              <Button variant="primary" to="/membership" arrow>
                 Join as Member
               </Button>
-              <Button variant="secondary" to="/volunteer" arrow={false}>
+              <Button variant="secondary" to="/contact" arrow={false}>
                 Volunteer With Us
               </Button>
             </div>

@@ -16,7 +16,7 @@ export default function Hero() {
       </div>
       <FloatingDots count={6} />
 
-      <div className="container-site w-full py-32 lg:py-40">
+      <div className="container-site w-full pt-[90px] pb-16 lg:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-center">
           {/* Left Content - 45% */}
           <div className="lg:pr-8">

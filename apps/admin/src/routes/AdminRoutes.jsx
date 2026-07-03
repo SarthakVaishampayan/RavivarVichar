@@ -7,11 +7,12 @@ import {
   ArticleList, ProgramList, ProjectList, ReportList,
   EventList, PartnerList, EntrepreneurList, SHGList,
   MentorList, MediaList, TestimonialList,
+  NewsletterList, ContactList, MembershipList, DonationList,
 } from '../pages/manage-content/ContentListPages';
 import {
   ArticleEditor, ProgramEditor, ProjectEditor, ReportEditor,
   EventEditor, PartnerEditor, MediaEditor, TestimonialEditor,
-  DirectoryEditor,
+  DonationEditor, MembershipEditor, DirectoryEditor,
 } from '../pages/manage-content/Editors';
 import Analytics from '../pages/Analytics';
 import SEO from '../pages/SEO';
@@ -76,6 +77,15 @@ export default function AdminRoutes() {
         <Route path="content/testimonials" element={<TestimonialList />} />
         <Route path="content/testimonials/:id/edit" element={<TestimonialEditor />} />
         <Route path="content/testimonials/new" element={<TestimonialEditor />} />
+
+        <Route path="content/newsletters" element={<NewsletterList />} />
+        <Route path="content/contacts" element={<ContactList />} />
+        <Route path="content/memberships" element={<MembershipList />} />
+        <Route path="content/memberships/:id/edit" element={<MembershipEditor />} />
+        <Route path="content/memberships/new" element={<MembershipEditor />} />
+        <Route path="content/donations" element={<DonationList />} />
+        <Route path="content/donations/:id/edit" element={<DonationEditor />} />
+        <Route path="content/donations/new" element={<DonationEditor />} />
 
         {/* Additional Pages */}
         <Route path="analytics" element={<Analytics />} />

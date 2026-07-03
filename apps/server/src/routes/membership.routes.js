@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getAll, getOne, getBySlug, create, update, deleteOne } = require('../controllers/program.controller');
+const { apply, getAll, update, deleteOne } = require('../controllers/membership.controller');
 const { protect } = require('../middlewares/auth.middleware');
 
-router.get('/', getAll);
-router.get('/slug/:slug', getBySlug);
-router.get('/:id', getOne);
-router.post('/', protect, create);
+router.post('/', apply);
+router.get('/', protect, getAll);
 router.put('/:id', protect, update);
 router.delete('/:id', protect, deleteOne);
 

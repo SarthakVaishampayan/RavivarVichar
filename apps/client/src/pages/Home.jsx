@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -15,8 +16,55 @@ import EventsPreview from '../components/home/EventsPreview';
 import MembershipCTA from '../components/home/MembershipCTA';
 import DonateCTA from '../components/home/DonateCTA';
 import Newsletter from '../components/home/Newsletter';
+import api from '../lib/axios';
+
+// Map section keys to their components
+const SECTION_COMPONENTS = {
+  hero: Hero,
+  mission: Mission,
+  programs: ProgramsGrid,
+  research: FeaturedResearch,
+  articles: LatestArticles,
+  stats: ImpactStats,
+  projects: CurrentProjects,
+  partners: Partners,
+  videos: VideosSection,
+  testimonials: Testimonials,
+  events: EventsPreview,
+  membership: MembershipCTA,
+  donate: DonateCTA,
+  newsletter: Newsletter,
+};
+
+// Default order when no server data exists yet
+const DEFAULT_SECTIONS = [
+  'hero', 'mission', 'programs', 'research', 'articles',
+  'stats', 'projects', 'partners', 'videos', 'testimonials',
+  'events', 'membership', 'donate', 'newsletter',
+];
 
 export default function Home() {
+  const [sectionKeys, setSectionKeys] = useState(DEFAULT_SECTIONS);
+
+  useEffect(() => {
+    const fetchSections = async () => {
+      try {
+        const { data } = await api.get('/homepage');
+        if (data.success && data.data && data.data.length > 0) {
+          const ordered = data.data
+            .filter((s) => s.visible !== false)
+            .sort((a, b) => a.order - b.order)
+            .map((s) => s.key);
+          setSectionKeys(ordered);
+          return;
+        }
+      } catch {
+        // Server not available — use defaults
+      }
+    };
+    fetchSections();
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -41,21 +89,11 @@ export default function Home() {
 
       <Navbar />
 
-      <main className="pt-[90px]">
-        <Hero />
-        <Mission />
-        <ProgramsGrid />
-        <FeaturedResearch />
-        <LatestArticles />
-        <ImpactStats />
-        <CurrentProjects />
-        <Partners />
-        <VideosSection />
-        <Testimonials />
-        <EventsPreview />
-        <MembershipCTA />
-        <DonateCTA />
-        <Newsletter />
+      <main>
+        {sectionKeys.map((key) => {
+          const SectionComponent = SECTION_COMPONENTS[key];
+          return SectionComponent ? <SectionComponent key={key} /> : null;
+        })}
       </main>
 
       <Footer />

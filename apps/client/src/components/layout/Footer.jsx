@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, ArrowRight } from 'lucide-react';
-import Button from '../shared/Button';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, ArrowRight, Check, Loader2 } from 'lucide-react';
+import api from '../../lib/axios';
 
 const footerLinks = {
   'Quick Links': [
@@ -33,13 +33,24 @@ const socialLinks = [
 
 export default function Footer() {
   const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleNewsletter = (e) => {
+  const handleNewsletter = async (e) => {
     e.preventDefault();
-    if (email) {
-      // Would call API in production
-      alert('Thank you for subscribing!');
+    if (!email) return;
+    setLoading(true);
+    setError('');
+    try {
+      await api.post('/newsletter/subscribe', { email });
+      setSubscribed(true);
       setEmail('');
+      setTimeout(() => setSubscribed(false), 3000);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Subscription failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,9 +130,11 @@ export default function Footer() {
                 className="input-field flex-1"
                 required
               />
-              <button type="submit" className="btn-primary shrink-0">
-                Subscribe <ArrowRight size={18} />
+              <button type="submit" disabled={loading || subscribed} className="btn-primary shrink-0">
+                {loading ? <Loader2 size={18} className="animate-spin" /> : subscribed ? <Check size={18} /> : <><span>Subscribe</span> <ArrowRight size={18} /></>}
               </button>
+            {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
+            {subscribed && <p className="text-xs text-green-600 mt-2">Thank you for subscribing!</p>}
             </form>
           </div>
         </div>

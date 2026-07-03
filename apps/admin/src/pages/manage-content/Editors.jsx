@@ -2,6 +2,7 @@ import { useState } from 'react';
 import EditorForm from './EditorForm';
 import RichTextEditor from '../../components/ui/RichTextEditor';
 import ImageUpload from '../../components/ui/ImageUpload';
+import MultiImageUpload from '../../components/ui/MultiImageUpload';
 import StatusBadge from '../../components/ui/StatusBadge';
 import {
   ARTICLE_CATEGORIES, PARTNER_CATEGORIES, MEDIA_TYPES,
@@ -159,6 +160,8 @@ export function ArticleEditor() {
               <Select label="Status" name="status" value={formData.status} onChange={handleChange} options={['draft', 'published']} />
               <Toggle label="Featured" name="featured" value={formData.featured} onChange={handleChange} />
               <ImageUpload label="Thumbnail" value={formData.thumbnail} onChange={(url) => handleChange('thumbnail', url)} />
+              <MultiImageUpload label="Gallery" value={formData.gallery} onChange={(urls) => handleChange('gallery', urls)} />
+              <Input label="Video URL" name="videoUrl" value={formData.videoUrl} onChange={handleChange} placeholder="https://youtube.com/watch?v=..." />
               <TagsInput label="Tags" name="tags" value={formData.tags} onChange={handleChange} />
             </div>
           </div>
@@ -394,6 +397,55 @@ export function MediaEditor() {
           <div className="space-y-4">
             <Select label="Type" name="type" value={formData.type} onChange={handleChange} options={MEDIA_TYPES} />
             <ImageUpload label="Thumbnail" value={formData.thumbnail} onChange={(url) => handleChange('thumbnail', url)} />
+          </div>
+        </div>
+      )}
+    />
+  );
+}
+
+// ─── DONATION EDITOR ───
+export function DonationEditor() {
+  return (
+    <EditorForm
+      resourceKey="donations"
+      resourceLabel="Donations"
+      apiPath="/donations"
+      fields={({ formData, handleChange }) => (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <Input label="Donor Name" name="donorName" value={formData.donorName} onChange={handleChange} placeholder="Donor name" required />
+            <Input label="Email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
+            <Input label="Amount (₹)" name="amount" value={formData.amount} onChange={handleChange} type="number" placeholder="Amount" />
+          </div>
+          <div className="space-y-4">
+            <Input label="Currency" name="currency" value={formData.currency} onChange={handleChange} placeholder="INR" />
+            <Input label="Purpose" name="purpose" value={formData.purpose} onChange={handleChange} placeholder="Purpose" />
+            <Select label="Status" name="paymentStatus" value={formData.paymentStatus} onChange={handleChange} options={['pending', 'completed', 'failed']} />
+          </div>
+        </div>
+      )}
+    />
+  );
+}
+
+// ─── MEMBERSHIP EDITOR ───
+export function MembershipEditor() {
+  return (
+    <EditorForm
+      resourceKey="memberships"
+      resourceLabel="Memberships"
+      apiPath="/membership"
+      fields={({ formData, handleChange }) => (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <Input label="Name" name="name" value={formData.name} onChange={handleChange} placeholder="Full name" required />
+            <Input label="Email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
+            <Input label="Phone" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" />
+          </div>
+          <div className="space-y-4">
+            <Input label="Membership Type" name="membershipType" value={formData.membershipType} onChange={handleChange} placeholder="Type" />
+            <Select label="Status" name="status" value={formData.status} onChange={handleChange} options={['active', 'inactive']} />
           </div>
         </div>
       )}

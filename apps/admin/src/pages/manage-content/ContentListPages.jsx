@@ -116,3 +116,43 @@ export function TestimonialList() {
     />
   );
 }
+
+export function NewsletterList() {
+  return (
+    <ContentList
+      resourceKey="newsletters"
+      resourceConfig={RESOURCES.newsletters}
+      fetchFn={fetchAll('/newsletter')}
+    />
+  );
+}
+
+export function ContactList() {
+  return (
+    <ContentList
+      resourceKey="contacts"
+      resourceConfig={RESOURCES.contacts}
+      fetchFn={fetchAll('/contact')}
+    />
+  );
+}
+
+export function MembershipList() {
+  return (
+    <ContentList
+      resourceKey="memberships"
+      resourceConfig={RESOURCES.memberships}
+      fetchFn={fetchAll('/membership')}
+    />
+  );
+}
+
+export function DonationList() {
+  return (
+    <ContentList
+      resourceKey="donations"
+      resourceConfig={RESOURCES.donations}
+      fetchFn={fetchAll('/donations')}
+    />
+  );
+}

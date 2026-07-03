@@ -5,6 +5,7 @@ import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
 import { Mail, Phone, MapPin, Clock, Send, Check, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import api from '../lib/axios';
 
 const contactInfo = [
   { icon: MapPin, label: 'Address', value: '123 Village Development Center, Bhilwara, Rajasthan 311001, India' },
@@ -25,13 +26,17 @@ export default function Contact() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await api.post('/contact', form);
       setSubmitted(true);
-    }, 1000);
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

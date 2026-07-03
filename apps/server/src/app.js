@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
@@ -20,6 +21,9 @@ app.use(
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Serve uploaded files (dev mode - disk storage)
+app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
 
 // Logging
 if (env.NODE_ENV === 'development') {

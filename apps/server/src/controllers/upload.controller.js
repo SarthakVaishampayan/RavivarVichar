@@ -2,17 +2,22 @@ const { cloudinary } = require('../config/cloudinary');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
 const catchAsync = require('../utils/catchAsync');
 
+// Helper: build response for a single file (works for both disk and memory storage)
+const fileResponse = (file) => ({
+  url: file.path
+    ? `/uploads/${file.filename}`  // disk storage
+    : `/uploads/${file.originalname}`, // fallback
+  filename: file.originalname || file.filename,
+  size: file.size,
+});
+
 // Upload single image
 const uploadSingle = catchAsync(async (req, res) => {
   if (!req.file) return sendError(res, 'No file uploaded', 400);
 
   if (!process.env.CLOUDINARY_CLOUD_NAME) {
-    // Dev mode: return a fake URL
-    return sendSuccess(res, {
-      url: `/uploads/${req.file.originalname}`,
-      filename: req.file.originalname,
-      size: req.file.size,
-    }, 'File uploaded (dev mode)', 200);
+    // Dev mode: file is saved to disk by multer's diskStorage
+    return sendSuccess(res, fileResponse(req.file), 'File uploaded', 200);
   }
 
   try {
@@ -45,13 +50,9 @@ const uploadMultiple = catchAsync(async (req, res) => {
   }
 
   if (!process.env.CLOUDINARY_CLOUD_NAME) {
-    // Dev mode: return fake URLs
-    const files = req.files.map((f) => ({
-      url: `/uploads/${f.originalname}`,
-      filename: f.originalname,
-      size: f.size,
-    }));
-    return sendSuccess(res, files, 'Files uploaded (dev mode)', 200);
+    // Dev mode: files are saved to disk by multer's diskStorage
+    const files = req.files.map(fileResponse);
+    return sendSuccess(res, files, 'Files uploaded', 200);
   }
 
   const uploadPromises = req.files.map((file) => {

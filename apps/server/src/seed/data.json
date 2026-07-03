@@ -9,21 +9,54 @@
   ],
   "programs": [
     {
-      "title": "Women Entrepreneurs Program",
-      "description": "Supporting rural women to launch and scale micro-enterprises through mentorship, seed funding, and market access.",
+      "title": "Women Entrepreneurship",
+      "slug": "women-entrepreneurs",
+      "description": "Our Women Entrepreneurship program provides comprehensive support for rural women to start, manage, and scale their own businesses. We combine skill development, financial access, and mentorship to create a nurturing ecosystem for women entrepreneurs.",
+      "tagline": "Empowering rural women to become business leaders",
       "objectives": ["Skill development", "Access to microfinance", "Market linkages"],
+      "impact": ["2,500+ women trained in business skills", "800+ businesses launched", "150 villages covered", "₹5Cr+ in microfinance disbursed", "85% business survival rate after 2 years"],
+      "approach": [
+        { "title": "Skill Development", "description": "Training in business planning, financial management, marketing, and digital literacy." },
+        { "title": "Microfinance Access", "description": "Facilitating connections with microfinance institutions and self-help group savings." },
+        { "title": "Mentorship Network", "description": "Ongoing guidance from experienced entrepreneurs and business professionals." },
+        { "title": "Market Linkages", "description": "Connecting women entrepreneurs to local and regional markets for their products." }
+      ],
+      "stats": { "trained": "2,500+", "active": "800+", "villages": "150", "growth": "40%" },
+      "color": "primary",
       "status": "active"
     },
     {
-      "title": "SHG Development Initiative",
-      "description": "Strengthening Self-Help Groups through capacity building and financial literacy.",
+      "title": "SHG Development",
+      "slug": "shg-development",
+      "description": "Our Self-Help Group development program focuses on forming and strengthening women's collectives that serve as platforms for savings, enterprise, and community leadership.",
+      "tagline": "Building self-reliant women's collectives",
       "objectives": ["Group formation", "Bookkeeping training", "Bank linkage"],
+      "impact": ["200+ active SHGs", "5,000+ women members", "₹2Cr+ in collective savings", "80% financial literacy rate", "120+ SHGs linked to bank credit"],
+      "approach": [
+        { "title": "Group Formation", "description": "Facilitating the formation of new SHGs with 10-15 members each." },
+        { "title": "Capacity Building", "description": "Training in bookkeeping, meeting management, conflict resolution, and leadership." },
+        { "title": "Financial Linkage", "description": "Connecting SHGs to banks, government schemes, and microfinance institutions." },
+        { "title": "Livelihood Promotion", "description": "Supporting SHG members in identifying and pursuing collective livelihood opportunities." }
+      ],
+      "stats": { "groups": "200+", "members": "5,000+", "savings": "₹2Cr+", "linked": "120+" },
+      "color": "secondary",
       "status": "active"
     },
     {
-      "title": "Financial Literacy Workshops",
-      "description": "Community workshops on savings, credit, and digital banking.",
+      "title": "Financial Literacy",
+      "slug": "financial-literacy",
+      "description": "Our Financial Literacy program equips rural communities with the knowledge and skills to make informed financial decisions. From basic budgeting to digital banking, we cover essential financial concepts.",
+      "tagline": "Building financial capability for better lives",
       "objectives": ["Digital payments awareness", "Savings habit building"],
+      "impact": ["10,000+ individuals trained", "300+ workshops conducted", "8 districts covered", "70% increase in savings behavior", "60% adoption of digital payments"],
+      "approach": [
+        { "title": "Workshops & Camps", "description": "Interactive financial literacy camps covering budgeting, savings, and debt management." },
+        { "title": "Digital Banking Training", "description": "Hands-on training in mobile banking, UPI, and digital payment systems." },
+        { "title": "Family Finance Planning", "description": "Workshops on household budgeting, children's education savings, and emergency funds." },
+        { "title": "Entrepreneur Finance", "description": "Specialized modules for small business owners on cash flow, pricing, and record keeping." }
+      ],
+      "stats": { "trained": "10,000+", "workshops": "300+", "districts": "8", "digital": "60%" },
+      "color": "blue",
       "status": "active"
     }
   ],
@@ -35,7 +68,8 @@
       "tags": ["entrepreneurship", "women", "rajasthan"],
       "status": "published",
       "featured": true,
-      "excerpt": "A look at three women-led enterprises that emerged from our SHG network."
+      "excerpt": "A look at three women-led enterprises that emerged from our SHG network, transforming local economies one small business at a time.",
+      "content": "<p class=\"text-lg leading-relaxed text-ink-secondary mb-6\">Self-Help Groups (SHGs) have emerged as one of the most effective vehicles for women's empowerment in rural India. This study examines the economic and social impact of SHGs on rural women in Rajasthan over a five-year period (2020-2025).</p><h2 class=\"text-2xl font-heading font-bold text-ink-primary mt-10 mb-4\">Key Findings</h2><p class=\"text-body text-ink-secondary mb-4\">Our research tracked 500 women across 40 SHGs in Bhilwara, Udaipur, and Chittorgarh districts. The findings reveal significant improvements across multiple dimensions of empowerment:</p><ul class=\"space-y-3 list-disc pl-6 text-body text-ink-secondary mb-6\"><li><strong>Income Growth:</strong> Average household income increased by 45% over the study period.</li><li><strong>Financial Inclusion:</strong> 92% of members now have bank accounts, compared to 34% before joining.</li><li><strong>Decision-Making:</strong> 78% of women reported greater participation in household financial decisions.</li></ul><blockquote class=\"border-l-4 border-primary-500 pl-6 my-8 italic text-lg text-ink-secondary bg-surface-section p-6 rounded-r-card\">\"Before joining the SHG, I never had a say in how our family money was spent. Now I not only manage our household finances but also run a small tailoring business.\"<footer class=\"mt-3 text-sm not-italic font-medium text-ink-primary\">— Lakshmi Devi, SHG Member, Bhilwara</footer></blockquote>"
     },
     {
       "title": "The State of Microfinance in India: 2026 Outlook",
@@ -43,14 +77,39 @@
       "category": "Research",
       "tags": ["microfinance", "policy"],
       "status": "published",
-      "featured": false
+      "featured": true,
+      "excerpt": "An analysis of current trends, challenges, and opportunities in India's microfinance sector with implications for rural development.",
+      "content": "<p class=\"text-lg leading-relaxed text-ink-secondary mb-6\">In this research study, Dr. Ananya Rao explores the critical dimensions of microfinance in India through the lens of ongoing work in Rajasthan. The data collected from rural communities reveal important patterns and actionable insights.</p><h2 class=\"text-2xl font-heading font-bold text-ink-primary mt-10 mb-4\">Key Findings</h2><p class=\"text-body text-ink-secondary mb-4\">Our analysis draws from field observations, community feedback, and systematic assessment of program outcomes.</p><ul class=\"space-y-3 list-disc pl-6 text-body text-ink-secondary mb-6\"><li><strong>Community Ownership:</strong> Programs with strong community participation show 3x better outcomes.</li><li><strong>Women's Leadership:</strong> Women-led initiatives demonstrate remarkable effectiveness in driving community development.</li></ul>"
     },
     {
       "title": "Explainer: What Is a Self-Help Group?",
       "slug": "explainer-what-is-shg",
       "category": "Explainer",
       "tags": ["basics", "shg"],
-      "status": "draft"
+      "status": "published",
+      "featured": false,
+      "excerpt": "A beginner-friendly guide to understanding SHGs — their structure, benefits, and role in rural financial inclusion.",
+      "content": "<p class=\"text-lg leading-relaxed text-ink-secondary mb-6\">A Self-Help Group (SHG) is a village-based financial intermediary committee usually composed of 10-25 local women. Members make small regular savings contributions over a few months until there is enough capital in the group to begin lending.</p><h2 class=\"text-2xl font-heading font-bold text-ink-primary mt-10 mb-4\">How SHGs Work</h2><p class=\"text-body text-ink-secondary mb-4\">Funds may then be lent back to the members or to others in the village for any purpose. In India, many SHGs are 'linked' to banks for the delivery of microcredit.</p>"
+    },
+    {
+      "title": "Digital Literacy Transforming Rural Entrepreneurship",
+      "slug": "digital-literacy-transforming-villages",
+      "category": "Impact Story",
+      "tags": ["digital", "literacy", "entrepreneurship"],
+      "status": "published",
+      "featured": true,
+      "excerpt": "Exploring the role of digital skills in enabling rural entrepreneurs to access markets, manage finances, and grow their businesses.",
+      "content": "<p class=\"text-lg leading-relaxed text-ink-secondary mb-6\">Digital literacy is transforming how rural entrepreneurs operate their businesses. From using UPI for payments to leveraging social media for marketing, women entrepreneurs are embracing technology. Our programs have trained over 10,000 women in digital skills, leading to a 60% adoption rate of digital payments among participants.</p>"
+    },
+    {
+      "title": "Policy Recommendations for Rural Financial Inclusion",
+      "slug": "policy-recommendations-rural-finance",
+      "category": "Policy Brief",
+      "tags": ["policy", "financial", "inclusion"],
+      "status": "published",
+      "featured": false,
+      "excerpt": "Evidence-based policy recommendations for improving access to financial services in underserved rural areas.",
+      "content": "<p class=\"text-lg leading-relaxed text-ink-secondary mb-6\">Based on our research across 12 districts in Rajasthan, we present key policy recommendations for strengthening rural financial inclusion.</p>"
     }
   ],
   "projects": [
@@ -124,25 +183,44 @@
     {
       "title": "Annual Women Entrepreneurs Summit 2026",
       "type": "upcoming",
+      "description": "Our flagship conference bringing together policymakers, practitioners, and community leaders to discuss rural development strategies.",
       "location": { "address": "Jaipur, Rajasthan" },
       "speakers": [{ "name": "Dr. Ananya Rao", "bio": "Development economist" }]
     },
     {
       "title": "SHG Bookkeeping Bootcamp",
       "type": "past",
+      "description": "A hands-on training workshop for SHG members on bookkeeping, financial management, and digital record-keeping.",
       "location": { "address": "Udaipur, Rajasthan" }
+    },
+    {
+      "title": "Financial Literacy Camp — Bhilwara",
+      "type": "upcoming",
+      "description": "A day-long camp covering digital banking, budgeting, savings, and financial planning for rural families.",
+      "location": { "address": "Bhilwara, Rajasthan" }
+    },
+    {
+      "title": "Women Entrepreneurs Meetup",
+      "type": "upcoming",
+      "description": "A networking and learning event for women entrepreneurs to share experiences, challenges, and best practices.",
+      "location": { "address": "Jodhpur, Rajasthan" }
     }
   ],
   "testimonials": [
     {
       "name": "Sunita Bai",
       "role": "SHG Member, Jodhpur",
-      "quote": "The training gave me the confidence to open my own shop."
+      "quote": "The training gave me the confidence to open my own shop. Today, I employ three women from my village and my children are going to school."
     },
     {
       "name": "Vikram Singh",
       "role": "Partner, NABARD",
-      "quote": "Their ground-level execution and reporting transparency stand out."
+      "quote": "Their ground-level execution and reporting transparency stand out among all our partner organizations."
+    },
+    {
+      "name": "Meena Kumari",
+      "role": "Entrepreneur, Udaipur",
+      "quote": "Before joining the financial literacy workshop, I had never used a bank account. Now I manage our SHG's savings book and teach other women how to use UPI."
     }
   ],
   "mediaItems": [

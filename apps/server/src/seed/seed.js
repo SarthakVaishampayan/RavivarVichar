@@ -13,6 +13,10 @@ const Mentor = require('../models/Mentor');
 const Event = require('../models/Event');
 const MediaItem = require('../models/MediaItem');
 const Testimonial = require('../models/Testimonial');
+const Newsletter = require('../models/Newsletter');
+const ContactMessage = require('../models/ContactMessage');
+const Membership = require('../models/Membership');
+const Donation = require('../models/Donation');
 const data = require('./data.json');
 
 const seed = async () => {
@@ -36,6 +40,10 @@ const seed = async () => {
       Event.deleteMany({}),
       MediaItem.deleteMany({}),
       Testimonial.deleteMany({}),
+      Newsletter.deleteMany({}),
+      ContactMessage.deleteMany({}),
+      Membership.deleteMany({}),
+      Donation.deleteMany({}),
     ]);
     console.log('🗑️  Cleared existing data');
 

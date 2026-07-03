@@ -15,6 +15,12 @@ router.use('/events', require('./event.routes'));
 router.use('/media', require('./media.routes'));
 router.use('/testimonials', require('./testimonial.routes'));
 
+// New Integrations
+router.use('/newsletter', require('./newsletter.routes'));
+router.use('/contact', require('./contact.routes'));
+router.use('/membership', require('./membership.routes'));
+router.use('/donations', require('./donation.routes'));
+
 // Upload & Analytics
 router.use('/upload', require('./upload.routes'));
 router.use('/analytics', require('./analytics.routes'));

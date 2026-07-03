@@ -3,7 +3,8 @@ import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
-import { Heart, Shield, TrendingUp, Users, BookOpen, Check } from 'lucide-react';
+import api from '../lib/axios';
+import { Heart, Shield, TrendingUp, Users, BookOpen, Check, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
 const tiers = [
@@ -23,6 +24,29 @@ const impactItems = [
 export default function Donate() {
   const [selected, setSelected] = useState(1);
   const [customAmount, setCustomAmount] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [donated, setDonated] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleDonate = async () => {
+    if (!name || !email) {
+      setError('Please enter your name and email to proceed.');
+      return;
+    }
+    const amount = customAmount || tiers[selected]?.amount.replace('₹', '').replace(',', '') || 500;
+    setLoading(true);
+    setError('');
+    try {
+      await api.post('/donations', { donorName: name, email, amount: Number(amount), purpose: tiers[selected]?.title || 'General donation' });
+      setDonated(true);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Donation failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -115,6 +139,12 @@ export default function Donate() {
 
               {/* Right: Why Donate */}
               <div className="card p-8 lg:p-10 bg-surface-section border-0">
+                {/* Donor Info */}
+                <div className="mb-6 space-y-4">
+                  <h3 className="text-card font-heading font-bold text-ink-primary">Your Information</h3>
+                  <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name *" className="input-field" required />
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Your email *" className="input-field" required />
+                </div>
                 <h3 className="text-card font-heading font-bold text-ink-primary mb-6">Why Donate to RavivarVichar?</h3>
                 <div className="space-y-4">
                   {[
@@ -131,12 +161,23 @@ export default function Donate() {
                   ))}
                 </div>
                 <div className="mt-8 pt-6 border-t border-gray-200">
-                  <Button variant="primary" className="w-full justify-center" arrow>
-                    Donate {customAmount ? `₹${customAmount}` : tiers[selected]?.amount || ''}
-                  </Button>
-                  <p className="text-xs text-ink-secondary text-center mt-3">
-                    Secure donation processing. You'll receive a receipt via email.
-                  </p>
+                  {donated ? (
+                    <div className="text-center py-4">
+                      <Check size={32} className="mx-auto text-green-500 mb-2" />
+                      <p className="text-green-600 font-medium">Thank you for your generosity! Your donation has been recorded.</p>
+                    </div>
+                  ) : (
+                    <>
+                      <Button variant="primary" className="w-full justify-center" arrow onClick={handleDonate} disabled={loading}>
+                        {loading ? <Loader2 size={18} className="animate-spin" /> : null}
+                        {loading ? 'Processing...' : `Donate ${customAmount ? `₹${customAmount}` : tiers[selected]?.amount || ''}`}
+                      </Button>
+                      {error && <p className="text-xs text-red-500 text-center mt-2">{error}</p>}
+                      <p className="text-xs text-ink-secondary text-center mt-3">
+                        Your donation will be recorded. Payment gateway integration coming soon.
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

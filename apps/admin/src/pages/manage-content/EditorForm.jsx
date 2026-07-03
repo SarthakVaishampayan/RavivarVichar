@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Send } from 'lucide-react';
 import api from '../../lib/axios';
@@ -15,27 +15,35 @@ export default function EditorForm({
 }) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const isNew = id === 'new';
+  const isNew = !id || id === 'new';
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
+
+  // Stable refs so transformLoad/transformSave don't trigger re-fetch on every render
+  const transformLoadRef = useRef(transformLoad);
+  transformLoadRef.current = transformLoad;
+  const navigateRef = useRef(navigate);
+  navigateRef.current = navigate;
 
   useEffect(() => {
     if (!isNew && id) {
       const fetchItem = async () => {
         try {
           const { data } = await api.get(`${apiPath}/${id}`);
-          setFormData(transformLoad(data.data || data));
+          setFormData(transformLoadRef.current(data.data || data));
         } catch (err) {
           toast.error('Failed to load item');
-          navigate(`/content/${resourceKey}`);
+          navigateRef.current(`/content/${resourceKey}`);
         } finally {
           setLoading(false);
         }
       };
       fetchItem();
     }
-  }, [id, isNew, apiPath, resourceKey, navigate, transformLoad]);
+    // Only re-fetch when the id actually changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const handleChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));

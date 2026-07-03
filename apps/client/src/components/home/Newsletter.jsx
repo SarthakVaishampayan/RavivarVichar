@@ -1,18 +1,29 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, ArrowRight, Check } from 'lucide-react';
+import { Mail, ArrowRight, Check, Loader2 } from 'lucide-react';
 import SectionHeading from '../shared/SectionHeading';
+import api from '../../lib/axios';
 
 export default function Newsletter() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email) {
+    if (!email) return;
+    setLoading(true);
+    setError('');
+    try {
+      await api.post('/newsletter/subscribe', { email });
       setSubscribed(true);
       setEmail('');
       setTimeout(() => setSubscribed(false), 3000);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Subscription failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,18 +57,21 @@ export default function Newsletter() {
               <button
                 type="submit"
                 className="btn-primary shrink-0"
-                disabled={subscribed}
+                disabled={subscribed || loading}
               >
-                {subscribed ? (
+                {loading ? (
+                  <Loader2 size={18} className="animate-spin" />
+                ) : subscribed ? (
                   <Check size={18} />
                 ) : (
                   <ArrowRight size={18} />
                 )}
               </button>
             </div>
-            <p className="text-xs text-text-secondary mt-3">
+            {error && <p className="text-xs text-red-500 mt-3">{error}</p>}
+            {!error && <p className="text-xs text-text-secondary mt-3">
               No spam. Unsubscribe anytime. We respect your privacy.
-            </p>
+            </p>}
           </form>
         </motion.div>
       </div>
