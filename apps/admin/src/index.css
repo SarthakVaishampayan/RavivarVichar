@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #F5A623;
+    --color-secondary: #6AA84F;
+    --color-accent-blue: #5DADE2;
+    --color-accent-red: #D96C6C;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-body antialiased text-ink-primary bg-surface-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  /* ─── Buttons ─── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill bg-primary-500 px-6 py-3 text-sm font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-hover focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-ink-primary shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-hover focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill bg-accent-red px-6 py-3 text-sm font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-hover focus:outline-none focus:ring-2 focus:ring-accent-red focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-ink-secondary transition-all duration-300 hover:bg-gray-100 hover:text-ink-primary focus:outline-none;
+  }
+
+  /* ─── Navbar ─── */
+  .nav-link {
+    @apply text-nav uppercase tracking-[1px] text-ink-secondary transition-colors duration-300 hover:text-primary-500;
+  }
+
+  /* ─── Inputs ─── */
+  .input-field {
+    @apply block w-full rounded-input border border-gray-200 bg-white px-5 py-3 text-body text-ink-primary placeholder-ink-secondary/50 shadow-sm transition-all duration-300 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-400/20 disabled:bg-gray-50 disabled:text-gray-400;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-ink-primary mb-1.5;
+  }
+
+  /* ─── Cards ─── */
+  .card {
+    @apply rounded-card bg-surface-white shadow-card border border-gray-100;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-300 hover:-translate-y-1 hover:shadow-hover;
+  }
+
+  .card-header {
+    @apply border-b border-gray-100 px-8 py-5;
+  }
+
+  .card-body {
+    @apply p-8;
+  }
+
+  /* ─── Images ─── */
+  .img-rounded {
+    @apply rounded-image;
+  }
+
+  .img-card {
+    @apply rounded-card;
+  }
+
+  /* ─── Container ─── */
+  .container-site {
+    @apply mx-auto w-full max-w-container px-6 md:px-8 lg:px-10;
+  }
+
+  .container-content {
+    @apply mx-auto w-full max-w-content px-6 md:px-8 lg:px-10;
+  }
+
+  /* ─── Section Spacing ─── */
+  .section-lg {
+    @apply py-20 md:py-30;
+  }
+
+  .section-md {
+    @apply py-16 md:py-20;
+  }
+
+  .section-sm {
+    @apply py-12 md:py-16;
+  }
+
+  /* ─── Page Layout (admin specific) ─── */
+  .page-container {
+    @apply p-6 lg:p-8;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold font-heading text-ink-primary;
+  }
+
+  .page-header {
+    @apply flex items-center justify-between mb-6;
+  }
+
+  /* ─── Section Titles ─── */
+  .section-label {
+    @apply text-nav text-primary-500 uppercase tracking-[2px] font-semibold;
+  }
+
+  .section-title {
+    @apply text-section text-ink-primary mt-3;
+  }
+
+  .section-desc {
+    @apply text-body text-ink-secondary max-w-2xl mx-auto mt-4;
+  }
+
+  /* ─── Decorative Dots ─── */
+  .dot {
+    @apply rounded-full opacity-70;
+  }
+
+  .dot-orange { @apply dot bg-primary-400; }
+  .dot-green { @apply dot bg-secondary-400; }
+  .dot-blue { @apply dot bg-accent-blue; }
+  .dot-red { @apply dot bg-accent-red; }
+
+  .dot-sm { @apply w-2 h-2; }
+  .dot-md { @apply w-3 h-3; }
+  .dot-lg { @apply w-[18px] h-[18px]; }
+
+  /* ─── Scrollbar ─── */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-gray-300;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+}

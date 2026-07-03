@@ -1,0 +1,153 @@
+{
+  "users": [
+    {
+      "name": "Admin User",
+      "email": "admin@ravivarvichar.org",
+      "password": "Admin@123",
+      "role": "admin"
+    }
+  ],
+  "programs": [
+    {
+      "title": "Women Entrepreneurs Program",
+      "description": "Supporting rural women to launch and scale micro-enterprises through mentorship, seed funding, and market access.",
+      "objectives": ["Skill development", "Access to microfinance", "Market linkages"],
+      "status": "active"
+    },
+    {
+      "title": "SHG Development Initiative",
+      "description": "Strengthening Self-Help Groups through capacity building and financial literacy.",
+      "objectives": ["Group formation", "Bookkeeping training", "Bank linkage"],
+      "status": "active"
+    },
+    {
+      "title": "Financial Literacy Workshops",
+      "description": "Community workshops on savings, credit, and digital banking.",
+      "objectives": ["Digital payments awareness", "Savings habit building"],
+      "status": "active"
+    }
+  ],
+  "articles": [
+    {
+      "title": "How Rural Women Are Redefining Entrepreneurship in Rajasthan",
+      "slug": "rural-women-entrepreneurship-rajasthan",
+      "category": "Case Study",
+      "tags": ["entrepreneurship", "women", "rajasthan"],
+      "status": "published",
+      "featured": true,
+      "excerpt": "A look at three women-led enterprises that emerged from our SHG network."
+    },
+    {
+      "title": "The State of Microfinance in India: 2026 Outlook",
+      "slug": "microfinance-india-2026-outlook",
+      "category": "Research",
+      "tags": ["microfinance", "policy"],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "title": "Explainer: What Is a Self-Help Group?",
+      "slug": "explainer-what-is-shg",
+      "category": "Explainer",
+      "tags": ["basics", "shg"],
+      "status": "draft"
+    }
+  ],
+  "projects": [
+    {
+      "title": "Marwar Livelihoods Project",
+      "location": { "district": "Jodhpur", "state": "Rajasthan" },
+      "status": "ongoing",
+      "budget": 4500000,
+      "startDate": "2025-04-01",
+      "impactNumbers": [
+        { "label": "Women trained", "value": "320" },
+        { "label": "SHGs formed", "value": "28" }
+      ]
+    },
+    {
+      "title": "Digital Literacy for SHGs",
+      "location": { "district": "Udaipur", "state": "Rajasthan" },
+      "status": "completed",
+      "budget": 1200000,
+      "startDate": "2024-01-15",
+      "endDate": "2024-12-20",
+      "impactNumbers": [{ "label": "Women onboarded to UPI", "value": "540" }]
+    }
+  ],
+  "partners": [
+    { "name": "NABARD", "category": "government", "status": "active" },
+    { "name": "Tata Trusts", "category": "corporate", "status": "active" },
+    { "name": "SEWA Bharat", "category": "ngo", "status": "active" },
+    { "name": "IIM Udaipur", "category": "educational", "status": "active" }
+  ],
+  "reports": [
+    {
+      "title": "Impact of SHG-Bank Linkage on Rural Household Income",
+      "category": "Policy Brief",
+      "year": 2025,
+      "author": "Dr. Ananya Rao",
+      "summary": "An empirical study across 12 districts showing a 22% average income increase post SHG-bank linkage."
+    }
+  ],
+  "entrepreneurs": [
+    {
+      "name": "Kavita Devi",
+      "district": "Jodhpur",
+      "sector": "Handicrafts",
+      "bio": "Runs a block-printing collective employing 15 women."
+    },
+    {
+      "name": "Meena Kumari",
+      "district": "Udaipur",
+      "sector": "Food Processing",
+      "bio": "Founder of a pickle and papad micro-enterprise supplying to 3 districts."
+    }
+  ],
+  "shgs": [
+    {
+      "groupName": "Ekta Mahila Samuh",
+      "members": 14,
+      "district": "Jodhpur",
+      "achievements": ["Bank-linked in 2023", "Started a tailoring unit"]
+    }
+  ],
+  "mentors": [
+    {
+      "name": "Rahul Mehta",
+      "skills": ["Business Strategy", "Marketing"],
+      "availability": "Weekends",
+      "experience": "12 years in retail and D2C brands"
+    }
+  ],
+  "events": [
+    {
+      "title": "Annual Women Entrepreneurs Summit 2026",
+      "type": "upcoming",
+      "location": { "address": "Jaipur, Rajasthan" },
+      "speakers": [{ "name": "Dr. Ananya Rao", "bio": "Development economist" }]
+    },
+    {
+      "title": "SHG Bookkeeping Bootcamp",
+      "type": "past",
+      "location": { "address": "Udaipur, Rajasthan" }
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Sunita Bai",
+      "role": "SHG Member, Jodhpur",
+      "quote": "The training gave me the confidence to open my own shop."
+    },
+    {
+      "name": "Vikram Singh",
+      "role": "Partner, NABARD",
+      "quote": "Their ground-level execution and reporting transparency stand out."
+    }
+  ],
+  "mediaItems": [
+    { "title": "RavivarVichar featured in The Hindu", "type": "news" },
+    { "title": "Press Release: New Rural Livelihoods Grant", "type": "press-release" },
+    { "title": "Field Podcast Ep. 1: Voices from Jodhpur", "type": "podcast" }
+  ]
+}

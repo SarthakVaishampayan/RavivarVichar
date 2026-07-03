@@ -1,0 +1,166 @@
+import { Helmet } from 'react-helmet-async';
+import PageLayout from '../components/layout/PageLayout';
+import SectionHeading from '../components/shared/SectionHeading';
+import FloatingDots from '../components/shared/FloatingDots';
+import Button from '../components/shared/Button';
+import { Mail, Phone, MapPin, Clock, Send, Check, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+
+const contactInfo = [
+  { icon: MapPin, label: 'Address', value: '123 Village Development Center, Bhilwara, Rajasthan 311001, India' },
+  { icon: Phone, label: 'Phone', value: '+91 98765 43210' },
+  { icon: Mail, label: 'Email', value: 'hello@ravivarvichar.org' },
+  { icon: Clock, label: 'Office Hours', value: 'Mon — Fri, 9:00 AM — 5:00 PM' },
+];
+
+const faqs = [
+  { q: 'How can I volunteer with RavivarVichar?', a: 'We welcome volunteers with diverse skills. Please fill out the contact form or email us directly, and our team will reach out with current opportunities.' },
+  { q: 'How do I partner with your organization?', a: 'We collaborate with NGOs, government agencies, corporations, and academic institutions. Reach out through our contact form to discuss partnership possibilities.' },
+  { q: 'Can I donate to a specific program?', a: 'Yes! You can specify the program you\'d like to support when donating. Your contribution will be directed to that program\'s activities.' },
+  { q: 'How are donations utilized?', a: '85% of donations go directly to program activities, 10% to capacity building and training, and 5% to administrative costs. We publish annual impact reports.' },
+];
+
+export default function Contact() {
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+    }, 1000);
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>Contact Us — RavivarVichar</title>
+        <meta name="description" content="Get in touch with RavivarVichar. Reach out for partnerships, volunteering, donations, or general inquiries." />
+      </Helmet>
+
+      <PageLayout>
+        {/* Hero */}
+        <section className="relative overflow-hidden bg-surface-secondary py-24 lg:py-32">
+          <FloatingDots />
+          <div className="container-content relative z-10">
+            <div className="max-w-3xl mx-auto text-center">
+              <span className="section-label">CONTACT US</span>
+              <h1 className="text-hero-mobile lg:text-hero text-ink-primary mt-4 leading-tight">
+                Let's{' '}
+                <span className="text-primary-500">Work Together</span>
+              </h1>
+              <p className="text-body text-ink-secondary mt-6 max-w-2xl mx-auto">
+                Have a question, want to partner with us, or interested in volunteering? 
+                We'd love to hear from you. Reach out and let's make a difference together.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Grid */}
+        <section className="section-md bg-surface-white">
+          <div className="container-content">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+              {/* Contact Info */}
+              <div className="lg:col-span-2 space-y-8">
+                {contactInfo.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.label} className="flex items-start gap-4">
+                      <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
+                        <Icon size={22} />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-ink-primary uppercase tracking-wider">{item.label}</h4>
+                        <p className="text-body text-ink-secondary mt-1">{item.value}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Contact Form */}
+              <div className="lg:col-span-3">
+                <div className="card p-8 lg:p-10">
+                  {submitted ? (
+                    <div className="text-center py-12">
+                      <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-green-50 text-green-600 mb-6">
+                        <Check size={32} />
+                      </div>
+                      <h3 className="text-2xl font-heading font-bold text-ink-primary">Message Sent!</h3>
+                      <p className="text-body text-ink-secondary mt-3">Thank you for reaching out. We'll get back to you within 24-48 hours.</p>
+                      <Button variant="primary" className="mt-6" onClick={() => { setSubmitted(false); setForm({ name: '', email: '', subject: '', message: '' }); }}>
+                        Send Another Message
+                      </Button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                          <label className="label">Full Name *</label>
+                          <input type="text" className="input-field" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required placeholder="Your name" />
+                        </div>
+                        <div>
+                          <label className="label">Email Address *</label>
+                          <input type="email" className="input-field" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required placeholder="you@example.com" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="label">Subject *</label>
+                        <select className="input-field" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} required>
+                          <option value="">Select a subject</option>
+                          <option value="Partnership">Partnership Inquiry</option>
+                          <option value="Volunteering">Volunteering</option>
+                          <option value="Donation">Donation</option>
+                          <option value="General">General Inquiry</option>
+                          <option value="Media">Media & Press</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="label">Message *</label>
+                        <textarea className="input-field min-h-[150px] resize-y" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required placeholder="Tell us how you'd like to connect..." />
+                      </div>
+                      <Button type="submit" variant="primary" className="w-full sm:w-auto" disabled={loading}>
+                        {loading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                        {loading ? 'Sending...' : 'Send Message'}
+                      </Button>
+                    </form>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="section-md bg-surface-section">
+          <div className="container-content">
+            <SectionHeading
+              label="FAQ"
+              title="Frequently Asked Questions"
+              description="Quick answers to common questions about our work and how to get involved."
+            />
+            <div className="max-w-3xl mx-auto mt-12 space-y-4">
+              {faqs.map((faq) => (
+                <details key={faq.q} className="card group open:ring-1 open:ring-primary-200 open:shadow-soft">
+                  <summary className="p-6 cursor-pointer text-lg font-semibold text-ink-primary flex items-center justify-between gap-4 marker:content-none">
+                    {faq.q}
+                    <span className="shrink-0 transition-transform duration-300 group-open:rotate-180 text-primary-500">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-body text-ink-secondary">
+                    {faq.a}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      </PageLayout>
+    </>
+  );
+}

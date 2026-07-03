@@ -1,0 +1,54 @@
+import { Menu, LogOut, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../store/authStore';
+import api from '../../lib/axios';
+import toast from 'react-hot-toast';
+
+export default function Topbar({ onMenuClick }) {
+  const { user, logout } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch {
+      // Proceed with local logout even if API call fails
+    }
+    logout();
+    navigate('/login');
+    toast.success('Logged out successfully');
+  };
+
+  return (
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-gray-200 bg-white px-4 lg:px-8">
+      <button
+        onClick={onMenuClick}
+        className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 lg:hidden"
+      >
+        <Menu size={20} />
+      </button>
+
+      <div className="flex-1" />
+
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-primary-700">
+            <User size={16} />
+          </div>
+          <div className="hidden sm:block">
+            <p className="text-sm font-medium text-gray-900">{user?.name || 'Admin'}</p>
+            <p className="text-xs text-gray-500">{user?.email || ''}</p>
+          </div>
+        </div>
+
+        <button
+          onClick={handleLogout}
+          className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+          title="Logout"
+        >
+          <LogOut size={18} />
+        </button>
+      </div>
+    </header>
+  );
+}

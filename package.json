@@ -1,0 +1,16 @@
+{
+  "name": "ravivarvichar-cms",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev -w apps/server",
+    "dev:client": "npm run dev -w apps/client",
+    "dev:admin": "npm run dev -w apps/admin",
+    "seed": "npm run seed -w apps/server",
+    "start:server": "npm start -w apps/server"
+  }
+}
