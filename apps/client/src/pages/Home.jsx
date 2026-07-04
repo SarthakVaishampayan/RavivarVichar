@@ -3,66 +3,54 @@ import { Helmet } from 'react-helmet-async';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Hero from '../components/home/Hero';
-import Mission from '../components/home/Mission';
-import ProgramsGrid from '../components/home/ProgramsGrid';
-import FeaturedResearch from '../components/home/FeaturedResearch';
-import LatestArticles from '../components/home/LatestArticles';
-import ImpactStats from '../components/home/ImpactStats';
-import CurrentProjects from '../components/home/CurrentProjects';
+import WhatWeDo from '../components/home/ProgramsGrid';
+import SuccessStories from '../components/home/FeaturedResearch';
 import Partners from '../components/home/Partners';
-import VideosSection from '../components/home/VideosSection';
+import MediaMentions from '../components/home/MediaMentions';
 import Testimonials from '../components/home/Testimonials';
-import EventsPreview from '../components/home/EventsPreview';
-import MembershipCTA from '../components/home/MembershipCTA';
-import DonateCTA from '../components/home/DonateCTA';
-import Newsletter from '../components/home/Newsletter';
 import api from '../lib/axios';
 
-// Map section keys to their components
-const SECTION_COMPONENTS = {
+const sectionComponents = {
   hero: Hero,
-  mission: Mission,
-  programs: ProgramsGrid,
-  research: FeaturedResearch,
-  articles: LatestArticles,
-  stats: ImpactStats,
-  projects: CurrentProjects,
+  programs: WhatWeDo,
+  research: SuccessStories,
   partners: Partners,
-  videos: VideosSection,
+  mediaMentions: MediaMentions,
   testimonials: Testimonials,
-  events: EventsPreview,
-  membership: MembershipCTA,
-  donate: DonateCTA,
-  newsletter: Newsletter,
 };
 
-// Default order when no server data exists yet
-const DEFAULT_SECTIONS = [
-  'hero', 'mission', 'programs', 'research', 'articles',
-  'stats', 'projects', 'partners', 'videos', 'testimonials',
-  'events', 'membership', 'donate', 'newsletter',
+const defaultSections = [
+  { key: 'hero', order: 0, visible: true },
+  { key: 'programs', order: 1, visible: true },
+  { key: 'research', order: 2, visible: true },
+  { key: 'partners', order: 3, visible: true },
+  { key: 'mediaMentions', order: 4, visible: true },
+  { key: 'testimonials', order: 5, visible: true },
 ];
 
 export default function Home() {
-  const [sectionKeys, setSectionKeys] = useState(DEFAULT_SECTIONS);
+  const [sections, setSections] = useState(defaultSections);
 
   useEffect(() => {
-    const fetchSections = async () => {
-      try {
-        const { data } = await api.get('/homepage');
-        if (data.success && data.data && data.data.length > 0) {
-          const ordered = data.data
-            .filter((s) => s.visible !== false)
-            .sort((a, b) => a.order - b.order)
-            .map((s) => s.key);
-          setSectionKeys(ordered);
-          return;
+    api.get('/homepage')
+      .then(({ data }) => {
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+          // Merge server data with defaults for any missing sections
+          const serverMap = {};
+          data.data.forEach((s) => { serverMap[s.key] = s; });
+
+          const merged = defaultSections.map((def) => ({
+            ...def,
+            ...(serverMap[def.key] ? { order: serverMap[def.key].order, visible: serverMap[def.key].visible } : {}),
+          }));
+
+          merged.sort((a, b) => a.order - b.order);
+          setSections(merged);
         }
-      } catch {
-        // Server not available — use defaults
-      }
-    };
-    fetchSections();
+      })
+      .catch(() => {
+        // Fall back to defaults on error
+      });
   }, []);
 
   return (
@@ -90,10 +78,12 @@ export default function Home() {
       <Navbar />
 
       <main>
-        {sectionKeys.map((key) => {
-          const SectionComponent = SECTION_COMPONENTS[key];
-          return SectionComponent ? <SectionComponent key={key} /> : null;
-        })}
+        {sections
+          .filter((s) => s.visible && sectionComponents[s.key])
+          .map((s) => {
+            const Component = sectionComponents[s.key];
+            return <Component key={s.key} />;
+          })}
       </main>
 
       <Footer />

@@ -1,34 +1,37 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, ArrowRight, Check, Loader2 } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, ArrowRight, Check, Loader2 } from 'lucide-react';
 import api from '../../lib/axios';
 
 const footerLinks = {
   'Quick Links': [
-    { label: 'Programs', path: '/programs' },
+    { label: 'Home', path: '/' },
     { label: 'About Us', path: '/about' },
     { label: 'Knowledge Hub', path: '/knowledge-hub' },
     { label: 'Events', path: '/events' },
+    { label: 'Gallery', path: '/gallery' },
     { label: 'Contact', path: '/contact' },
   ],
-  'Programs': [
-    { label: 'Women Entrepreneurs', path: '/programs/women-entrepreneurs' },
-    { label: 'SHG Development', path: '/programs/shg-development' },
-    { label: 'Financial Literacy', path: '/programs/financial-literacy' },
+  'Knowledge Hub': [
+    { label: 'Articles', path: '/knowledge-hub#articles' },
+    { label: 'Research & Reports', path: '/knowledge-hub#research-reports' },
+    { label: 'Success Stories', path: '/knowledge-hub#success-stories' },
+    { label: 'Interviews', path: '/knowledge-hub#interviews' },
   ],
-  'Resources': [
-    { label: 'Research Reports', path: '/research' },
-    { label: 'Case Studies', path: '/knowledge-hub?category=Case+Study' },
-    { label: 'Gallery', path: '/media' },
-    { label: 'Press Releases', path: '/media?type=press-release' },
+  'About Us': [
+    { label: 'Our Story', path: '/about#our-story' },
+    { label: 'Our Values', path: '/about#our-values' },
+    { label: 'Our Journey', path: '/about#our-journey' },
+    { label: 'Our Mission', path: '/about#our-mission' },
+    { label: 'Our Founders', path: '/about#our-founders' },
   ],
 };
 
 const socialLinks = [
-  { icon: Facebook, href: '#', label: 'Facebook' },
-  { icon: Twitter, href: '#', label: 'Twitter' },
-  { icon: Instagram, href: '#', label: 'Instagram' },
-  { icon: Linkedin, href: '#', label: 'LinkedIn' },
+  { icon: Facebook, href: 'https://facebook.com/ravivarvichar', label: 'Facebook' },
+  { icon: Twitter, href: 'https://twitter.com/ravivarvichar', label: 'Twitter' },
+  { icon: Instagram, href: 'https://instagram.com/ravivarvichar', label: 'Instagram' },
+  { icon: Linkedin, href: 'https://linkedin.com/company/ravivarvichar', label: 'LinkedIn' },
 ];
 
 export default function Footer() {
@@ -58,28 +61,40 @@ export default function Footer() {
     <footer className="bg-surface-secondary border-t border-gray-100">
       <div className="container-site py-20">
         <div className="grid grid-cols-1 lg:grid-cols-6 gap-12 lg:gap-8">
-          {/* Brand Column */}
+          {/* Newsletter + Social Column */}
           <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-3 mb-5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500 text-lg font-bold text-white">
-                R
-              </div>
-              <span className="text-lg font-bold font-heading text-ink-primary">
-                RavivarVichar
-              </span>
-            </Link>
-            <p className="text-body text-ink-secondary mb-6 max-w-sm">
-              Empowering rural communities through research, entrepreneurship, and self-help groups. Working towards sustainable development across Rajasthan.
+            <h3 className="text-card font-heading font-bold text-ink-primary mb-3">
+              Stay Connected
+            </h3>
+            <p className="text-body text-ink-secondary mb-6">
+              Subscribe to our newsletter for updates on programs, research, and impact stories.
             </p>
+            <form onSubmit={handleNewsletter} className="flex gap-3 max-w-sm">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="input-field flex-1"
+                required
+              />
+              <button type="submit" disabled={loading || subscribed} className="btn-primary shrink-0">
+                {loading ? <Loader2 size={18} className="animate-spin" /> : subscribed ? <Check size={18} /> : <><span>Subscribe</span> <ArrowRight size={18} /></>}
+              </button>
+            </form>
+            {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
+            {subscribed && <p className="text-xs text-green-600 mt-2">Thank you for subscribing!</p>}
 
             {/* Social Icons */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 mt-8">
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
                   <a
                     key={social.label}
                     href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={social.label}
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-white border border-gray-200 text-ink-secondary hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-300"
                   >
@@ -111,45 +126,14 @@ export default function Footer() {
             </div>
           ))}
         </div>
-
-        {/* Newsletter */}
-        <div className="mt-16 pt-12 border-t border-gray-200">
-          <div className="max-w-xl mx-auto text-center">
-            <h3 className="text-card font-heading font-bold text-ink-primary mb-3">
-              Stay Connected
-            </h3>
-            <p className="text-body text-ink-secondary mb-6">
-              Subscribe to our newsletter for updates on programs, research, and impact stories.
-            </p>
-            <form onSubmit={handleNewsletter} className="flex gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="input-field flex-1"
-                required
-              />
-              <button type="submit" disabled={loading || subscribed} className="btn-primary shrink-0">
-                {loading ? <Loader2 size={18} className="animate-spin" /> : subscribed ? <Check size={18} /> : <><span>Subscribe</span> <ArrowRight size={18} /></>}
-              </button>
-            {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
-            {subscribed && <p className="text-xs text-green-600 mt-2">Thank you for subscribing!</p>}
-            </form>
-          </div>
-        </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-200">
-        <div className="container-site py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="container-site py-6 text-center">
           <p className="text-sm text-ink-secondary">
             © {new Date().getFullYear()} RavivarVichar. All rights reserved.
           </p>
-          <div className="flex items-center gap-6 text-sm text-ink-secondary">
-            <Link to="/privacy" className="hover:text-primary-500 transition-colors">Privacy Policy</Link>
-            <Link to="/terms" className="hover:text-primary-500 transition-colors">Terms of Service</Link>
-          </div>
         </div>
       </div>
     </footer>

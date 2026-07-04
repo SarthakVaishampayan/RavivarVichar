@@ -64,7 +64,10 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         useAuthStore.getState().logout();
-        window.location.href = '/login';
+        // Reload the page — ProtectedRoute will catch the unauthenticated state
+        // and redirect to /login within the SPA. This works for both root
+        // and subpath deployments (unlike window.location.href = '/login').
+        window.location.reload();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

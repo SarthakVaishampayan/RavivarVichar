@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
@@ -35,6 +37,21 @@ const values = [
 ];
 
 export default function About() {
+  const location = useLocation();
+
+  // Handle hash on page load for scroll-to-section
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
+
   return (
     <>
       <Helmet>
@@ -44,11 +61,11 @@ export default function About() {
 
       <PageLayout>
         {/* Hero */}
-        <section className="relative overflow-hidden bg-surface-secondary py-24 lg:py-32">
+        <section id="our-story" className="relative overflow-hidden bg-surface-secondary py-24 lg:py-32">
           <FloatingDots />
           <div className="container-content relative z-10">
             <div className="max-w-3xl mx-auto text-center">
-              <span className="section-label">ABOUT US</span>
+              <span className="section-label">OUR STORY</span>
               <h1 className="text-hero-mobile lg:text-hero text-ink-primary mt-4 leading-tight">
                 Empowering Rural{' '}
                 <span className="text-primary-500">Communities</span>
@@ -76,7 +93,7 @@ export default function About() {
         </section>
 
         {/* Mission / Vision / Approach */}
-        <section className="section-md bg-surface-section">
+        <section id="our-values" className="section-md bg-surface-section">
           <div className="container-content">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {values.map((item) => {
@@ -96,7 +113,7 @@ export default function About() {
         </section>
 
         {/* Timeline */}
-        <section className="section-md bg-surface-white">
+        <section id="our-journey" className="section-md bg-surface-white">
           <div className="container-content">
             <SectionHeading
               label="OUR JOURNEY"
@@ -124,11 +141,56 @@ export default function About() {
           </div>
         </section>
 
+        {/* Our Mission (moved from homepage) */}
+        <section id="our-mission" className="section-md bg-surface-section">
+          <div className="container-content">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+              <div className="relative">
+                <div className="w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden mx-auto shadow-card border-4 border-white">
+                  <img
+                    src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600&q=80"
+                    alt="Our mission"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-8 right-8 w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-white shadow-soft">
+                  <img
+                    src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&q=80"
+                    alt="Community work"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              <div>
+                <SectionHeading
+                  label="OUR MISSION"
+                  title="Empowering Communities, Transforming Lives"
+                  description=""
+                  align="left"
+                />
+                <div className="space-y-5 text-body text-ink-secondary">
+                  <p>
+                    At RavivarVichar, we believe that sustainable change comes from within
+                    communities. Our mission is to equip rural women and marginalized groups
+                    with the knowledge, skills, and resources they need to build better futures
+                    for themselves and their families.
+                  </p>
+                  <p>
+                    Through research-driven programs, financial literacy initiatives, and
+                    grassroots entrepreneurship support, we're creating an ecosystem where
+                    rural communities can thrive on their own terms.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Team */}
-        <section className="section-md bg-surface-section">
+        <section id="our-founders" className="section-md bg-surface-section">
           <div className="container-content">
             <SectionHeading
-              label="OUR TEAM"
+              label="OUR FOUNDERS"
               title="Meet the People Behind the Mission"
               description="Passionate individuals committed to driving change in rural communities."
             />
@@ -162,7 +224,7 @@ export default function About() {
               Join us in our mission to empower rural communities. Your support can transform lives.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
-              <Button variant="secondary" to="/donate" arrow>Support Our Work</Button>
+              <Button variant="secondary" to="/join-our-initiative" arrow>Join Our Initiative</Button>
               <Button variant="outline" to="/contact" className="border-white text-white hover:bg-white hover:text-primary-500">Get in Touch</Button>
             </div>
           </div>

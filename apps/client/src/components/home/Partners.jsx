@@ -1,18 +1,25 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SectionHeading from '../shared/SectionHeading';
-
-const partners = [
-  { name: 'NABARD', category: 'Government' },
-  { name: 'Tata Trusts', category: 'Corporate' },
-  { name: 'SEWA Bharat', category: 'NGO' },
-  { name: 'IIM Udaipur', category: 'Educational' },
-  { name: 'Rajasthan Government', category: 'Government' },
-  { name: 'ICICI Foundation', category: 'Corporate' },
-];
+import api from '../../lib/axios';
 
 export default function Partners() {
+  const [partners, setPartners] = useState([]);
+
+  useEffect(() => {
+    api.get('/partners', { params: { status: 'active', limit: 20, sort: 'name' } })
+      .then(({ data }) => {
+        if (data.data && data.data.length > 0) {
+          setPartners(data.data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  if (partners.length === 0) return null;
+
   return (
-    <section className="section-lg bg-surface-white">
+    <section className="section-lg bg-surface-secondary">
       <div className="container-site">
         <SectionHeading
           label="Our Partners"
@@ -21,7 +28,7 @@ export default function Partners() {
         />
 
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center"
+          className="flex flex-wrap items-center justify-center gap-8 lg:gap-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -29,22 +36,32 @@ export default function Partners() {
         >
           {partners.map((partner, i) => (
             <motion.div
-              key={partner.name}
-              className="flex flex-col items-center justify-center p-6 rounded-card bg-surface-secondary border border-gray-100 hover:shadow-soft transition-all duration-300 h-32"
-              initial={{ opacity: 0, scale: 0.9 }}
+              key={partner._id}
+              className="group relative"
+              initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: i * 0.05 }}
+              transition={{ duration: 0.3, delay: i * 0.08 }}
             >
-              <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center mb-2">
-                <span className="text-primary-600 font-bold font-heading text-lg">
-                  {partner.name.charAt(0)}
+              <div className="flex items-center justify-center w-28 h-28 lg:w-32 lg:h-32 rounded-2xl bg-white shadow-soft hover:shadow-card transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+                {partner.logo ? (
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    className="w-full h-full object-contain p-4"
+                  />
+                ) : (
+                  <span className="text-2xl lg:text-3xl font-bold font-heading text-primary-600">
+                    {partner.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                  </span>
+                )}
+              </div>
+              {/* Tooltip on hover */}
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                <span className="text-xs font-medium text-ink-secondary bg-white px-3 py-1 rounded-full shadow-soft">
+                  {partner.name}
                 </span>
               </div>
-              <p className="text-sm font-semibold text-text-primary text-center leading-tight">
-                {partner.name}
-              </p>
-              <p className="text-xs text-text-secondary mt-0.5">{partner.category}</p>
             </motion.div>
           ))}
         </motion.div>

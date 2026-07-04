@@ -7,6 +7,7 @@ const contactMessageSchema = new mongoose.Schema(
     subject: { type: String, required: [true, 'Subject is required'] },
     message: { type: String, required: [true, 'Message is required'] },
     read: { type: Boolean, default: false },
+    status: { type: String, enum: ['under-consideration', 'approved', 'posted', 'denied'], default: 'under-consideration' },
   },
   { timestamps: true }
 );

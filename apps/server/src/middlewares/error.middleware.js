@@ -1,8 +1,23 @@
+const { MulterError } = require('multer');
 const { sendError } = require('../utils/apiResponse');
 
 const errorHandler = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Internal Server Error';
+
+  // Multer errors (file upload)
+  if (err instanceof MulterError) {
+    statusCode = 400;
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      message = 'File too large. Maximum size is 5MB.';
+    } else if (err.code === 'LIMIT_FILE_COUNT') {
+      message = 'Too many files uploaded.';
+    } else if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+      message = 'Unexpected file field.';
+    } else {
+      message = err.message;
+    }
+  }
 
   // Mongoose bad ObjectId
   if (err.name === 'CastError') {

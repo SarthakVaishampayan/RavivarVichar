@@ -4,19 +4,22 @@ import ProtectedRoute from '../components/layout/ProtectedRoute';
 import Dashboard from '../pages/Dashboard';
 import ContentHub from '../pages/manage-content/ContentHub';
 import {
-  ArticleList, ProgramList, ProjectList, ReportList,
-  EventList, PartnerList, EntrepreneurList, SHGList,
-  MentorList, MediaList, TestimonialList,
-  NewsletterList, ContactList, MembershipList, DonationList,
+  ArticleList, EventList, PartnerList,
+  TestimonialList,
+  NewsletterList, ContactList,
+  FeatureRequestList, JoinInitiativeList, MediaMentionList, PartnerApplicationList,
+  ResearchReportList, SuccessStoryList, InterviewList,
 } from '../pages/manage-content/ContentListPages';
 import {
-  ArticleEditor, ProgramEditor, ProjectEditor, ReportEditor,
-  EventEditor, PartnerEditor, MediaEditor, TestimonialEditor,
-  DonationEditor, MembershipEditor, DirectoryEditor,
+  ArticleEditor, EventEditor, PartnerEditor,
+  TestimonialEditor, MediaMentionEditor,
+  ResearchReportEditor, SuccessStoryEditor, InterviewEditor,
 } from '../pages/manage-content/Editors';
 import Analytics from '../pages/Analytics';
 import SEO from '../pages/SEO';
 import HomepageBuilder from '../pages/HomepageBuilder';
+import GalleryManager from '../pages/manage-content/GalleryManager';
+import SubmissionDetail from '../pages/manage-content/SubmissionDetail';
 import Users from '../pages/Users';
 import Settings from '../pages/Settings';
 
@@ -34,21 +37,10 @@ export default function AdminRoutes() {
 
         {/* Content Management */}
         <Route path="content" element={<ContentHub />} />
+
         <Route path="content/articles" element={<ArticleList />} />
         <Route path="content/articles/:id/edit" element={<ArticleEditor />} />
         <Route path="content/articles/new" element={<ArticleEditor />} />
-
-        <Route path="content/programs" element={<ProgramList />} />
-        <Route path="content/programs/:id/edit" element={<ProgramEditor />} />
-        <Route path="content/programs/new" element={<ProgramEditor />} />
-
-        <Route path="content/projects" element={<ProjectList />} />
-        <Route path="content/projects/:id/edit" element={<ProjectEditor />} />
-        <Route path="content/projects/new" element={<ProjectEditor />} />
-
-        <Route path="content/reports" element={<ReportList />} />
-        <Route path="content/reports/:id/edit" element={<ReportEditor />} />
-        <Route path="content/reports/new" element={<ReportEditor />} />
 
         <Route path="content/events" element={<EventList />} />
         <Route path="content/events/:id/edit" element={<EventEditor />} />
@@ -58,34 +50,41 @@ export default function AdminRoutes() {
         <Route path="content/partners/:id/edit" element={<PartnerEditor />} />
         <Route path="content/partners/new" element={<PartnerEditor />} />
 
-        <Route path="content/entrepreneurs" element={<EntrepreneurList />} />
-        <Route path="content/entrepreneurs/:id/edit" element={<DirectoryEditor type="entrepreneurs" />} />
-        <Route path="content/entrepreneurs/new" element={<DirectoryEditor type="entrepreneurs" />} />
-
-        <Route path="content/shgs" element={<SHGList />} />
-        <Route path="content/shgs/:id/edit" element={<DirectoryEditor type="shgs" />} />
-        <Route path="content/shgs/new" element={<DirectoryEditor type="shgs" />} />
-
-        <Route path="content/mentors" element={<MentorList />} />
-        <Route path="content/mentors/:id/edit" element={<DirectoryEditor type="mentors" />} />
-        <Route path="content/mentors/new" element={<DirectoryEditor type="mentors" />} />
-
-        <Route path="content/media" element={<MediaList />} />
-        <Route path="content/media/:id/edit" element={<MediaEditor />} />
-        <Route path="content/media/new" element={<MediaEditor />} />
-
         <Route path="content/testimonials" element={<TestimonialList />} />
         <Route path="content/testimonials/:id/edit" element={<TestimonialEditor />} />
         <Route path="content/testimonials/new" element={<TestimonialEditor />} />
 
         <Route path="content/newsletters" element={<NewsletterList />} />
+        <Route path="content/newsletters/:id/edit" element={<SubmissionDetail />} />
+
         <Route path="content/contacts" element={<ContactList />} />
-        <Route path="content/memberships" element={<MembershipList />} />
-        <Route path="content/memberships/:id/edit" element={<MembershipEditor />} />
-        <Route path="content/memberships/new" element={<MembershipEditor />} />
-        <Route path="content/donations" element={<DonationList />} />
-        <Route path="content/donations/:id/edit" element={<DonationEditor />} />
-        <Route path="content/donations/new" element={<DonationEditor />} />
+        <Route path="content/contacts/:id/edit" element={<SubmissionDetail />} />
+
+        <Route path="content/featureRequests" element={<FeatureRequestList />} />
+        <Route path="content/joinInitiative" element={<JoinInitiativeList />} />
+        <Route path="content/gallery" element={<GalleryManager />} />
+        <Route path="content/mediaMentions" element={<MediaMentionList />} />
+
+        <Route path="content/mediaMentions/:id/edit" element={<MediaMentionEditor />} />
+        <Route path="content/mediaMentions/new" element={<MediaMentionEditor />} />
+
+        <Route path="content/researchReports" element={<ResearchReportList />} />
+        <Route path="content/researchReports/:id/edit" element={<ResearchReportEditor />} />
+        <Route path="content/researchReports/new" element={<ResearchReportEditor />} />
+
+        <Route path="content/successStories" element={<SuccessStoryList />} />
+        <Route path="content/successStories/:id/edit" element={<SuccessStoryEditor />} />
+        <Route path="content/successStories/new" element={<SuccessStoryEditor />} />
+
+        <Route path="content/interviews" element={<InterviewList />} />
+        <Route path="content/interviews/:id/edit" element={<InterviewEditor />} />
+        <Route path="content/interviews/new" element={<InterviewEditor />} />
+
+        <Route path="content/partnerApplications" element={<PartnerApplicationList />} />
+
+        <Route path="content/featureRequests/:id/edit" element={<SubmissionDetail />} />
+        <Route path="content/joinInitiative/:id/edit" element={<SubmissionDetail />} />
+        <Route path="content/partnerApplications/:id/edit" element={<SubmissionDetail />} />
 
         {/* Additional Pages */}
         <Route path="analytics" element={<Analytics />} />

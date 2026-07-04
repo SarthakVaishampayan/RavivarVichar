@@ -19,6 +19,10 @@ const statusStyles = {
   'press-release': 'bg-purple-50 text-purple-700 ring-purple-600/20',
   podcast: 'bg-orange-50 text-orange-700 ring-orange-600/20',
   video: 'bg-rose-50 text-rose-700 ring-rose-600/20',
+  'under-consideration': 'bg-yellow-100 text-yellow-800 ring-yellow-600/20',
+  approved: 'bg-green-100 text-green-800 ring-green-600/20',
+  posted: 'bg-blue-100 text-blue-800 ring-blue-600/20',
+  denied: 'bg-red-100 text-red-800 ring-red-600/20',
 };
 
 export default function StatusBadge({ status, className = '' }) {

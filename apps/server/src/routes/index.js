@@ -6,24 +6,26 @@ router.use('/auth', require('./auth.routes'));
 
 // Content CRUD
 router.use('/articles', require('./article.routes'));
-router.use('/programs', require('./program.routes'));
-router.use('/projects', require('./project.routes'));
 router.use('/partners', require('./partner.routes'));
-router.use('/reports', require('./report.routes'));
-router.use('/directory', require('./directory.routes'));
 router.use('/events', require('./event.routes'));
-router.use('/media', require('./media.routes'));
 router.use('/testimonials', require('./testimonial.routes'));
 
-// New Integrations
+// Submissions
 router.use('/newsletter', require('./newsletter.routes'));
 router.use('/contact', require('./contact.routes'));
-router.use('/membership', require('./membership.routes'));
-router.use('/donations', require('./donation.routes'));
+router.use('/feature-requests', require('./featureRequest.routes'));
+router.use('/join-initiative', require('./joinInitiative.routes'));
+router.use('/partner-applications', require('./partnerApplication.routes'));
 
 // Upload & Analytics
 router.use('/upload', require('./upload.routes'));
 router.use('/analytics', require('./analytics.routes'));
+
+// Gallery
+router.use('/gallery', require('./gallery.routes'));
+
+// Media Mentions
+router.use('/media-mentions', require('./mediaMention.routes'));
 
 // Homepage builder
 router.use('/homepage', require('./homepage.routes'));

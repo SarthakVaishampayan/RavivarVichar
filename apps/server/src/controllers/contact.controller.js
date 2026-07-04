@@ -41,6 +41,22 @@ const getOne = catchAsync(async (req, res) => {
   sendSuccess(res, message);
 });
 
+// PUT /api/v1/contact/:id/status — admin only
+const updateStatus = catchAsync(async (req, res) => {
+  const { status } = req.body;
+  if (!['under-consideration', 'approved', 'posted', 'denied'].includes(status)) {
+    return sendError(res, 'Invalid status', 400);
+  }
+
+  const message = await ContactMessage.findByIdAndUpdate(
+    req.params.id,
+    { status },
+    { new: true }
+  );
+  if (!message) return sendError(res, 'Message not found', 404);
+  sendSuccess(res, message, `Message marked as ${status.replace('-', ' ')}`);
+});
+
 // DELETE /api/v1/contact/:id — admin only
 const deleteOne = catchAsync(async (req, res) => {
   const message = await ContactMessage.findByIdAndDelete(req.params.id);
@@ -48,4 +64,4 @@ const deleteOne = catchAsync(async (req, res) => {
   sendSuccess(res, null, 'Message deleted');
 });
 
-module.exports = { submit, getAll, getOne, deleteOne };
+module.exports = { submit, getAll, getOne, updateStatus, deleteOne };

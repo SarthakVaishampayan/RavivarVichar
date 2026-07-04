@@ -3,10 +3,9 @@ import EditorForm from './EditorForm';
 import RichTextEditor from '../../components/ui/RichTextEditor';
 import ImageUpload from '../../components/ui/ImageUpload';
 import MultiImageUpload from '../../components/ui/MultiImageUpload';
-import StatusBadge from '../../components/ui/StatusBadge';
 import {
-  ARTICLE_CATEGORIES, PARTNER_CATEGORIES, MEDIA_TYPES,
-  PROJECT_STATUSES, PROGRAM_STATUSES, EVENT_TYPES,
+  ARTICLE_CATEGORIES, PARTNER_CATEGORIES,
+  EVENT_TYPES,
 } from '../../lib/constants';
 
 // ─── TEXT INPUT ───
@@ -171,96 +170,6 @@ export function ArticleEditor() {
   );
 }
 
-// ─── PROGRAM EDITOR ───
-export function ProgramEditor() {
-  return (
-    <EditorForm
-      resourceKey="programs"
-      resourceLabel="Programs"
-      apiPath="/programs"
-      fields={({ formData, handleChange }) => (
-        <>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-4">
-              <Input label="Title" name="title" value={formData.title} onChange={handleChange} placeholder="Program title" required />
-              <Input label="Description" name="description" value={formData.description} onChange={handleChange} placeholder="Program description" rows={4} />
-              <TagsInput label="Objectives" name="objectives" value={formData.objectives} onChange={handleChange} placeholder="Type objective and press Enter" />
-              <ArrayFields label="FAQs" name="faqs" value={formData.faqs} onChange={handleChange} fields={[{ key: 'question', label: 'Question' }, { key: 'answer', label: 'Answer' }]} />
-            </div>
-            <div className="space-y-4">
-              <Select label="Status" name="status" value={formData.status} onChange={handleChange} options={PROGRAM_STATUSES} />
-              <ImageUpload label="Banner Image" value={formData.banner} onChange={(url) => handleChange('banner', url)} />
-            </div>
-          </div>
-        </>
-      )}
-    />
-  );
-}
-
-// ─── PROJECT EDITOR ───
-export function ProjectEditor() {
-  return (
-    <EditorForm
-      resourceKey="projects"
-      resourceLabel="Projects"
-      apiPath="/projects"
-      fields={({ formData, handleChange }) => (
-        <>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-4">
-              <Input label="Title" name="title" value={formData.title} onChange={handleChange} placeholder="Project title" required />
-              <Input label="Description" name="description" value={formData.description} onChange={handleChange} placeholder="Project description" rows={4} />
-              <div className="grid grid-cols-2 gap-4">
-                <Input label="District" name="location.district" value={formData.location?.district} onChange={(n, v) => handleChange('location', { ...formData.location, district: v })} placeholder="District" />
-                <Input label="State" name="location.state" value={formData.location?.state} onChange={(n, v) => handleChange('location', { ...formData.location, state: v })} placeholder="State" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Input label="Budget (₹)" name="budget" value={formData.budget} onChange={handleChange} type="number" />
-                <Input label="Start Date" name="startDate" value={formData.startDate ? formData.startDate.slice(0, 10) : ''} onChange={handleChange} type="date" />
-              </div>
-              <ArrayFields label="Impact Numbers" name="impactNumbers" value={formData.impactNumbers} onChange={handleChange} fields={[{ key: 'label', label: 'Label' }, { key: 'value', label: 'Value' }]} />
-            </div>
-            <div className="space-y-4">
-              <Select label="Status" name="status" value={formData.status} onChange={handleChange} options={PROJECT_STATUSES} />
-              <ImageUpload label="Cover Image" value={formData.coverImage} onChange={(url) => handleChange('coverImage', url)} />
-            </div>
-          </div>
-        </>
-      )}
-    />
-  );
-}
-
-// ─── REPORT EDITOR ───
-export function ReportEditor() {
-  return (
-    <EditorForm
-      resourceKey="reports"
-      resourceLabel="Reports"
-      apiPath="/reports"
-      fields={({ formData, handleChange }) => (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-4">
-            <Input label="Title" name="title" value={formData.title} onChange={handleChange} placeholder="Report title" required />
-            <Input label="Author" name="author" value={formData.author} onChange={handleChange} placeholder="Author name" />
-            <Input label="Summary" name="summary" value={formData.summary} onChange={handleChange} placeholder="Brief summary" rows={3} />
-            <Input label="Citation" name="citation" value={formData.citation} onChange={handleChange} placeholder="Citation text" rows={2} />
-            <Input label="PDF URL" name="pdfUrl" value={formData.pdfUrl} onChange={handleChange} placeholder="https://..." />
-            <Input label="DOI" name="doi" value={formData.doi} onChange={handleChange} placeholder="DOI identifier" />
-            <TagsInput label="Tags" name="tags" value={formData.tags} onChange={handleChange} />
-          </div>
-          <div className="space-y-4">
-            <Input label="Category" name="category" value={formData.category} onChange={handleChange} placeholder="e.g. Research, Policy Brief" />
-            <Input label="Year" name="year" value={formData.year} onChange={handleChange} type="number" placeholder="2025" />
-            <ImageUpload label="Thumbnail" value={formData.thumbnail} onChange={(url) => handleChange('thumbnail', url)} />
-          </div>
-        </div>
-      )}
-    />
-  );
-}
-
 // ─── EVENT EDITOR ───
 export function EventEditor() {
   return (
@@ -317,86 +226,24 @@ export function PartnerEditor() {
   );
 }
 
-// ─── DIRECTORY EDITOR (Entrepreneurs / SHGs / Mentors) ───
-export function DirectoryEditor({ type }) {
-  const configs = {
-    entrepreneurs: {
-      resourceKey: 'entrepreneurs', resourceLabel: 'Entrepreneurs', apiPath: '/directory/entrepreneurs',
-      fields: ({ formData, handleChange }) => (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-4">
-            <Input label="Name" name="name" value={formData.name} onChange={handleChange} placeholder="Full name" required />
-            <Input label="Bio" name="bio" value={formData.bio} onChange={handleChange} placeholder="Brief bio" rows={3} />
-            <Input label="Contact" name="contact" value={formData.contact} onChange={handleChange} placeholder="Phone or email" />
-          </div>
-          <div className="space-y-4">
-            <Input label="District" name="district" value={formData.district} onChange={handleChange} placeholder="District" />
-            <Input label="Sector" name="sector" value={formData.sector} onChange={handleChange} placeholder="e.g. Handicrafts" />
-            <ImageUpload label="Photo" value={formData.photo} onChange={(url) => handleChange('photo', url)} />
-          </div>
-        </div>
-      ),
-    },
-    shgs: {
-      resourceKey: 'shgs', resourceLabel: 'SHGs', apiPath: '/directory/shgs',
-      fields: ({ formData, handleChange }) => (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-4">
-            <Input label="Group Name" name="groupName" value={formData.groupName} onChange={handleChange} placeholder="Group name" required />
-            <TagsInput label="Achievements" name="achievements" value={formData.achievements} onChange={handleChange} />
-            <Input label="Contact" name="contact" value={formData.contact} onChange={handleChange} placeholder="Phone or email" />
-          </div>
-          <div className="space-y-4">
-            <Input label="District" name="district" value={formData.district} onChange={handleChange} placeholder="District" />
-            <Input label="Members" name="members" value={formData.members} onChange={handleChange} type="number" placeholder="Number of members" />
-            <ImageUpload label="Photo" value={formData.photo} onChange={(url) => handleChange('photo', url)} />
-          </div>
-        </div>
-      ),
-    },
-    mentors: {
-      resourceKey: 'mentors', resourceLabel: 'Mentors', apiPath: '/directory/mentors',
-      fields: ({ formData, handleChange }) => (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-4">
-            <Input label="Name" name="name" value={formData.name} onChange={handleChange} placeholder="Full name" required />
-            <Input label="Experience" name="experience" value={formData.experience} onChange={handleChange} placeholder="e.g. 12 years in retail" rows={2} />
-            <Input label="Contact" name="contact" value={formData.contact} onChange={handleChange} placeholder="Phone or email" />
-          </div>
-          <div className="space-y-4">
-            <TagsInput label="Skills" name="skills" value={formData.skills} onChange={handleChange} />
-            <Input label="Availability" name="availability" value={formData.availability} onChange={handleChange} placeholder="e.g. Weekends" />
-            <ImageUpload label="Photo" value={formData.photo} onChange={(url) => handleChange('photo', url)} />
-          </div>
-        </div>
-      ),
-    },
-  };
-
-  const config = configs[type];
-  if (!config) return <div>Invalid directory type</div>;
-
-  return <EditorForm {...config} />;
-}
-
-// ─── MEDIA EDITOR ───
-export function MediaEditor() {
+// ─── MEDIA MENTION EDITOR ───
+export function MediaMentionEditor() {
   return (
     <EditorForm
-      resourceKey="media"
-      resourceLabel="Media"
-      apiPath="/media"
+      resourceKey="mediaMentions"
+      resourceLabel="Media Mentions"
+      apiPath="/media-mentions"
       fields={({ formData, handleChange }) => (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
-            <Input label="Title" name="title" value={formData.title} onChange={handleChange} placeholder="Media title" required />
-            <Input label="Description" name="description" value={formData.description} onChange={handleChange} placeholder="Brief description" rows={3} />
-            <Input label="URL" name="url" value={formData.url} onChange={handleChange} placeholder="https://..." />
+            <Input label="Title" name="title" value={formData.title} onChange={handleChange} placeholder="Article or mention title" required />
+            <Input label="Source" name="source" value={formData.source} onChange={handleChange} placeholder="e.g. The Times of India, Dainik Bhaskar" required />
+            <Input label="URL" name="url" value={formData.url} onChange={handleChange} placeholder="https://..." required />
+            <Input label="Summary" name="summary" value={formData.summary} onChange={handleChange} placeholder="Brief description of the mention" rows={3} />
+          </div>
+          <div className="space-y-4">
             <Input label="Date" name="date" value={formData.date ? formData.date.slice(0, 10) : ''} onChange={handleChange} type="date" />
-          </div>
-          <div className="space-y-4">
-            <Select label="Type" name="type" value={formData.type} onChange={handleChange} options={MEDIA_TYPES} />
-            <ImageUpload label="Thumbnail" value={formData.thumbnail} onChange={(url) => handleChange('thumbnail', url)} />
+            <ImageUpload label="Main Image" value={formData.imageUrl} onChange={(url) => handleChange('imageUrl', url)} />
           </div>
         </div>
       )}
@@ -404,54 +251,51 @@ export function MediaEditor() {
   );
 }
 
-// ─── DONATION EDITOR ───
-export function DonationEditor() {
-  return (
-    <EditorForm
-      resourceKey="donations"
-      resourceLabel="Donations"
-      apiPath="/donations"
-      fields={({ formData, handleChange }) => (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <Input label="Donor Name" name="donorName" value={formData.donorName} onChange={handleChange} placeholder="Donor name" required />
-            <Input label="Email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
-            <Input label="Amount (₹)" name="amount" value={formData.amount} onChange={handleChange} type="number" placeholder="Amount" />
-          </div>
-          <div className="space-y-4">
-            <Input label="Currency" name="currency" value={formData.currency} onChange={handleChange} placeholder="INR" />
-            <Input label="Purpose" name="purpose" value={formData.purpose} onChange={handleChange} placeholder="Purpose" />
-            <Select label="Status" name="paymentStatus" value={formData.paymentStatus} onChange={handleChange} options={['pending', 'completed', 'failed']} />
-          </div>
-        </div>
-      )}
-    />
-  );
+// ─── HOMEPAGE RESEARCH CATEGORY EDITOR (Success Stories) ───
+function makeCategoryEditor(category, label, singularName, apiPath, resourceKey) {
+  return function CategoryEditor() {
+    return (
+      <EditorForm
+        resourceKey={resourceKey}
+        resourceLabel={label}
+        singularLabel={singularName}
+        apiPath={apiPath}
+        defaultValues={{ category }}
+        fields={({ formData, handleChange, setField }) => (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-4">
+                <Input label="Title" name="title" value={formData.title} onChange={handleChange} placeholder="Enter title" required />
+                <Input label="Excerpt" name="excerpt" value={formData.excerpt} onChange={handleChange} placeholder="Brief summary" rows={2} />
+                <div>
+                  <label className="label">Content</label>
+                  <RichTextEditor
+                    value={formData.content || ''}
+                    onChange={(html) => handleChange('content', html)}
+                  />
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="rounded-lg border border-gray-200 p-4 bg-gray-50">
+                  <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">Category</p>
+                  <p className="text-sm font-semibold text-gray-800 mt-1">{category}</p>
+                </div>
+                <Select label="Status" name="status" value={formData.status} onChange={handleChange} options={['draft', 'published']} />
+                <ImageUpload label="Thumbnail" value={formData.thumbnail} onChange={(url) => handleChange('thumbnail', url)} />
+                <MultiImageUpload label="Gallery" value={formData.gallery} onChange={(urls) => handleChange('gallery', urls)} />
+                <Input label="Video URL" name="videoUrl" value={formData.videoUrl} onChange={handleChange} placeholder="https://youtube.com/watch?v=..." />
+              </div>
+            </div>
+          </>
+        )}
+      />
+    );
+  };
 }
 
-// ─── MEMBERSHIP EDITOR ───
-export function MembershipEditor() {
-  return (
-    <EditorForm
-      resourceKey="memberships"
-      resourceLabel="Memberships"
-      apiPath="/membership"
-      fields={({ formData, handleChange }) => (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <Input label="Name" name="name" value={formData.name} onChange={handleChange} placeholder="Full name" required />
-            <Input label="Email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
-            <Input label="Phone" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" />
-          </div>
-          <div className="space-y-4">
-            <Input label="Membership Type" name="membershipType" value={formData.membershipType} onChange={handleChange} placeholder="Type" />
-            <Select label="Status" name="status" value={formData.status} onChange={handleChange} options={['active', 'inactive']} />
-          </div>
-        </div>
-      )}
-    />
-  );
-}
+export const ResearchReportEditor = makeCategoryEditor('Research', 'Research & Reports', 'Research Report', '/articles', 'researchReports');
+export const SuccessStoryEditor = makeCategoryEditor('Success Stories', 'Success Stories', 'Success Story', '/articles', 'successStories');
+export const InterviewEditor = makeCategoryEditor('Interview', 'Interviews', 'Interview', '/articles', 'interviews');
 
 // ─── TESTIMONIAL EDITOR ───
 export function TestimonialEditor() {

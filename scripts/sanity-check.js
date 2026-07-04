@@ -117,16 +117,9 @@ const fetchJson = async (url, options = {}) => {
   const publicEndpoints = [
     { name: 'Articles list',      url: '/articles' },
     { name: 'Articles by slug',   url: '/articles/slug/test-article' },
-    { name: 'Programs list',      url: '/programs' },
-    { name: 'Projects list',      url: '/projects' },
     { name: 'Partners list',      url: '/partners' },
-    { name: 'Reports list',       url: '/reports' },
     { name: 'Events list',        url: '/events' },
-    { name: 'Media list',         url: '/media' },
     { name: 'Testimonials list',  url: '/testimonials' },
-    { name: 'Entrepreneurs list', url: '/directory/entrepreneurs' },
-    { name: 'SHGs list',          url: '/directory/shgs' },
-    { name: 'Mentors list',       url: '/directory/mentors' },
     { name: 'Homepage sections',  url: '/homepage' },
   ];
 
@@ -171,22 +164,6 @@ const fetchJson = async (url, options = {}) => {
     }
   } catch (err) {
     testFail('Single article endpoints', err.message);
-  }
-
-  // Test fetching a single program by slug
-  try {
-    const { data: programsData } = await fetchJson(`${API}/programs?limit=1`);
-    const programs = programsData.data;
-    if (programs && programs.length > 0) {
-      const slug = programs[0].slug;
-      const { status: bySlug } = await fetchJson(`${API}/programs/slug/${slug}`);
-      if (bySlug === 200) testPass('Program by slug', `slug=${slug}`);
-      else testFail('Program by slug', `status=${bySlug}`);
-    } else {
-      testWarn('Single program endpoints', 'No programs in database — skipping');
-    }
-  } catch (err) {
-    testFail('Single program endpoints', err.message);
   }
 
   // Test fetching a single event by ID
@@ -265,9 +242,9 @@ const fetchJson = async (url, options = {}) => {
 
   const checkEnv = (name, value) => {
     if (value && value !== '') {
-      testPass(`Env var: ${name}`, 'set');
+      testPass('Env var: ' + name, 'set');
     } else {
-      testWarn(`Env var: ${name}`, 'not set (may use default)`);
+      testWarn('Env var: ' + name, 'not set (may use default)');
     }
   };
 

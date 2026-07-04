@@ -8,15 +8,17 @@ import toast from 'react-hot-toast';
 export default function EditorForm({
   resourceKey,
   resourceLabel,
+  singularLabel,
   apiPath,
   fields,
   transformSave = (data) => data,
   transformLoad = (data) => data,
+  defaultValues = {},
 }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const isNew = !id || id === 'new';
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState(isNew ? { ...defaultValues } : {});
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
 
@@ -84,7 +86,7 @@ export default function EditorForm({
           Back
         </button>
         <div>
-          <h1 className="page-title">{isNew ? `New ${resourceLabel.slice(0, -1)}` : `Edit ${resourceLabel.slice(0, -1)}`}</h1>
+          <h1 className="page-title">{isNew ? `New ${singularLabel || resourceLabel.slice(0, -1)}` : `Edit ${singularLabel || resourceLabel.slice(0, -1)}`}</h1>
         </div>
       </div>
 

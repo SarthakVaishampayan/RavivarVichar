@@ -1,41 +1,38 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, ArrowRight } from 'lucide-react';
+import { Quote } from 'lucide-react';
 import SectionHeading from '../shared/SectionHeading';
 import Button from '../shared/Button';
-
-const researchItems = [
-  {
-    title: 'Impact of SHG-Bank Linkage on Rural Household Income',
-    summary: 'An empirical study across 12 districts in Rajasthan showing a 22% average income increase post SHG-bank linkage, with the strongest effects among women-led households.',
-    author: 'Dr. Ananya Rao',
-    year: 2025,
-    image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&q=80',
-    tags: ['Policy Brief', 'SHG', 'Financial Inclusion'],
-  },
-  {
-    title: 'Digital Literacy & Financial Inclusion in Rural Rajasthan',
-    summary: 'Examining the impact of UPI-based training programs on financial autonomy among rural women, with recommendations for scaling digital inclusion initiatives.',
-    author: 'RavivarVichar Research Team',
-    year: 2025,
-    image: 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600&q=80',
-    tags: ['Research', 'Digital Literacy', 'Women'],
-  },
-];
+import api from '../../lib/axios';
 
 export default function FeaturedResearch() {
+  const [stories, setStories] = useState([]);
+
+  useEffect(() => {
+    api.get('/articles', { params: { category: 'Success Stories', status: 'published', limit: 3, sort: '-createdAt' } })
+      .then(({ data }) => {
+        if (data.data && data.data.length > 0) {
+          setStories(data.data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  if (stories.length === 0) return null;
+
   return (
     <section className="section-lg bg-surface-section">
       <div className="container-site">
         <SectionHeading
-          label="Research Centre"
-          title="Our Latest Research"
-          description="Evidence-based insights driving our programs and policy recommendations."
+          label="Success Stories"
+          title="Real Stories, Real Impact"
+          description="Inspiring journeys of individuals and communities transforming their lives through our programs."
         />
 
         <div className="space-y-20">
-          {researchItems.map((item, i) => (
+          {stories.map((item, i) => (
             <motion.div
-              key={item.title}
+              key={item._id}
               className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center`}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -45,50 +42,40 @@ export default function FeaturedResearch() {
               {/* Image */}
               <div className={`${i % 2 === 1 ? 'lg:order-2' : ''}`}>
                 <div className="img-card overflow-hidden shadow-card">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-80 object-cover"
-                  />
+                  {item.thumbnail ? (
+                    <img
+                      src={item.thumbnail}
+                      alt={item.title}
+                      className="w-full h-80 object-cover"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-80 bg-gray-100">
+                      <Quote size={48} className="text-gray-300" />
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Content */}
               <div className={i % 2 === 1 ? 'lg:order-1' : ''}>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {item.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-primary-50 text-primary-600 px-3 py-1 text-xs font-medium"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                <div className="flex items-center gap-3 mb-4">
+                  <Quote size={24} className="text-primary-500/40" />
+                  <span className="text-sm text-ink-secondary font-medium">{item.location || item.author || ''}</span>
                 </div>
-                <h3 className="text-[32px] font-heading font-bold text-text-primary leading-tight mb-4">
+                <h3 className="text-[32px] font-heading font-bold text-ink-primary leading-tight mb-4">
                   {item.title}
                 </h3>
-                <p className="text-body text-text-secondary mb-6">
-                  {item.summary}
+                <p className="text-body text-ink-secondary leading-relaxed">
+                  {item.excerpt || item.summary}
                 </p>
-                <div className="flex items-center justify-between">
-                  <div className="text-sm text-text-secondary">
-                    <span className="font-medium">{item.author}</span>
-                    <span className="mx-2">·</span>
-                    <span>{item.year}</span>
-                  </div>
-                  <Button variant="outline" to="/research" arrow className="text-sm py-2 px-5">
-                    Read Report
-                  </Button>
-                </div>
               </div>
             </motion.div>
           ))}
         </div>
 
         <div className="text-center mt-16">
-          <Button variant="primary" to="/research" arrow>
-            View All Research
+          <Button variant="primary" to="/knowledge-hub/section/success-stories" arrow>
+            View More Stories
           </Button>
         </div>
       </div>

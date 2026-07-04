@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Edit2, Trash2, ExternalLink } from 'lucide-react';
+import { Edit2, Trash2, ExternalLink, Search } from 'lucide-react';
 import api from '../../lib/axios';
 import DataTable from '../../components/ui/DataTable';
 import StatusBadge from '../../components/ui/StatusBadge';
@@ -17,6 +17,8 @@ const formatDate = (dateStr) => {
     year: 'numeric',
   });
 };
+
+const submissionResources = ['contacts', 'newsletters', 'featureRequests', 'joinInitiative', 'partnerApplications'];
 
 export default function ContentList({ resourceKey, resourceConfig, fetchFn }) {
   const navigate = useNavigate();
@@ -64,9 +66,9 @@ export default function ContentList({ resourceKey, resourceConfig, fetchFn }) {
 
     // Name/title column
     cols.push(
-      columnHelper.accessor((row) => row.title || row.name || row.groupName || 'Untitled', {
+      columnHelper.accessor((row) => row.title || row.name || 'Untitled', {
         id: 'title',
-        header: resourceKey === 'shgs' ? 'Group Name' : resourceKey === 'mentors' ? 'Name' : resourceKey === 'entrepreneurs' ? 'Name' : 'Title',
+        header: 'Title',
         cell: (info) => (
           <div className="flex items-center gap-3">
             {info.row.original.thumbnail || info.row.original.photo || info.row.original.logo ? (
@@ -86,7 +88,7 @@ export default function ContentList({ resourceKey, resourceConfig, fetchFn }) {
     );
 
     // Status/type columns based on resource
-    if (['articles', 'programs', 'projects', 'partners'].includes(resourceKey)) {
+    if (['articles', 'partners'].includes(resourceKey)) {
       cols.push(
         columnHelper.accessor('status', {
           header: 'Status',
@@ -95,14 +97,6 @@ export default function ContentList({ resourceKey, resourceConfig, fetchFn }) {
       );
     }
     if (resourceKey === 'events') {
-      cols.push(
-        columnHelper.accessor('type', {
-          header: 'Type',
-          cell: (info) => <StatusBadge status={info.getValue()} />,
-        })
-      );
-    }
-    if (resourceKey === 'media') {
       cols.push(
         columnHelper.accessor('type', {
           header: 'Type',
@@ -136,19 +130,12 @@ export default function ContentList({ resourceKey, resourceConfig, fetchFn }) {
         })
       );
     }
-    if (resourceKey === 'entrepreneurs') {
+    // Status column for submission resources
+    if (submissionResources.includes(resourceKey)) {
       cols.push(
-        columnHelper.accessor('district', {
-          header: 'District',
-          cell: (info) => <span className="text-sm text-gray-500">{info.getValue() || '—'}</span>,
-        })
-      );
-    }
-    if (resourceKey === 'shgs') {
-      cols.push(
-        columnHelper.accessor('members', {
-          header: 'Members',
-          cell: (info) => <span className="text-sm text-gray-500">{info.getValue() || 0}</span>,
+        columnHelper.accessor('status', {
+          header: 'Status',
+          cell: (info) => <StatusBadge status={info.getValue() || 'under-consideration'} />,
         })
       );
     }
@@ -166,13 +153,24 @@ export default function ContentList({ resourceKey, resourceConfig, fetchFn }) {
         header: '',
         cell: (info) => (
           <div className="flex items-center justify-end gap-1">
-            <button
-              onClick={() => navigate(`/content/${resourceKey}/${info.row.original._id}/edit`)}
-              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
-              title="Edit"
-            >
-              <Edit2 size={15} />
-            </button>
+            {submissionResources.includes(resourceKey) ? (
+              <button
+                onClick={() => navigate(`/content/${resourceKey}/${info.row.original._id}/edit`)}
+                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-primary-600 bg-primary-50 hover:bg-primary-100 transition-colors"
+                title="Review submission"
+              >
+                <Search size={13} />
+                Review
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate(`/content/${resourceKey}/${info.row.original._id}/edit`)}
+                className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+                title="Edit"
+              >
+                <Edit2 size={15} />
+              </button>
+            )}
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -215,15 +213,15 @@ export default function ContentList({ resourceKey, resourceConfig, fetchFn }) {
         data={items}
         loading={loading}
         searchPlaceholder={`Search ${resourceConfig.label.toLowerCase()}...`}
-        addLabel={`Add ${resourceConfig.label.slice(0, -1)}`}
-        onAdd={() => navigate(`/content/${resourceKey}/new`)}
+        addLabel={!submissionResources.includes(resourceKey) ? `Add ${resourceConfig.singularLabel || resourceConfig.label.slice(0, -1)}` : undefined}
+        onAdd={!submissionResources.includes(resourceKey) ? () => navigate(`/content/${resourceKey}/new`) : undefined}
       />
 
       <ConfirmDialog
         open={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDelete}
-        title={`Delete ${resourceConfig.label.slice(0, -1)}?`}
+        title={`Delete ${resourceConfig.singularLabel || resourceConfig.label.slice(0, -1)}?`}
         message={`Are you sure you want to delete "${deleteTarget?.title || deleteTarget?.name || deleteTarget?.groupName || 'this item'}"? This action cannot be undone.`}
         loading={deleting}
       />

@@ -6,10 +6,10 @@ import Button from '../shared/Button';
 
 const navItems = [
   { label: 'Home', path: '/' },
-  { label: 'Programs', path: '/programs' },
-  { label: 'About', path: '/about' },
+  { label: 'About Us', path: '/about' },
   { label: 'Knowledge Hub', path: '/knowledge-hub' },
   { label: 'Events', path: '/events' },
+  { label: 'Gallery', path: '/gallery' },
   { label: 'Contact', path: '/contact' },
 ];
 
@@ -38,7 +38,7 @@ export default function Navbar() {
           : 'bg-transparent'
       )}
     >
-      <div className="container-site h-full flex items-center justify-between">
+      <div className="container-site h-full flex items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 shrink-0">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500 text-lg font-bold text-white">
@@ -49,8 +49,8 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-10">
+        {/* Desktop Navigation - centered */}
+        <nav className="hidden lg:flex items-center justify-center flex-1 gap-8">
           {navItems.map((item) => (
             <Link
               key={item.path}
@@ -66,9 +66,9 @@ export default function Navbar() {
         </nav>
 
         {/* Desktop CTA */}
-        <div className="hidden lg:block">
-          <Button variant="primary" to="/donate" arrow>
-            Donate Now
+        <div className="hidden lg:block shrink-0">
+          <Button variant="primary" to="/get-featured" arrow>
+            Get Featured
           </Button>
         </div>
 
@@ -99,8 +99,8 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="pt-4 border-t border-gray-100">
-              <Button variant="primary" to="/donate" arrow className="w-full justify-center">
-                Donate Now
+              <Button variant="primary" to="/get-featured" arrow className="w-full justify-center">
+                Get Featured
               </Button>
             </div>
           </nav>

@@ -19,6 +19,7 @@ ravivarvichar-cms/                  ← Monorepo (npm workspaces)
 │   └── shared/                    ← Shared Zod validation schemas
 ├── phase.md                       ← Phase tracking & progress
 ├── resume_prompt.md               ← This file
+├── futurePlan.md                  ← Local storage migration plan + pending tasks
 ├── RavivarVichar_CMS_Implementation_Plan.md  ← Full implementation plan
 ├── package.json                   ← Root workspace config
 └── .env.example
@@ -31,7 +32,9 @@ ravivarvichar-cms/                  ← Monorepo (npm workspaces)
 4. **Analytics Dashboard**: Content count cards, pie chart (content distribution), bar chart (monthly posts), recent activity feed.
 5. **JavaScript only** — no TypeScript.
 6. **Local MongoDB** — not Atlas for development.
-7. **UI Design Spec** — public website follows a specific design spec: minimalistic, elegant, editorial, spacious, premium. Colors: warm orange (#F5A623), soft green (#6AA84F), muted blue (#5DADE2), soft red (#D96C6C). Fonts: Playfair Display (headings), Inter (body). Pill buttons (999px), 28px card radii, 24px image radii.
+7. **No hardcoded data** — All homepage sections must fetch from API and return null/hide when no data.
+8. **Status system for submissions**: `under-consideration` / `approved` / `posted` / `denied`. Deny does NOT delete.
+9. **Admin idle timeout**: Page reloads instead of redirecting to `/login` (avoids blank page when SPA is at subpath).
 
 ### Design Tokens (current)
 ```css
@@ -57,7 +60,7 @@ Border radius system: pill = 999px, card = 28px, image = 24px, input = 18px. Sha
 - Public GET routes require no auth
 
 ### Content Models (18+ Mongoose schemas)
-Article, Program, Project, Partner, Report, Entrepreneur, SHG, Mentor, Event, MediaItem, Testimonial, Newsletter, Donation, Membership, PageSection, SeoMeta, ActivityLog
+Article, Program, Project, Partner, Report, Entrepreneur, SHG, Mentor, Event, MediaItem, Testimonial, Newsletter, Donation, Membership, PageSection, SeoMeta, ActivityLog, ContactMessage, FeatureRequest, JoinInitiative, PartnerApplication, GalleryImage, MediaMention
 
 ### Tech Stack
 - **Frontend (client)**: React 18 + Vite + Tailwind CSS 3 + React Router v6 + Framer Motion + clsx + react-helmet-async + lucide-react
@@ -79,103 +82,90 @@ Article, Program, Project, Partner, Report, Entrepreneur, SHG, Mentor, Event, Me
 | 5 — Integrations | ⏳ Not started |
 | 6 — Polish & Deploy | ⏳ Not started |
 
-### Files Created
+### Last Session (July 2026) — Summary of All Changes
 
-**Phase 1 — Foundation** (Session 1)
-- `RavivarVichar_CMS_Implementation_Plan.md` — Full implementation plan
-- `phase.md` — Detailed phase tracking with task breakdowns and checklists
-- `resume_prompt.md` — This file
-- `package.json` — Root workspace config
-- `.gitignore` — Standard Node.js gitignore
-- `.env.example` — Environment variables template
-- `apps/server/` — Complete Express server with auth, 18 models, middleware, seed script
-- `packages/shared/` — Shared Zod validation schemas
+#### Bug Fixes
+1. **Server crash fix** — `contact.routes.js` was missing `updateStatus` in the destructured import from the controller. Caused `ReferenceError` on startup.
+2. **Duplicate `module.exports`** — 4 route files (joinInitiative, featureRequest, newsletter, partnerApplication) had duplicate `module.exports = router;` lines. Cleaned up.
+3. **Admin idle timeout redirect** — Changed `window.location.href = '/login'` → `window.location.reload()` in axios interceptor. Old code navigated to main site's `/login` (blank page) instead of admin SPA's internal `/login` when deployed at subpath.
+4. **Upload middleware fix** — Removed invalid `image/jpg` MIME type, added `image/bmp`, `image/tiff`, `image/svg+xml`, and `startsWith('image/')` fallback to accept ALL image formats.
+5. **Multer error handling** — Added MulterError handling to `error.middleware.js` with clear messages (LIMIT_FILE_SIZE, LIMIT_FILE_COUNT, LIMIT_UNEXPECTED_FILE).
 
-**Phase 2 — Core CMS APIs** (Session 2)
-- 11 CRUD controllers + routes (Articles, Programs, Projects, Partners, Reports, Entrepreneurs, SHGs, Mentors, Events, Media, Testimonials)
-- Upload controller (Cloudinary via Multer)
-- Analytics summary endpoint (content counts + activity log)
-- Homepage builder API (PageSection order/visibility)
-- Activity logging on all write operations
-- All routes mounted under `/api/v1`
+#### Status System Overhaul (All 5 Submission Types)
+- **Before**: `pending` / `reviewed` / `denied` (deny auto-deleted)
+- **After**: `under-consideration` / `approved` / `posted` / `denied` (deny just sets status, no delete)
+- Updated all 5 models: ContactMessage, Newsletter, FeatureRequest, JoinInitiative, PartnerApplication
+- Updated all 5 controllers — `updateStatus` validates against new enum
+- Updated SubmissionDetail.jsx — 4 colored buttons: Approved (green), Under Consideration (yellow), Posted (blue), Deny (red)
 
-**Phase 3 — Admin Dashboard** (Session 3)
-32 files in `apps/admin/src/`:
-- `main.jsx`, `App.jsx`, `index.css` — Entry point with Tailwind + custom component classes
-- `lib/axios.js` — Axios with auth interceptor (auto-refresh + redirect on 401)
-- `lib/constants.js` — Resource configs, nav items, statuses, homepage sections
-- `store/authStore.js` — Zustand JWT store with localStorage persistence
-- Auth: `Login.jsx`, `ProtectedRoute.jsx`
-- Layout: `DashboardLayout.jsx`, `Sidebar.jsx` (collapsible), `Topbar.jsx`
-- Dashboard: `Dashboard.jsx` — stat cards, pie chart, bar chart, activity feed, quick actions
-- UI: `DataTable.jsx` (TanStack w/ sort/search/paginate), `RichTextEditor.jsx` (TipTap), `ImageUpload.jsx`, `ConfirmDialog.jsx`, `StatusBadge.jsx`, `StatCard.jsx`, `LoadingSpinner.jsx`
-- Content management: `ContentHub.jsx` (content type grid), `ContentList.jsx` (reusable list), `ContentListPages.jsx` (11 wrappers), `EditorForm.jsx` (reusable), `Editors.jsx` (9 editor implementations)
-- Pages: `Analytics.jsx`, `SEO.jsx`, `HomepageBuilder.jsx` (dnd-kit), `Users.jsx`, `Settings.jsx`
-- Routes: `AdminRoutes.jsx` — all routes with ProtectedRoute
+#### Admin Panel Improvements
+- **Review button** — Submission resources now show a labeled "Review" button (Search icon) instead of pencil icon
+- **Status column** — Added colored StatusBadge in ContentList for submission resources
+- **StatusBadge colors** — Added color styles for `under-consideration` (yellow), `approved` (green), `posted` (blue), `denied` (red)
+- **"Add Medi" fix** — Changed media label from `'Media'` to `'Media Items'` so add button shows "Add Media Item"
+- **New sidebar sections** — Added 3 dedicated management sections:
+  - **Research & Reports** (filters articles by category "Research")
+  - **Success Stories** (filters articles by category "Success Stories")
+  - **Interviews** (filters articles by category "Interview")
+  - Each has its own list page, editor (category pre-set), and sidebar entry
+  - EditorForm now supports `defaultValues` and `singularLabel` props
+  - ContentList now supports `singularLabel` field for proper singular names
 
-**Phase 4 — Public Website** (Session 4)
-36 files in `apps/client/src/`:
-- `main.jsx`, `App.jsx`, `index.css` — Vite entry, routing, Tailwind + design spec CSS
-- `lib/axios.js` — Axios instance pointing to `/api/v1`
-- Layout: `Navbar.jsx` (transparent→solid on scroll, mobile hamburger), `Footer.jsx` (large, newsletter), `PageLayout.jsx` (wrapper)
-- Shared components: `Button.jsx` (primary/secondary/outline), `Card.jsx` (hover lift, image zoom), `SectionHeading.jsx`, `FloatingDots.jsx`
-- Homepage (14 sections): Hero (blob-masked image collage), Mission, ProgramsGrid, FeaturedResearch, LatestArticles, ImpactStats, CurrentProjects, Partners, VideosSection, Testimonials (carousel), EventsPreview, MembershipCTA, DonateCTA, Newsletter
-- Inner pages (11 pages): About, Programs (list), ProgramDetail, KnowledgeHub (articles), ArticleDetail, Events, Contact, Donate, Research, Media (gallery/video/press tabs)
-- SEO: react-helmet-async on every page, Open Graph, Twitter Card, JSON-LD structured data on Home
+#### Hardcoded Data Removed
+All 4 homepage components now fetch from APIs and return `null` when no data:
+- **MediaMentions.jsx** — Removed 3 hardcoded fallback entries. Fetches from `/media-mentions` API.
+- **FeaturedResearch.jsx** — Removed 3 hardcoded "Success Stories". Fetches from `/articles?category=Success Stories`.
+- **Partners.jsx** — Removed 6 hardcoded partners. Fetches from `/partners?status=active`. Shows logos or auto-generates initials.
+- **Testimonials.jsx** — Removed 3 hardcoded testimonials. Fetches from `/testimonials`. Handles `image`/`photo`, `quote`/`content`, `role`/`designation`.
 
-### Phase 1 Completed ✅
-- Monorepo with npm workspaces set up
-- Express server starts on port 5000
-- Local MongoDB connected (MONGO_URI: `mongodb://localhost:27017/ravivarvichar`)
-- JWT auth: login, register, refresh, logout, getMe (access + refresh tokens)
-- Zod validation on auth routes via shared package
-- 18 Mongoose models
-- Middleware: error handler, JWT auth, Zod validate, Multer upload, Express rate limiter
-- Seed script with sample data (run: `npm run seed`)
-- Single admin role, JavaScript only (no TypeScript)
+#### Database Cleanup
+- **PageSection cleanup** — Deleted 9 old ghost documents (`mission`, `articles`, `stats`, `projects`, `videos`, `events`, `membership`, `donate`, `newsletter`) from before the enum was narrowed
+- **Fixed `programs.visible=false`** — Was causing "What We Do" section to be hidden on homepage
+- Created `apps/server/src/seed/cleanupSections.js` (one-time migration script, can be removed)
 
-### Phase 2 Completed ✅
-- Full CRUD REST APIs for all 11 content types
-- Pagination, search, sorting on list endpoints
-- Admin auth gates write operations; public GET routes accessible without token
-- Cloudinary upload endpoint (single + multiple)
-- Analytics summary endpoint
-- Activity logging on all create/update/delete operations
-- Homepage builder API for PageSection order/visibility
-
-### Phase 3 Completed ✅
-- Admin Vite app on port 5174
-- Login/logout with JWT refresh flow
-- Collapsible sidebar, topbar with user info
-- Dashboard with Recharts pie + bar charts
-- ContentHub → DataTable → Editor flow for all 11 content types
-- TipTap rich text editor with full toolbar
-- dnd-kit homepage drag-and-drop builder
-- SEO panel, Analytics page, Users page, Settings page
-- Image upload component
-
-### Phase 4 Completed ✅
-- Client Vite app on port 5173 with all design spec tokens
-- Navbar (transparent→solid, mobile menu), Footer (links, newsletter, social)
-- 14 homepage sections with static demo content (not yet wired to API)
-- 11 inner pages: About, Programs (list + detail), Knowledge Hub (list + detail), Events, Contact, Donate, Research, Media
-- SEO meta tags on every page, Open Graph, JSON-LD on Home
-- PageLayout wrapper component for consistent layout
-
-### Last Session Summary
-- Built all 11 inner pages for the public website
-- Fixed CSS error from `text-text-primary` → `text-ink-primary` color name conflict
-- Renamed color key from `text` to `ink` to avoid Tailwind utility namespace collision
-- Fixed nesting bug in tailwind.config (fontFamily inside colors block)
-- Added ArticleDetail content for all 9 article slugs
-- Cleaned up dead imports across all page files
-- Design tokens updated to match user's exact UI spec
-- All 11 routes wired in App.jsx
+#### Knowledge Hub Screens Issues
+- The 4 Knowledge Hub sections (Articles, Research & Reports, Success Stories, Interviews) are all articles with different category values
+- Admin sidebar now shows dedicated entries for each with pre-set category
+- Category is shown as a read-only badge in the editor form
 
 ---
 
-## Next Steps
+## Next Steps / Remaining Work
 
-Phase 5 — Integrations: Newsletter signup + email, donations (Razorpay/Stripe), membership, contact form backend, pageview analytics tracking.
+### Immediate Items
+1. **ProgramsGrid.jsx** — Still has hardcoded "What We Do" content (Empowerment, Entrepreneurship Support, Capacity Building, Ground Work). User wants NO hardcoded data — needs to be dynamic.
+2. **About.jsx** — Still has hardcoded stats, timeline, team, values. Needs to be dynamic.
+3. **Hero.jsx** — Has hardcoded images from Unsplash. May need to be configurable.
+4. **Deployment** — Server needs PM2 + Nginx setup on DigitalOcean. See `scripts/deploy.sh`.
+5. **futurePlan.md** — Has local storage migration plan that hasn't been started yet.
+6. **Seed data** — `npm run seed` is outdated. New models (MediaMention, GalleryImage, FeatureRequest, JoinInitiative, PartnerApplication) aren't seeded.
 
-See `phase.md` for the complete Phase 5 task breakdown.
+### Infrastructure / CI
+- PM2 process manager setup for production
+- Nginx/Caddy reverse proxy config for client, admin, API
+- SSL cert via Let's Encrypt
+- MongoDB connection to Atlas (currently local)
+- Environment vars for production
+
+### Phase 5 — Integrations (Not Started)
+- Newsletter signup + email (Resend/Nodemailer)
+- Donations (Razorpay/Stripe)
+- Membership management
+- Contact form backend
+- Pageview analytics tracking
+
+### Known Issues
+- EditorForm title uses `pluralLabel.slice(0, -1)` fallback — edge cases like "Media" → "Medi" still exist for some resources
+- ContentHub shows "0 items" for the 3 new sections (researchReports, successStories, interviews) because analytics doesn't count by category
+- ProgramsGrid.jsx still has hardcoded data (not yet rewritten)
+
+---
+
+## Resuming Work
+
+When the user says "continue", first check:
+1. Is the dev server running? If not, start it.
+2. Which issue do they want to work on next?
+3. Read the full conversation summary in this file for context.
+
+See `phase.md` for the complete task breakdown.

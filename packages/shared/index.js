@@ -33,22 +33,8 @@ const articleSchema = z.object({
     keywords: z.array(z.string()).optional(),
   }).optional(),
 });
-
-// Project schemas
-const projectSchema = z.object({
-  title: z.string().min(5, 'Title must be at least 5 characters'),
-  coverImage: z.string().optional(),
-  description: z.string().optional(),
-  status: z.enum(['ongoing', 'completed']).optional(),
-  location: z.object({
-    district: z.string().optional(),
-    state: z.string().optional(),
-  }).optional(),
-});
-
 module.exports = {
   loginSchema,
   registerSchema,
   articleSchema,
-  projectSchema,
 };

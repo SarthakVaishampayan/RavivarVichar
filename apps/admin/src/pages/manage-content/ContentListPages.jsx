@@ -17,36 +17,6 @@ export function ArticleList() {
   );
 }
 
-export function ProgramList() {
-  return (
-    <ContentList
-      resourceKey="programs"
-      resourceConfig={RESOURCES.programs}
-      fetchFn={fetchAll('/programs')}
-    />
-  );
-}
-
-export function ProjectList() {
-  return (
-    <ContentList
-      resourceKey="projects"
-      resourceConfig={RESOURCES.projects}
-      fetchFn={fetchAll('/projects')}
-    />
-  );
-}
-
-export function ReportList() {
-  return (
-    <ContentList
-      resourceKey="reports"
-      resourceConfig={RESOURCES.reports}
-      fetchFn={fetchAll('/reports')}
-    />
-  );
-}
-
 export function EventList() {
   return (
     <ContentList
@@ -63,46 +33,6 @@ export function PartnerList() {
       resourceKey="partners"
       resourceConfig={RESOURCES.partners}
       fetchFn={fetchAll('/partners')}
-    />
-  );
-}
-
-export function EntrepreneurList() {
-  return (
-    <ContentList
-      resourceKey="entrepreneurs"
-      resourceConfig={RESOURCES.entrepreneurs}
-      fetchFn={fetchAll('/directory/entrepreneurs')}
-    />
-  );
-}
-
-export function SHGList() {
-  return (
-    <ContentList
-      resourceKey="shgs"
-      resourceConfig={RESOURCES.shgs}
-      fetchFn={fetchAll('/directory/shgs')}
-    />
-  );
-}
-
-export function MentorList() {
-  return (
-    <ContentList
-      resourceKey="mentors"
-      resourceConfig={RESOURCES.mentors}
-      fetchFn={fetchAll('/directory/mentors')}
-    />
-  );
-}
-
-export function MediaList() {
-  return (
-    <ContentList
-      resourceKey="media"
-      resourceConfig={RESOURCES.media}
-      fetchFn={fetchAll('/media')}
     />
   );
 }
@@ -137,22 +67,72 @@ export function ContactList() {
   );
 }
 
-export function MembershipList() {
+export function FeatureRequestList() {
   return (
     <ContentList
-      resourceKey="memberships"
-      resourceConfig={RESOURCES.memberships}
-      fetchFn={fetchAll('/membership')}
+      resourceKey="featureRequests"
+      resourceConfig={RESOURCES.featureRequests}
+      fetchFn={fetchAll('/feature-requests')}
     />
   );
 }
 
-export function DonationList() {
+export function JoinInitiativeList() {
   return (
     <ContentList
-      resourceKey="donations"
-      resourceConfig={RESOURCES.donations}
-      fetchFn={fetchAll('/donations')}
+      resourceKey="joinInitiative"
+      resourceConfig={RESOURCES.joinInitiative}
+      fetchFn={fetchAll('/join-initiative')}
+    />
+  );
+}
+
+export function MediaMentionList() {
+  return (
+    <ContentList
+      resourceKey="mediaMentions"
+      resourceConfig={RESOURCES.mediaMentions}
+      fetchFn={fetchAll('/media-mentions')}
+    />
+  );
+}
+
+export function PartnerApplicationList() {
+  return (
+    <ContentList
+      resourceKey="partnerApplications"
+      resourceConfig={RESOURCES.partnerApplications}
+      fetchFn={fetchAll('/partner-applications')}
+    />
+  );
+}
+
+export function ResearchReportList() {
+  return (
+    <ContentList
+      resourceKey="researchReports"
+      resourceConfig={RESOURCES.researchReports}
+      fetchFn={fetchAll('/articles?category=Research')}
+    />
+  );
+}
+
+export function SuccessStoryList() {
+  return (
+    <ContentList
+      resourceKey="successStories"
+      resourceConfig={RESOURCES.successStories}
+      fetchFn={fetchAll('/articles?category=Success%20Stories')}
+    />
+  );
+}
+
+export function InterviewList() {
+  return (
+    <ContentList
+      resourceKey="interviews"
+      resourceConfig={RESOURCES.interviews}
+      fetchFn={fetchAll('/articles?category=Interview')}
     />
   );
 }

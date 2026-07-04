@@ -23,6 +23,29 @@ const subscribe = catchAsync(async (req, res) => {
   sendSuccess(res, null, 'Successfully subscribed to our newsletter!', 201);
 });
 
+// GET /api/v1/newsletter/:id — admin only
+const getOne = catchAsync(async (req, res) => {
+  const subscriber = await Newsletter.findById(req.params.id);
+  if (!subscriber) return sendError(res, 'Subscriber not found', 404);
+  sendSuccess(res, subscriber);
+});
+
+// PUT /api/v1/newsletter/:id/status — admin only
+const updateStatus = catchAsync(async (req, res) => {
+  const { status } = req.body;
+  if (!['under-consideration', 'approved', 'posted', 'denied'].includes(status)) {
+    return sendError(res, 'Invalid status', 400);
+  }
+
+  const subscriber = await Newsletter.findByIdAndUpdate(
+    req.params.id,
+    { status },
+    { new: true }
+  );
+  if (!subscriber) return sendError(res, 'Subscriber not found', 404);
+  sendSuccess(res, subscriber, `Subscriber marked as ${status.replace('-', ' ')}`);
+});
+
 // GET /api/v1/newsletter — admin only
 const getAll = catchAsync(async (req, res) => {
   const result = await paginate(Newsletter, {}, {
@@ -42,4 +65,4 @@ const deleteOne = catchAsync(async (req, res) => {
   sendSuccess(res, null, 'Subscriber removed');
 });
 
-module.exports = { subscribe, getAll, deleteOne };
+module.exports = { subscribe, getAll, getOne, updateStatus, deleteOne };

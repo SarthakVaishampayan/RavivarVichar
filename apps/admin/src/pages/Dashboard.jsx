@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  FileText, Layers, Briefcase, Users, Calendar,
-  BarChart3, Plus, ArrowRight, Clock,
+  FileText, Users, Calendar, Image, BarChart3, Plus, ArrowRight, Clock,
 } from 'lucide-react';
 import api from '../lib/axios';
 import StatCard from '../components/ui/StatCard';
@@ -12,10 +11,9 @@ import MonthlyPostChart from '../components/charts/MonthlyPostChart';
 
 const contentTypes = [
   { key: 'articles', label: 'Articles', icon: FileText, color: 'text-primary-500', bg: 'bg-primary-50', path: '/content/articles' },
-  { key: 'programs', label: 'Programs', icon: Layers, color: 'text-secondary-500', bg: 'bg-secondary-50', path: '/content/programs' },
-  { key: 'projects', label: 'Projects', icon: Briefcase, color: 'text-blue-500', bg: 'bg-blue-50', path: '/content/projects' },
   { key: 'events', label: 'Events', icon: Calendar, color: 'text-rose-500', bg: 'bg-rose-50', path: '/content/events' },
   { key: 'partners', label: 'Partners', icon: Users, color: 'text-purple-500', bg: 'bg-purple-50', path: '/content/partners' },
+  { key: 'gallery', label: 'Gallery', icon: Image, color: 'text-emerald-500', bg: 'bg-emerald-50', path: '/content/gallery' },
 ];
 
 export default function Dashboard() {
@@ -166,7 +164,7 @@ export default function Dashboard() {
 
         <div className="card">
           <div className="card-header">
-            <h2 className="text-base font-semibold text-gray-900">Quick Stats</h2>
+            <h2 className="text-base font-semibold text-gray-900">Quick Actions</h2>
           </div>
           <div className="card-body space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -181,14 +179,14 @@ export default function Dashboard() {
                 <p className="text-xs text-yellow-500 mt-0.5">Articles</p>
               </div>
               <div className="rounded-lg bg-green-50 p-4">
-                <p className="text-xs font-medium text-green-600 uppercase tracking-wider">Ongoing</p>
-                <p className="text-2xl font-bold text-green-700 mt-1">{stats.ongoingProjects || 0}</p>
-                <p className="text-xs text-green-500 mt-0.5">Projects</p>
+                <p className="text-xs font-medium text-green-600 uppercase tracking-wider">Active</p>
+                <p className="text-2xl font-bold text-green-700 mt-1">{stats.activeEvents || 0}</p>
+                <p className="text-xs text-green-500 mt-0.5">Events</p>
               </div>
               <div className="rounded-lg bg-purple-50 p-4">
-                <p className="text-xs font-medium text-purple-600 uppercase tracking-wider">Upcoming</p>
-                <p className="text-2xl font-bold text-purple-700 mt-1">{stats.upcomingEvents || 0}</p>
-                <p className="text-xs text-purple-500 mt-0.5">Events</p>
+                <p className="text-xs font-medium text-purple-600 uppercase tracking-wider">Partners</p>
+                <p className="text-2xl font-bold text-purple-700 mt-1">{stats.activePartners || 0}</p>
+                <p className="text-xs text-purple-500 mt-0.5">Active</p>
               </div>
             </div>
 
@@ -201,18 +199,18 @@ export default function Dashboard() {
                 Add New Article
               </button>
               <button
-                onClick={() => navigate('/content/projects?action=new')}
-                className="btn-ghost w-full justify-start text-sm"
-              >
-                <Plus size={16} />
-                Add New Project
-              </button>
-              <button
                 onClick={() => navigate('/content/events?action=new')}
                 className="btn-ghost w-full justify-start text-sm"
               >
                 <Plus size={16} />
                 Add New Event
+              </button>
+              <button
+                onClick={() => navigate('/content/gallery')}
+                className="btn-ghost w-full justify-start text-sm"
+              >
+                <Image size={16} />
+                Manage Gallery
               </button>
               <button
                 onClick={() => navigate('/content')}

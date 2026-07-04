@@ -1,34 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Quote, User } from 'lucide-react';
 import SectionHeading from '../shared/SectionHeading';
-
-const testimonials = [
-  {
-    quote: "The training gave me the confidence to open my own shop. Today, I employ three women from my village and my children are going to school. RavivarVichar didn't just teach me skills — they showed me I could dream.",
-    name: 'Sunita Bai',
-    role: 'SHG Member, Jodhpur',
-    image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?w=200&q=80',
-  },
-  {
-    quote: "Their ground-level execution and reporting transparency stand out among all our partner organizations. The impact data is meticulously tracked and the community outcomes speak for themselves.",
-    name: 'Vikram Singh',
-    role: 'Partner, NABARD',
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80',
-  },
-  {
-    quote: "Before joining the financial literacy workshop, I had never used a bank account. Now I manage our SHG's savings book and teach other women how to use UPI. This is real change.",
-    name: 'Meena Kumari',
-    role: 'Entrepreneur, Udaipur',
-    image: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=200&q=80',
-  },
-];
+import api from '../../lib/axios';
 
 export default function Testimonials() {
+  const [testimonials, setTestimonials] = useState([]);
   const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    api.get('/testimonials', { params: { limit: 10, sort: '-createdAt' } })
+      .then(({ data }) => {
+        if (data.data && data.data.length > 0) {
+          setTestimonials(data.data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  if (testimonials.length === 0) return null;
 
   const next = () => setCurrent((prev) => (prev + 1) % testimonials.length);
   const prev = () => setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+
+  const t = testimonials[current];
 
   return (
     <section className="section-lg bg-surface-white relative overflow-hidden">
@@ -55,25 +50,31 @@ export default function Testimonials() {
               transition={{ duration: 0.4 }}
             >
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-8 border-4 border-primary-100 shadow-soft">
-                <img
-                  src={testimonials[current].image}
-                  alt={testimonials[current].name}
-                  className="w-full h-full object-cover"
-                />
+                {t.image || t.photo ? (
+                  <img
+                    src={t.image || t.photo}
+                    alt={t.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-primary-50 flex items-center justify-center">
+                    <User size={28} className="text-primary-400" />
+                  </div>
+                )}
               </div>
 
               <Quote size={28} className="mx-auto text-primary-300 mb-6" />
 
               <blockquote className="text-xl md:text-2xl text-text-primary font-medium leading-relaxed mb-8 max-w-3xl mx-auto">
-                "{testimonials[current].quote}"
+                "{t.quote || t.content}"
               </blockquote>
 
               <div className="mb-2">
                 <p className="text-lg font-semibold text-text-primary">
-                  {testimonials[current].name}
+                  {t.name}
                 </p>
                 <p className="text-sm text-text-secondary">
-                  {testimonials[current].role}
+                  {t.role || t.designation || ''}
                 </p>
               </div>
             </motion.div>

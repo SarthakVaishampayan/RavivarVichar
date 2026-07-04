@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, FileText, Users, Calendar } from 'lucide-react';
+import { BarChart3, FileText, Calendar } from 'lucide-react';
 import api from '../lib/axios';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import StatCard from '../components/ui/StatCard';
@@ -59,7 +59,6 @@ export default function Analytics() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard icon={BarChart3} label="Total Content Items" value={data.total} colorClass="text-primary-500" bgClass="bg-primary-50" />
         <StatCard icon={FileText} label="Published Articles" value={stats.publishedArticles || 0} colorClass="text-green-500" bgClass="bg-green-50" />
-        <StatCard icon={TrendingUp} label="Ongoing Projects" value={stats.ongoingProjects || 0} colorClass="text-blue-500" bgClass="bg-blue-50" />
         <StatCard icon={Calendar} label="Upcoming Events" value={stats.upcomingEvents || 0} colorClass="text-purple-500" bgClass="bg-purple-50" />
       </div>
 

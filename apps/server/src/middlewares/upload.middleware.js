@@ -26,11 +26,15 @@ const storage = process.env.CLOUDINARY_CLOUD_NAME
     });
 
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-  if (allowedTypes.includes(file.mimetype)) {
+  // Accept all common image MIME types
+  const allowedTypes = [
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+    'image/bmp', 'image/tiff', 'image/svg+xml',
+  ];
+  if (allowedTypes.includes(file.mimetype) || file.mimetype.startsWith('image/')) {
     cb(null, true);
   } else {
-    cb(new Error('Only image files (JPEG, PNG, GIF, WebP) are allowed'), false);
+    cb(new Error('Only image files are allowed (JPEG, PNG, GIF, WebP, etc.)'), false);
   }
 };
 

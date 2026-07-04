@@ -41,12 +41,12 @@ export default function Hero() {
               </p>
 
               <div className="flex flex-wrap items-center gap-4 mt-10">
-                <Button variant="primary" to="/programs" arrow>
-                  Explore Our Programs
+                <Button variant="primary" to="/partner-with-us" arrow>
+                  Partner with Us
                 </Button>
-                <Button variant="secondary" to="/about" arrow={false}>
+                <Button variant="secondary" to="/join-our-initiative" arrow={false}>
                   <Play size={18} />
-                  Our Story
+                  Join Our Initiative
                 </Button>
               </div>
             </motion.div>

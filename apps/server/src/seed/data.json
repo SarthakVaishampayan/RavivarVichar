@@ -7,59 +7,7 @@
       "role": "admin"
     }
   ],
-  "programs": [
-    {
-      "title": "Women Entrepreneurship",
-      "slug": "women-entrepreneurs",
-      "description": "Our Women Entrepreneurship program provides comprehensive support for rural women to start, manage, and scale their own businesses. We combine skill development, financial access, and mentorship to create a nurturing ecosystem for women entrepreneurs.",
-      "tagline": "Empowering rural women to become business leaders",
-      "objectives": ["Skill development", "Access to microfinance", "Market linkages"],
-      "impact": ["2,500+ women trained in business skills", "800+ businesses launched", "150 villages covered", "₹5Cr+ in microfinance disbursed", "85% business survival rate after 2 years"],
-      "approach": [
-        { "title": "Skill Development", "description": "Training in business planning, financial management, marketing, and digital literacy." },
-        { "title": "Microfinance Access", "description": "Facilitating connections with microfinance institutions and self-help group savings." },
-        { "title": "Mentorship Network", "description": "Ongoing guidance from experienced entrepreneurs and business professionals." },
-        { "title": "Market Linkages", "description": "Connecting women entrepreneurs to local and regional markets for their products." }
-      ],
-      "stats": { "trained": "2,500+", "active": "800+", "villages": "150", "growth": "40%" },
-      "color": "primary",
-      "status": "active"
-    },
-    {
-      "title": "SHG Development",
-      "slug": "shg-development",
-      "description": "Our Self-Help Group development program focuses on forming and strengthening women's collectives that serve as platforms for savings, enterprise, and community leadership.",
-      "tagline": "Building self-reliant women's collectives",
-      "objectives": ["Group formation", "Bookkeeping training", "Bank linkage"],
-      "impact": ["200+ active SHGs", "5,000+ women members", "₹2Cr+ in collective savings", "80% financial literacy rate", "120+ SHGs linked to bank credit"],
-      "approach": [
-        { "title": "Group Formation", "description": "Facilitating the formation of new SHGs with 10-15 members each." },
-        { "title": "Capacity Building", "description": "Training in bookkeeping, meeting management, conflict resolution, and leadership." },
-        { "title": "Financial Linkage", "description": "Connecting SHGs to banks, government schemes, and microfinance institutions." },
-        { "title": "Livelihood Promotion", "description": "Supporting SHG members in identifying and pursuing collective livelihood opportunities." }
-      ],
-      "stats": { "groups": "200+", "members": "5,000+", "savings": "₹2Cr+", "linked": "120+" },
-      "color": "secondary",
-      "status": "active"
-    },
-    {
-      "title": "Financial Literacy",
-      "slug": "financial-literacy",
-      "description": "Our Financial Literacy program equips rural communities with the knowledge and skills to make informed financial decisions. From basic budgeting to digital banking, we cover essential financial concepts.",
-      "tagline": "Building financial capability for better lives",
-      "objectives": ["Digital payments awareness", "Savings habit building"],
-      "impact": ["10,000+ individuals trained", "300+ workshops conducted", "8 districts covered", "70% increase in savings behavior", "60% adoption of digital payments"],
-      "approach": [
-        { "title": "Workshops & Camps", "description": "Interactive financial literacy camps covering budgeting, savings, and debt management." },
-        { "title": "Digital Banking Training", "description": "Hands-on training in mobile banking, UPI, and digital payment systems." },
-        { "title": "Family Finance Planning", "description": "Workshops on household budgeting, children's education savings, and emergency funds." },
-        { "title": "Entrepreneur Finance", "description": "Specialized modules for small business owners on cash flow, pricing, and record keeping." }
-      ],
-      "stats": { "trained": "10,000+", "workshops": "300+", "districts": "8", "digital": "60%" },
-      "color": "blue",
-      "status": "active"
-    }
-  ],
+
   "articles": [
     {
       "title": "How Rural Women Are Redefining Entrepreneurship in Rajasthan",
@@ -112,72 +60,11 @@
       "content": "<p class=\"text-lg leading-relaxed text-ink-secondary mb-6\">Based on our research across 12 districts in Rajasthan, we present key policy recommendations for strengthening rural financial inclusion.</p>"
     }
   ],
-  "projects": [
-    {
-      "title": "Marwar Livelihoods Project",
-      "location": { "district": "Jodhpur", "state": "Rajasthan" },
-      "status": "ongoing",
-      "budget": 4500000,
-      "startDate": "2025-04-01",
-      "impactNumbers": [
-        { "label": "Women trained", "value": "320" },
-        { "label": "SHGs formed", "value": "28" }
-      ]
-    },
-    {
-      "title": "Digital Literacy for SHGs",
-      "location": { "district": "Udaipur", "state": "Rajasthan" },
-      "status": "completed",
-      "budget": 1200000,
-      "startDate": "2024-01-15",
-      "endDate": "2024-12-20",
-      "impactNumbers": [{ "label": "Women onboarded to UPI", "value": "540" }]
-    }
-  ],
   "partners": [
     { "name": "NABARD", "category": "government", "status": "active" },
     { "name": "Tata Trusts", "category": "corporate", "status": "active" },
     { "name": "SEWA Bharat", "category": "ngo", "status": "active" },
     { "name": "IIM Udaipur", "category": "educational", "status": "active" }
-  ],
-  "reports": [
-    {
-      "title": "Impact of SHG-Bank Linkage on Rural Household Income",
-      "category": "Policy Brief",
-      "year": 2025,
-      "author": "Dr. Ananya Rao",
-      "summary": "An empirical study across 12 districts showing a 22% average income increase post SHG-bank linkage."
-    }
-  ],
-  "entrepreneurs": [
-    {
-      "name": "Kavita Devi",
-      "district": "Jodhpur",
-      "sector": "Handicrafts",
-      "bio": "Runs a block-printing collective employing 15 women."
-    },
-    {
-      "name": "Meena Kumari",
-      "district": "Udaipur",
-      "sector": "Food Processing",
-      "bio": "Founder of a pickle and papad micro-enterprise supplying to 3 districts."
-    }
-  ],
-  "shgs": [
-    {
-      "groupName": "Ekta Mahila Samuh",
-      "members": 14,
-      "district": "Jodhpur",
-      "achievements": ["Bank-linked in 2023", "Started a tailoring unit"]
-    }
-  ],
-  "mentors": [
-    {
-      "name": "Rahul Mehta",
-      "skills": ["Business Strategy", "Marketing"],
-      "availability": "Weekends",
-      "experience": "12 years in retail and D2C brands"
-    }
   ],
   "events": [
     {
@@ -222,10 +109,5 @@
       "role": "Entrepreneur, Udaipur",
       "quote": "Before joining the financial literacy workshop, I had never used a bank account. Now I manage our SHG's savings book and teach other women how to use UPI."
     }
-  ],
-  "mediaItems": [
-    { "title": "RavivarVichar featured in The Hindu", "type": "news" },
-    { "title": "Press Release: New Rural Livelihoods Grant", "type": "press-release" },
-    { "title": "Field Podcast Ep. 1: Voices from Jodhpur", "type": "podcast" }
   ]
 }
