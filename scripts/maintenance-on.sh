@@ -7,7 +7,8 @@
 #       • Public sees login dialog → cancel → sees maintenance page (200)
 #       • You set MAINTENANCE_PASS env var → enter credentials → see client SPA
 #   - /admin → NOT in maintenance (already JWT-protected by the app)
-#   - /api/ → Protected with HTTP Basic Auth
+#   - /api/ → NOT auth-protected (admin JS calls it freely; JWT middleware on server protects endpoints)
+#   - /uploads/ → NOT auth-protected (served to authenticated admin users)
 #
 # Usage (SECURE - password never visible in ps):
 #   MAINTENANCE_PASS=mysecret bash scripts/maintenance-on.sh
@@ -197,7 +198,7 @@ echo "  - YOU visit http://admin:YOUR_PASS@yourdomain.com"
 echo "      → sees the actual client website → test everything!"
 echo "  - YOU visit http://yourdomain.com/admin"
 echo "      → logs in normally (no extra auth) → manage content"
-echo "  - YOU test API via: curl -u admin:PASS http://domain.com/api/v1/..."
+echo "  - YOU test API via: curl http://domain.com/api/v1/..."
 echo ""
 echo "  Workflow:"
 echo "    1. MAINTENANCE_PASS=secret bash scripts/maintenance-on.sh"
