@@ -3,14 +3,15 @@
 # Maintenance Mode — ON
 #
 # Switches Nginx to maintenance mode:
-#   - ROOT URL → Protected with HTTP Basic Auth:
-#       • Public sees login dialog → cancel → sees maintenance page (200)
-#       • You set MAINTENANCE_PASS env var → enter credentials → see client SPA
+#   - ROOT URL → Cookie-based bypass:
+#       • Public → sees maintenance page (no login dialog)
+#       • You visit /_rv_preview → get bypass cookie → browse freely
+#       • Or visit ?rv=PASS → cookie set automatically, redirected to /
 #   - /admin → NOT in maintenance (already JWT-protected by the app)
 #   - /api/ → NOT auth-protected (admin JS calls it freely; JWT middleware on server protects endpoints)
 #   - /uploads/ → NOT auth-protected (served to authenticated admin users)
 #
-# Usage (SECURE - password never visible in ps):
+# Usage:
 #   MAINTENANCE_PASS=mysecret bash scripts/maintenance-on.sh
 #   bash scripts/maintenance-on.sh          # Prompts for password (hidden input)
 #   bash scripts/maintenance-on.sh --dry-run
@@ -69,7 +70,7 @@ fi
 pass "Maintenance page ready at $MAINTENANCE_HTML_DST"
 
 # ─── Step 2: Get password securely ───
-info "Step 2: Setting up HTTP Basic Auth..."
+info "Step 2: Setting up bypass password..."
 
 # In dry-run mode, skip password setup
 if [ "$DRY_RUN" = true ]; then
@@ -104,40 +105,65 @@ else
     htpasswd -c "$HTPASSWD_FILE" admin
   }
   # Clear password from shell memory
-  unset PASSWORD
   unset PASSWORD_CONFIRM
-  pass "HTTP Basic Auth configured (username: admin)"
+  BYPASS_PASSWORD="$PASSWORD"
+  unset PASSWORD
+  pass "Bypass password configured"
 fi
 
 # ─── Step 3: Create maintenance Nginx config ───
 info "Step 3: Creating maintenance Nginx config..."
 
 if [ "$DRY_RUN" = false ]; then
-  cat > "$MAINTENANCE_CONFIG" << 'NGINX'
+    cat > "$MAINTENANCE_CONFIG" << 'NGINX'
 server {
     listen 80;
     server_name _;
 
-    # ─── Root URL: Auth-protected client preview ───
-    #   Public: sees login dialog → cancel → sees maintenance page (200 OK, no more dialogs)
-    #   You:    enter admin:password → see the actual client SPA for testing
+    # ─── Root URL: Cookie-based bypass ───
+    #   Public: sees maintenance page directly (no login dialog)
+    #   You:    visit /_rv_preview OR ?rv=PASSWORD once → cookie set → browse freely
+    #
+    #   Why cookies instead of Basic Auth?
+    #   - Browsers strip admin:pass@ from URLs (security feature)
+    #   - Cookies persist across SPA navigation; query params get lost
+    #   - Public never sees a login dialog — just the clean maintenance page
     location / {
-        auth_basic "RavivarVichar Maintenance";
-        auth_basic_user_file /etc/nginx/.htpasswd;
+        # Query param shortcut: ?rv=PASSWORD → sets cookie then redirects to /
+        if ($arg_rv = "__RV_PASSWORD__") {
+            add_header Set-Cookie "rv_preview=__RV_PASSWORD__; Path=/; Max-Age=7200";
+            return 302 /;
+        }
 
+        # No bypass cookie? → serve maintenance page (internal, not visible in URL)
+        if ($cookie_rv_preview != "__RV_PASSWORD__") {
+            rewrite ^ /_maintenance.html last;
+        }
+
+        # Has cookie → serve the client SPA normally
         root /var/www/RavivarVichar/apps/client/dist;
         index index.html;
         try_files $uri $uri/ /index.html;
-
-        # Auth failed/cancelled → show maintenance page with 200 status
-        # (200 status means browser won't keep showing login dialog)
-        error_page 401 =200 @maintenance_page;
     }
 
-    location @maintenance_page {
+    # Internal maintenance page (not directly accessible)
+    location = /_maintenance.html {
+        internal;
         root /var/www;
         try_files /maintenance.html =404;
         add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+
+    # ─── Preview bypass cookie endpoint ───
+    # Visit http://yourdomain.com/_rv_preview once to get the cookie
+    # Protected by the same Basic Auth htpasswd file (so public can't sneak in)
+    location = /_rv_preview {
+        auth_basic "Preview Access";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+
+        add_header Set-Cookie "rv_preview=__RV_PASSWORD__; Path=/; Max-Age=7200";
+        add_header Content-Type text/plain;
+        return 200 "Preview access granted. Navigate to / to browse the site.\n";
     }
 
     # ─── Admin — NOT in maintenance (already JWT-protected by the app) ───
@@ -168,6 +194,11 @@ server {
     }
 }
 NGINX
+
+  # Substitute the actual password into the config
+  # Use | as sed delimiter to avoid issues with / in passwords
+  ESCAPED_PASSWORD=$(printf '%s\n' "$BYPASS_PASSWORD" | sed 's:[][\/.^$*&|]:\\&:g')
+  sed -i "s|__RV_PASSWORD__|$ESCAPED_PASSWORD|g" "$MAINTENANCE_CONFIG"
 fi
 pass "Maintenance config created"
 
@@ -192,18 +223,25 @@ echo -e "${YELLOW}╚═══════════════════�
 echo ""
 echo "  What happens now:"
 echo "  - PUBLIC visits http://yourdomain.com"
-echo "      → auth dialog appears → cancel → sees maintenance page"
+echo "      → sees maintenance page (no login dialog)"
 echo ""
-echo "  - YOU visit http://admin:YOUR_PASS@yourdomain.com"
-echo "      → sees the actual client website → test everything!"
+echo "  - YOU preview the client site:"
+echo "      Step 1: Visit http://yourdomain.com/_rv_preview"
+echo "              (this sets a cookie for 2 hours)"
+echo "      Step 2: Visit http://yourdomain.com/"
+echo "              → sees the actual client website → browse freely!"
+echo ""
+echo "      Alternative: Visit http://yourdomain.com/?rv=YOUR_PASS"
+echo "              (cookie set automatically, redirected to /)"
+echo ""
 echo "  - YOU visit http://yourdomain.com/admin"
-echo "      → logs in normally (no extra auth) → manage content"
+echo "      → logs in normally → manage content"
 echo "  - YOU test API via: curl http://domain.com/api/v1/..."
 echo ""
 echo "  Workflow:"
 echo "    1. MAINTENANCE_PASS=secret bash scripts/maintenance-on.sh"
 echo "    2. bash scripts/deploy.sh"
-echo "    3. Test at http://admin:secret@yourdomain.com"
+echo "    3. Open /_rv_preview in browser → then test the site"
 echo "    4. Found bug? Fix → git push → run deploy.sh again"
 echo "       (maintenance stays ON the whole time)"
 echo "    5. Satisfied? → bash scripts/maintenance-off.sh"
