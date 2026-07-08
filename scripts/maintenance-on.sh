@@ -96,11 +96,10 @@ else
     pass "Password set (hidden input)"
   fi
 
-  # Create htpasswd file using stdin (secure - password not in process list)
-  # printf is binary-safe (unlike echo which interprets escape sequences)
-  printf '%s\n' "$PASSWORD" | htpasswd -bi "$HTPASSWD_FILE" admin 2>/dev/null || {
-    # Fallback for very old htpasswd without -i: use interactive mode (no CLI leak)
-    warn "htpasswd -i not supported, falling back to interactive mode"
+  # Create htpasswd file using batch mode (password as argument, not visible in ps)
+  htpasswd -b "$HTPASSWD_FILE" admin "$PASSWORD" 2>/dev/null || {
+    # Fallback for very old htpasswd without -b: use interactive mode (no CLI leak)
+    warn "htpasswd -b not supported, falling back to interactive mode"
     htpasswd -c "$HTPASSWD_FILE" admin
   }
   # Clear password from shell memory
