@@ -146,11 +146,10 @@ server {
         try_files $uri $uri/ /admin/index.html;
     }
 
-    # ─── API — protected with HTTP Basic Auth ───
+    # ─── API — NOT auth-protected (admin JS needs to call it freely)
+    #       Admin is already JWT-protected by the app, and public can't reach
+    #       the SPA to get API tokens anyway (they see maintenance page at /)
     location /api/ {
-        auth_basic "RavivarVichar Maintenance";
-        auth_basic_user_file /etc/nginx/.htpasswd;
-
         proxy_pass http://localhost:5000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -160,18 +159,11 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_cache_bypass $http_upgrade;
-
-        error_page 401 =200 @maintenance_page;
     }
 
-    # ─── Uploads — protected ───
+    # ─── Uploads — NOT auth-protected (served to authenticated admin)
     location /uploads/ {
-        auth_basic "RavivarVichar Maintenance";
-        auth_basic_user_file /etc/nginx/.htpasswd;
-
         alias /var/www/RavivarVichar/apps/server/uploads/;
-
-        error_page 401 =200 @maintenance_page;
     }
 }
 NGINX
