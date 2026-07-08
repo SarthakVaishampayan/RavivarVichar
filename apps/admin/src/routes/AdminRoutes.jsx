@@ -16,6 +16,7 @@ import {
   ResearchReportEditor, SuccessStoryEditor, InterviewEditor,
 } from '../pages/manage-content/Editors';
 import Analytics from '../pages/Analytics';
+import Traffic from '../pages/Traffic';
 import SEO from '../pages/SEO';
 import HomepageBuilder from '../pages/HomepageBuilder';
 import GalleryManager from '../pages/manage-content/GalleryManager';
@@ -88,6 +89,7 @@ export default function AdminRoutes() {
 
         {/* Additional Pages */}
         <Route path="analytics" element={<Analytics />} />
+        <Route path="traffic" element={<Traffic />} />
         <Route path="seo" element={<SEO />} />
         <Route path="homepage" element={<HomepageBuilder />} />
         <Route path="users" element={<Users />} />

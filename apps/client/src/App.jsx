@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/layout/ScrollToTop';
+import usePageviewTracking from './hooks/usePageviewTracking';
 import Home from './pages/Home';
 import About from './pages/About';
 import KnowledgeHub from './pages/KnowledgeHub';
@@ -15,10 +16,16 @@ import PartnerWithUs from './pages/PartnerWithUs';
 import WhatWeDoDetail from './pages/WhatWeDoDetail';
 import MediaMentions from './pages/MediaMentions';
 
+function PageviewTracker() {
+  usePageviewTracking();
+  return null;
+}
+
 export default function App() {
   return (
     <>
       <ScrollToTop />
+      <PageviewTracker />
       <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />

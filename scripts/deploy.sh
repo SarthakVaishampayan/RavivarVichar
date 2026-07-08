@@ -25,13 +25,15 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 # ─── Configuration ───
-PROJECT_DIR="/var/www/ravivarvichar-cms"
+PROJECT_DIR="/var/www/RavivarVichar"
 CLIENT_DIR="apps/client"
 ADMIN_DIR="apps/admin"
 SERVER_SCRIPT="apps/server/src/server.js"
 PM2_PROCESS_NAME="ravivarvichar-api"
 GIT_BRANCH="main"
 BACKUP_DIR="/tmp/ravivarvichar-rollback"
+SWAPFILE="/swapfile"
+MIN_RAM_MB=1500  # Warn if less than this much RAM (no swap)
 
 FORCE=false
 DRY_RUN=false
@@ -198,12 +200,18 @@ if ! command -v git &>/dev/null; then
 fi
 
 UNCOMMITTED=$(git status --porcelain 2>/dev/null | wc -l)
-if [ "$UNCOMMITTED" -gt 0 ] && [ "$FORCE" = false ]; then
-  warn "You have $UNCOMMITTED uncommitted change(s):"
-  git status --short
-  echo ""
-  echo "  Commit or stash them first, or use --force to deploy anyway."
-  exit 1
+if [ "$UNCOMMITTED" -gt 0 ]; then
+  if [ "$FORCE" = true ]; then
+    warn "$UNCOMMITTED uncommitted change(s) found. Stashing them..."
+    git stash --include-untracked 2>/dev/null || true
+    pass "Local changes stashed"
+  else
+    warn "You have $UNCOMMITTED uncommitted change(s):"
+    git status --short
+    echo ""
+    echo "  Commit or stash them first, or use --force to deploy anyway."
+    exit 1
+  fi
 fi
 
 BEFORE_COMMIT=$(git rev-parse HEAD)
@@ -238,14 +246,39 @@ else
   git log --oneline "$BEFORE_COMMIT..$AFTER_COMMIT" 2>/dev/null | head -20
 fi
 
-# ─── Step 3: Install dependencies ───
-info "Step 3: Installing dependencies..."
-run_cmd "npm install"
-pass "Dependencies installed"
+# ─── Step 3: Check swap space (prevents OOM kills on 1GB droplets) ───
+info "Step 3: Checking memory and swap space..."
+RAM_MB=$(free -m | awk '/^Mem:/{print $2}')
+SWAP_MB=$(free -m | awk '/^Swap:/{print $2}')
+TOTAL_MB=$((RAM_MB + SWAP_MB))
+echo "  RAM: ${RAM_MB}MB | Swap: ${SWAP_MB}MB | Total: ${TOTAL_MB}MB"
+if [ "$TOTAL_MB" -lt "$MIN_RAM_MB" ]; then
+  warn "Low memory (${TOTAL_MB}MB total). Build may fail with 'Killed' error."
+  warn "  Run this to add swap: fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile"
+fi
 
-# ─── Step 4: Run sanity checks (unless --force) ───
+# ─── Step 4: Check for platform-mismatched node_modules ───
+info "Step 4: Checking node_modules platform compatibility..."
+if [ -f "node_modules/.package-lock.json" ]; then
+  # Check if rollup platform module matches this OS
+  ROLLUP_BINDING=$(node -e "try{console.log(require('rollup/dist/native').getDefault())}catch(e){console.log('missing')}" 2>/dev/null || echo "missing")
+  if [ "$ROLLUP_BINDING" = "missing" ]; then
+    warn "Rollup native binding missing (platform mismatch). Reinstalling modules..."
+    rm -rf node_modules package-lock.json
+    run_cmd "npm install"
+    pass "Dependencies reinstalled for this platform"
+  else
+    pass "Platform bindings OK ($ROLLUP_BINDING)"
+  fi
+else
+  # First install or fresh clone — just install
+  run_cmd "npm install"
+fi
+pass "Dependencies ready"
+
+# ─── Step 5: Run sanity checks (unless --force) ───
 if [ "$FORCE" = false ]; then
-  info "Step 4: Running sanity checks..."
+  info "Step 5: Running sanity checks..."
 
   # Start server if not running
   ensure_server_running
@@ -269,8 +302,8 @@ else
   warn "Step 4: Sanity checks skipped (--force flag)"
 fi
 
-# ─── Step 5: Build frontends ───
-info "Step 5: Building frontends..."
+# ─── Step 6: Build frontends ───
+info "Step 6: Building frontends..."
 
 if [ "$DRY_RUN" = false ]; then
   info "  Building client..."
@@ -286,8 +319,8 @@ else
 fi
 pass "Frontends built"
 
-# ─── Step 6: Restart server ───
-info "Step 6: Restarting server with latest code..."
+# ─── Step 7: Restart server ───
+info "Step 7: Restarting server with latest code..."
 
 if command -v pm2 &>/dev/null; then
   if pm2 describe "$PM2_PROCESS_NAME" &>/dev/null; then
@@ -311,13 +344,13 @@ else
   warn "PM2 not installed. Restart manually: node $SERVER_SCRIPT"
 fi
 
-# ─── Step 7: Clean up backup (deploy succeeded!) ───
-info "Step 7: Cleaning up..."
+# ─── Step 8: Clean up backup (deploy succeeded!) ───
+info "Step 8: Cleaning up..."
 rm -rf "$BACKUP_DIR" 2>/dev/null
 pass "Rollback backup removed (deploy succeeded)"
 
-# ─── Step 8: Final verification ───
-info "Step 8: Final verification..."
+# ─── Step 9: Final verification ───
+info "Step 9: Final verification..."
 if command -v curl &>/dev/null; then
   HEALTH=$(curl -s http://localhost:5000/api/v1/health 2>/dev/null || echo '{"success":false}')
   echo "  API response: $HEALTH"
@@ -337,6 +370,12 @@ if [ "$BEFORE_COMMIT" != "$AFTER_COMMIT" ]; then
   echo ""
   echo "  ─── Deployed Changes ───"
   git log --oneline "$BEFORE_COMMIT..$AFTER_COMMIT" 2>/dev/null
+fi
+
+# Remind about stashed changes if --force was used
+if [ "$UNCOMMITTED" -gt 0 ] && [ "$FORCE" = true ]; then
+  echo ""
+  echo "  ⚠  Local changes were stashed. Run 'git stash pop' to restore them if needed."
 fi
 
 echo ""

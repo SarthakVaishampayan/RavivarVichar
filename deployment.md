@@ -73,66 +73,89 @@ nginx -v   # Should show nginx version
 
 ---
 
-## Step 4: Clone the Repository
+## Step 4: Add swap space (REQUIRED for 1GB droplets)
+
+Without this, the frontend build will crash with "Killed" error due to out of memory.
+
+```bash
+fallocate -l 2G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo '/swapfile none swap sw 0 0' >> /etc/fstab
+
+# Verify
+free -m   # Should show ~2048MB swap
+```
+
+---
+
+## Step 5: Clone the Repository
 
 ```bash
 cd /var
-mkdir www && cd www
-git clone https://github.com/your-username/ravivarvichar-cms.git
-cd ravivarvichar-cms
+mkdir -p www && cd www
+git clone https://github.com/SarthakVaishampayan/RavivarVichar.git
+cd RavivarVichar
+```
 
-# Install all dependencies (workspaces)
+---
+
+## Step 6: Create .env File
+
+```bash
+cat > apps/server/.env << 'ENVEOF'
+PORT=5000
+NODE_ENV=production
+MONGO_URI=mongodb://localhost:27017/ravivarvichar
+JWT_ACCESS_SECRET=your-64-char-random-hex-here
+JWT_REFRESH_SECRET=your-64-char-random-hex-here
+CLIENT_URL=http://your-droplet-ip
+ADMIN_URL=http://your-droplet-ip
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+ENVEOF
+```
+
+Generate strong secrets:
+```bash
+ACCESS=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
+REFRESH=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
+sed -i "s/JWT_ACCESS_SECRET=.*/JWT_ACCESS_SECRET=$ACCESS/" apps/server/.env
+sed -i "s/JWT_REFRESH_SECRET=.*/JWT_REFRESH_SECRET=$REFRESH/" apps/server/.env
+```
+
+Create the uploads directory:
+```bash
+mkdir -p apps/server/uploads
+```
+
+---
+
+## Step 7: Install Dependencies
+
+> ⚠️ **IMPORTANT**: If you copied the repo from a Windows machine, delete node_modules first!
+> ```bash
+> rm -rf node_modules package-lock.json
+> ```
+
+```bash
 npm install
 ```
 
 ---
 
-## Step 5: Create .env File
+## Step 8: Build the Frontends
 
-Create `/var/www/ravivarvichar-cms/apps/server/.env`:
-
-```
-PORT=5000
-NODE_ENV=production
-MONGO_URI=mongodb://localhost:27017/ravivarvichar
-JWT_ACCESS_SECRET=<generate-a-random-64-char-string>
-JWT_REFRESH_SECRET=<generate-another-random-64-char-string>
-CLIENT_URL=https://yourdomain.com
-ADMIN_URL=https://admin.yourdomain.com
-
-# Optional — set up later
-# CLOUDINARY_CLOUD_NAME=your_cloud_name
-# CLOUDINARY_API_KEY=your_api_key
-# CLOUDINARY_API_SECRET=your_api_secret
-```
-
-Generate secrets:
 ```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-```
-
-Create the uploads directory:
-```bash
-mkdir -p /var/www/ravivarvichar-cms/apps/server/uploads
+NODE_OPTIONS="--max-old-space-size=512" npm run build -w apps/client
+NODE_OPTIONS="--max-old-space-size=512" npm run build -w apps/admin
 ```
 
 ---
 
-## Step 6: Build the Frontends
-
-```bash
-cd /var/www/ravivarvichar-cms
-
-# Build client
-npm run build -w apps/client
-
-# Build admin
-npm run build -w apps/admin
-```
-
----
-
-## Step 7: Seed Initial Data (Optional)
+## Step 9: Seed Initial Data (Optional)
 
 If you want sample data (admin user, articles, etc.):
 
@@ -140,13 +163,13 @@ If you want sample data (admin user, articles, etc.):
 npm run seed -w apps/server
 ```
 
-Default admin credentials (from the seed file):
-- **Email**: admin@ravivarvichar.org
-- **Password**: Admin@123
+Default admin credentials (from seed file):
+- **Email**: admin@ravivarvichar.com
+- **Password**: Sarthak@2003
 
 ---
 
-## Step 8: Start the Server with PM2
+## Step 10: Start the Server with PM2
 
 ```bash
 pm2 start apps/server/src/server.js --name ravivarvichar-api
@@ -162,25 +185,35 @@ curl http://localhost:5000/api/v1/health
 
 ---
 
-## Step 9: Configure Nginx
+## Step 11: Configure Nginx
 
-Create `/etc/nginx/sites-available/ravivarvichar`:
+```bash
+nano /etc/nginx/sites-available/ravivarvichar
+```
+
+Paste this config (replace `your-droplet-ip` with your actual IP):
 
 ```nginx
-# ─── Client Website (yourdomain.com) ───
 server {
     listen 80;
-    server_name yourdomain.com www.yourdomain.com;
+    server_name _;   # Replace with your domain or IP
 
-    root /var/www/ravivarvichar-cms/apps/client/dist;
+    # ─── Client Website ───
+    root /var/www/RavivarVichar/apps/client/dist;
     index index.html;
 
-    # Serve static files
     location / {
         try_files $uri $uri/ /index.html;
     }
 
-    # Proxy API calls to Node.js
+    # ─── Admin Panel ───
+    location /admin {
+        alias /var/www/RavivarVichar/apps/admin/dist;
+        index index.html;
+        try_files $uri $uri/ /admin/index.html;
+    }
+
+    # ─── API Proxy ───
     location /api/ {
         proxy_pass http://localhost:5000;
         proxy_http_version 1.1;
@@ -193,39 +226,9 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 
-    # Serve uploaded files
+    # ─── Uploads ───
     location /uploads/ {
-        alias /var/www/ravivarvichar-cms/apps/server/uploads/;
-    }
-}
-
-# ─── Admin Panel (admin.yourdomain.com) ───
-server {
-    listen 80;
-    server_name admin.yourdomain.com;
-
-    root /var/www/ravivarvichar-cms/apps/admin/dist;
-    index index.html;
-
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-
-    # Proxy API calls to Node.js
-    location /api/ {
-        proxy_pass http://localhost:5000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
-
-    location /uploads/ {
-        alias /var/www/ravivarvichar-cms/apps/server/uploads/;
+        alias /var/www/RavivarVichar/apps/server/uploads/;
     }
 }
 ```
@@ -233,15 +236,15 @@ server {
 Enable the site and restart Nginx:
 
 ```bash
-ln -s /etc/nginx/sites-available/ravivarvichar /etc/nginx/sites-enabled/
 rm -f /etc/nginx/sites-enabled/default
+ln -s /etc/nginx/sites-available/ravivarvichar /etc/nginx/sites-enabled/
 nginx -t  # Test config
 systemctl restart nginx
 ```
 
 ---
 
-## Step 10: Set Up Domains (DNS)
+## Step 12: Set Up Domains (DNS)
 
 In your domain registrar (e.g., GoDaddy, Namecheap), point these A records to your droplet IP:
 
@@ -253,7 +256,7 @@ In your domain registrar (e.g., GoDaddy, Namecheap), point these A records to yo
 
 ---
 
-## Step 11: Enable HTTPS with Let's Encrypt
+## Step 13: Enable HTTPS with Let's Encrypt
 
 ```bash
 apt install -y certbot python3-certbot-nginx
@@ -267,83 +270,55 @@ certbot renew --dry-run
 
 ---
 
-## Step 12: Verify Everything
+## Step 14: Verify Everything
 
-- **Client**: https://yourdomain.com
-- **Admin**: https://admin.yourdomain.com
-- **API**: https://yourdomain.com/api/v1/health
-- **Login with**: admin@ravivarvichar.org / Admin@123
+| URL | Expected |
+|-----|----------|
+| `http://your-droplet-ip` | Client website loads |
+| `http://your-droplet-ip/admin` | Admin login page loads |
+| `http://your-droplet-ip/api/v1/health` | `{"success":true,...}` |
+
+Login with: admin@ravivarvichar.com / Sarthak@2003
 
 ---
 
-## Updating the Site
+## Updating the Site (Future Deploys)
 
-### Manual update on the server:
-
+### One-command deploy (recommended):
 ```bash
-cd /var/www/ravivarvichar-cms
-git pull
+cd /var/www/RavivarVichar
+bash scripts/deploy.sh
+```
+
+The script **automatically**:
+- Pulls latest code (stashes any local changes first)
+- Checks platform compatibility of node_modules
+- Builds frontends
+- Restarts the server
+- Rolls back everything if any step fails
+
+### Manual update:
+```bash
+cd /var/www/RavivarVichar
+git pull origin main
 npm install
-npm run build -w apps/client
-npm run build -w apps/admin
+NODE_OPTIONS="--max-old-space-size=512" npm run build -w apps/client
+NODE_OPTIONS="--max-old-space-size=512" npm run build -w apps/admin
 pm2 restart ravivarvichar-api
 ```
-
-### Optional: Auto-deploy with GitHub Actions
-
-Create `.github/workflows/deploy.yml` in the repo:
-
-```yaml
-name: Deploy to DigitalOcean
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.DROPLET_IP }}
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /var/www/ravivarvichar-cms
-            git pull
-            npm install
-            npm run build -w apps/client
-            npm run build -w apps/admin
-            pm2 restart ravivarvichar-api
-```
-
-Then add `DROPLET_IP` and `SSH_PRIVATE_KEY` as secrets in your GitHub repo.
 
 ---
 
 ## Troubleshooting
 
-### "502 Bad Gateway" from Nginx
-- The Node.js server might not be running: `pm2 status`
-- Check logs: `pm2 logs ravivarvichar-api`
-
-### "MongoDB connection error"
-- Check MongoDB is running: `systemctl status mongod`
-- Check MongoDB logs: `journalctl -u mongod -n 50`
-
-### "Cannot GET /" for frontend routes
-- The Nginx config needs `try_files $uri $uri/ /index.html;` for SPA routing
-- Make sure the dist directories exist
-
-### Uploaded images return 404
-- Check the uploads directory exists
-- `/uploads/` in the browser must match Nginx's `alias` path
-
-### Port 5000 already in use
-- Change `PORT` in `.env` or kill the existing process: `pm2 delete ravivarvichar-api`
+| Problem | Cause | Fix |
+|---------|-------|-----|
+| White screen on admin | Missing `base: '/admin/'` in vite.config.js | Push the fix and redeploy |
+| Build gets "Killed" | Out of memory (1GB droplet) | Add swap space: see Step 4 |
+| 502 Bad Gateway | Node server not running | `pm2 restart ravivarvichar-api` |
+| Cannot find module (rollup-linux) | node_modules from Windows | `rm -rf node_modules package-lock.json && npm install` |
+| API returns HTML | Nginx not proxying correctly | Check `location /api/` block in nginx config |
+| MongoDB error | MongoDB not running | `systemctl start mongod` |
 
 ---
 

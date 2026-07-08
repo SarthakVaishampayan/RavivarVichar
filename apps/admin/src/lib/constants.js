@@ -15,6 +15,7 @@ import {
   HandHelping,
   Image,
   Newspaper,
+  Activity,
 } from 'lucide-react';
 
 export const RESOURCES = {
@@ -146,6 +147,7 @@ export const NAV_ITEMS = [
     })),
   },
   { label: 'Analytics', icon: BarChart3, path: '/analytics' },
+  { label: 'Traffic', icon: Activity, path: '/traffic' },
   { label: 'Homepage Builder', icon: Layout, path: '/homepage' },
   { label: 'SEO', icon: Search, path: '/seo' },
   { label: 'Users', icon: UserCog, path: '/users' },

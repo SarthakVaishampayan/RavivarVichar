@@ -11,4 +11,17 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-module.exports = { authLimiter };
+// Stricter limiter for pageview tracking — 60 requests per minute per IP
+const pageviewLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 60, // 60 requests per minute
+  message: {
+    success: false,
+    message: 'Too many pageview requests, please slow down',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => req.ip,
+});
+
+module.exports = { authLimiter, pageviewLimiter };
