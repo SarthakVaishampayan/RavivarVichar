@@ -17,9 +17,9 @@ export default function MultiImageUpload({ value = [], onChange, label = 'Galler
       return;
     }
 
-    const oversized = files.find((f) => f.size > 5 * 1024 * 1024);
+    const oversized = files.find((f) => f.size > 50 * 1024 * 1024);
     if (oversized) {
-      toast.error('Each image must be less than 5MB');
+      toast.error('Each image must be less than 50MB');
       return;
     }
 

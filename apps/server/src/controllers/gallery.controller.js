@@ -10,10 +10,14 @@ const getAll = catchAsync(async (req, res) => {
 
 // POST /api/v1/gallery — admin only
 const create = catchAsync(async (req, res) => {
-  const { imageUrl, caption, altText } = req.body;
+  const { imageUrl, caption, altText, title, slug, summary, metaDescription, customDate } = req.body;
   if (!imageUrl) return sendError(res, 'Image URL is required', 400);
 
-  const image = await GalleryImage.create({ imageUrl, caption, altText });
+  const image = await GalleryImage.create({
+    imageUrl, caption, altText,
+    title, slug, summary, metaDescription,
+    customDate: customDate || null,
+  });
   sendSuccess(res, image, 'Image added to gallery', 201);
 });
 

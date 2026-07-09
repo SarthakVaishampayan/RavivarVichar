@@ -17,8 +17,8 @@ export default function ImageUpload({ value, onChange, label = 'Image', classNam
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image must be less than 5MB');
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error('Image must be less than 50MB');
       return;
     }
 
@@ -87,7 +87,7 @@ export default function ImageUpload({ value, onChange, label = 'Image', classNam
               <ImageIcon size={32} className="text-gray-400" />
               <Upload size={20} className="text-gray-400" />
               <span className="text-sm text-gray-500">Click to upload image</span>
-              <span className="text-xs text-gray-400">PNG, JPG up to 5MB</span>
+              <span className="text-xs text-gray-400">PNG, JPG up to 50MB</span>
             </div>
           )}
         </button>

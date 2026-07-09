@@ -9,7 +9,7 @@ const errorHandler = (err, req, res, next) => {
   if (err instanceof MulterError) {
     statusCode = 400;
     if (err.code === 'LIMIT_FILE_SIZE') {
-      message = 'File too large. Maximum size is 5MB.';
+      message = 'File too large. Maximum size is 50MB.';
     } else if (err.code === 'LIMIT_FILE_COUNT') {
       message = 'Too many files uploaded.';
     } else if (err.code === 'LIMIT_UNEXPECTED_FILE') {

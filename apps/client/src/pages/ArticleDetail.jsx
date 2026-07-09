@@ -11,7 +11,6 @@ export default function ArticleDetail() {
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchArticle = async () => {
       try {
@@ -58,49 +57,30 @@ export default function ArticleDetail() {
       })
     : '';
 
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = '/article-hero.jpg';
-    img.onload = () => setLoaded(true);
-  }, []);
-
   return (
     <>
       <Helmet>
         <title>{article.title} — Ravivar Vichar</title>
         <meta name="description" content={(article.excerpt || article.content || '').replace(/<[^>]*>/g, '').slice(0, 160)} />
-      <link rel="preload" as="image" href="/article-hero.jpg" />
       </Helmet>
 
       <PageLayout>
-        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[15vh]">
-          {/* Background image */}
-          <div className="absolute inset-0 bg-gray-900">
-            <img
-  src="/article-hero.jpg"
-  alt=""
-  onLoad={() => setLoaded(true)}
-  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-    loaded ? 'opacity-100' : 'opacity-0'
-  }`}
-/>
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
-          </div>
-          {/* Content */}
-          <div className="w-full relative z-10 pl-[5vw]">
-            <div className="max-w-[580px]">
-              <Link to="/knowledge-hub" className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors mb-8">
+        {/* Article Header */}
+        <section className="bg-surface-white pt-24 pb-8 lg:pb-12">
+          <div className="container-content">
+            <div className="max-w-4xl mx-auto">
+              <Link to="/knowledge-hub" className="inline-flex items-center gap-2 text-sm font-medium text-ink-secondary hover:text-primary-500 transition-colors mb-8">
                 <ArrowLeft size={16} /> Back to Knowledge Hub
               </Link>
-              <span className="block text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-white/90 backdrop-blur-sm mb-4 w-fit">
-                {article.category}
-              </span>
-              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2] font-heading font-bold">
-                {article.title}
-              </h1>
-              <div className="flex flex-wrap items-center gap-5 mt-6 text-sm text-white/70">
+              <div className="flex flex-wrap items-center gap-3 mb-2">
+                <h1 className="text-3xl lg:text-4xl font-heading font-bold text-ink-primary leading-tight">
+                  {article.title}
+                </h1>
+                <span className="inline-block text-xs font-semibold px-3 py-1.5 rounded-full bg-primary-50 text-primary-600 whitespace-nowrap">
+                  {article.category}
+                </span>
+              </div>
+              <div className="flex flex-wrap items-center gap-5 mt-4 text-sm text-ink-secondary">
                 <span className="flex items-center gap-1.5"><User size={16} /> {authorName}</span>
                 <span className="flex items-center gap-1.5"><Calendar size={16} /> {formattedDate}</span>
               </div>
@@ -108,10 +88,11 @@ export default function ArticleDetail() {
           </div>
         </section>
 
-        <section className="bg-surface-white">
+        <section className="bg-surface-white pb-8">
           <div className="container-content">
+            <div className="max-w-4xl mx-auto">
             {article.thumbnail && (
-              <div className="-mt-16 rounded-xl overflow-hidden shadow-xl max-w-4xl mx-auto">
+              <div className="rounded-xl overflow-hidden shadow-xl max-w-4xl mx-auto">
                 <img
                   src={article.thumbnail}
                   alt={article.title}
@@ -157,6 +138,7 @@ export default function ArticleDetail() {
                 ))}
               </div>
             )}
+            </div>
           </div>
         </section>
 
