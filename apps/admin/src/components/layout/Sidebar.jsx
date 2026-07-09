@@ -4,6 +4,7 @@ import { ChevronDown, ChevronRight, Menu, X } from 'lucide-react';
 import { NAV_ITEMS } from '../../lib/constants';
 
 export default function Sidebar({ mobileOpen, onMobileClose }) {
+  const [logoFailed, setLogoFailed] = useState(false);
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState(['Manage Content']);
 
@@ -22,12 +23,12 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
     <div className="flex h-full flex-col bg-gray-900">
       {/* Logo */}
       <div className="flex h-16 items-center justify-between px-6 border-b border-gray-800">
-        <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-500 text-sm font-bold text-white">
-            R
-          </div>
+        <div className="flex items-center gap-3 min-w-0">
+          {!logoFailed && (
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Ravivar Vichar" className="h-7 w-auto shrink-0" onError={() => setLogoFailed(true)} />
+          )}
           <div>
-            <h1 className="text-sm font-bold text-white">Ravivar Vichar</h1>
+            <h1 className="text-sm font-bold text-white whitespace-nowrap">Ravivar Vichar</h1>
             <p className="text-[10px] text-gray-400">Content Management</p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { Menu, LogOut, User } from 'lucide-react';
+import { Menu, LogOut, User, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import api from '../../lib/axios';
@@ -29,6 +29,17 @@ export default function Topbar({ onMenuClick }) {
       </button>
 
       <div className="flex-1" />
+
+      <a
+        href={import.meta.env.VITE_CLIENT_URL || 'http://localhost:5173'}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hidden sm:inline-flex items-center gap-2 px-4 py-2 mr-2 text-sm font-medium text-primary-600 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors"
+        title="Visit Website"
+      >
+        <ExternalLink size={16} />
+        Visit Website
+      </a>
 
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-3">
