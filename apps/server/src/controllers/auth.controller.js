@@ -6,7 +6,7 @@ const catchAsync = require('../utils/catchAsync');
 
 // Generate access & refresh tokens
 const generateTokens = (userId) => {
-  const accessToken = jwt.sign({ id: userId }, env.JWT_ACCESS_SECRET, { expiresIn: '15m' });
+  const accessToken = jwt.sign({ id: userId }, env.JWT_ACCESS_SECRET, { expiresIn: '24h' });
   const refreshToken = jwt.sign({ id: userId }, env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
   return { accessToken, refreshToken };
 };

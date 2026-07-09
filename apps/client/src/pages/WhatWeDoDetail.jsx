@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
@@ -62,8 +63,15 @@ const contentMap = {
 };
 
 export default function WhatWeDoDetail() {
+  const [loaded, setLoaded] = useState(false);
   const { slug } = useParams();
   const content = contentMap[slug];
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/whatwedo-hero.jpg';
+    img.onload = () => setLoaded(true);
+  }, []);
 
   if (!content) {
     return (
@@ -82,23 +90,36 @@ export default function WhatWeDoDetail() {
   return (
     <>
       <Helmet>
-        <title>{content.title} — RavivarVichar</title>
+        <title>{content.title} — Ravivar Vichar</title>
         <meta name="description" content={content.heroDescription} />
+      <link rel="preload" as="image" href="/whatwedo-hero.jpg" />
       </Helmet>
 
       <PageLayout>
-        <section className="relative overflow-hidden bg-surface-secondary py-24 lg:py-28">
-          <FloatingDots />
-          <div className="container-content relative z-10">
-            <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-ink-secondary hover:text-primary-500 transition-colors mb-8">
-              <ArrowLeft size={16} /> Back to Home
-            </Link>
-            <div className="max-w-3xl">
-              <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${content.bgColor} ${content.color} mb-5`}>
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[15vh]">
+          {/* Background image */}
+          <div className="absolute inset-0 bg-gray-900">
+            <img
+  src="/whatwedo-hero.jpg"
+  alt=""
+  onLoad={() => setLoaded(true)}
+  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+    loaded ? 'opacity-100' : 'opacity-0'
+  }`}
+/>
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
+          </div>
+          {/* Content */}
+          <div className="w-full relative z-10 pl-[5vw]">
+            <div className="max-w-[580px]">
+              <Link to="/" className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors mb-8">
+                <ArrowLeft size={16} /> Back to Home
+              </Link>
+              <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 ${content.color} mb-5`}>
                 <Icon size={28} />
               </div>
-              <h1 className="text-hero-mobile lg:text-hero text-ink-primary mt-4 leading-tight">{content.title}</h1>
-              <p className="text-body text-ink-secondary mt-6 max-w-2xl">{content.heroDescription}</p>
+              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">{content.title}</h1>
+              <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">{content.heroDescription}</p>
             </div>
           </div>
         </section>
@@ -153,7 +174,7 @@ export default function WhatWeDoDetail() {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
               <Button variant="secondary" to="/join-our-initiative" arrow>Join Our Initiative</Button>
-              <Button variant="outline" to="/partner-with-us" className="border-white text-white hover:bg-white hover:text-primary-500">Partner with Us</Button>
+              <Button variant="outline" to="/partner-with-us" className="border-white text-white hover:bg-white hover:text-primary-500">Partner With Us</Button>
             </div>
           </div>
         </section>

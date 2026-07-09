@@ -1,89 +1,77 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Play } from 'lucide-react';
 import Button from '../shared/Button';
-import FloatingDots from '../shared/FloatingDots';
 
 export default function Hero() {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/hero-image.jpg';
+    img.onload = () => setLoaded(true);
+  }, []);
+
   return (
-    <section className="relative min-h-[90vh] flex items-center bg-surface-white overflow-hidden">
-      {/* Background texture */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-        <div className="w-full h-full" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Cpath fill='%23F5A623' d='M 0 0 C 200 100 300 300 200 500 C 100 700 200 800 400 800 C 600 800 700 600 800 400 C 900 200 700 0 500 0 Z'/%3E%3C/svg%3E")`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }} />
+    <section className="relative mt-[90px] min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[15vh]">
+      {/* Full-screen background image fills section (starts below navbar) */}
+      <div className="absolute inset-0 bg-gray-900">
+        <img
+          src="/hero-image.jpg"
+          alt="Ravivar Vichar community work"
+          onLoad={() => setLoaded(true)}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+            loaded ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+        {/* Gradient overlay: dark on left, transparent on right */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)',
+          }}
+        />
       </div>
-      <FloatingDots count={6} />
 
-      <div className="container-site w-full pt-[90px] pb-16 lg:pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-center">
-          {/* Left Content - 45% */}
-          <div className="lg:pr-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-            >
-              <span className="section-label inline-block mb-5">
-                Empowering Rural India
-              </span>
-              <h1 className="text-hero-mobile lg:text-hero text-text-primary leading-[1.1]">
-                Building{' '}
-                <span className="text-primary-500">Self-Reliant</span>{' '}
-                Communities Through{' '}
-                <span className="text-secondary-500">Knowledge</span> &amp; Action
-              </h1>
-              <p className="text-body text-text-secondary mt-6 max-w-lg">
-                RavivarVichar works with rural communities in Rajasthan to
-                foster entrepreneurship, strengthen self-help groups, and drive
-                sustainable development through research and action.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 mt-10">
-                <Button variant="primary" to="/partner-with-us" arrow>
-                  Partner with Us
-                </Button>
-                <Button variant="secondary" to="/join-our-initiative" arrow={false}>
-                  <Play size={18} />
-                  Join Our Initiative
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right Content - 55% (Image Collage with Organic Mask) */}
+      {/* Content */}
+      <div className="w-full pb-24 relative z-10 pl-[5vw]">
+        <div className="max-w-[580px]">
           <motion.div
-            className="relative"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            {/* Main blob image */}
-            <div className="relative blob-mask w-full aspect-square max-w-[550px] mx-auto">
-              <img
-                src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80"
-                alt="Rural community empowerment"
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">
+              EMPOWERING RURAL INDIA
+            </span>
+            <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">
+              Building Stronger{' '}
+              <span className="text-[#6AA84F]">Communities</span>{' '}
+              Through{' '}
+              <span className="text-[#F5A623]">Knowledge</span>,{' '}
+              <span className="text-[#C9892D]">Livelihood</span>{' '}
+              &amp; Collective Action
+            </h1>
+            <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
+              Ravivar Vichar works alongside rural communities to strengthen livelihoods, empower women, foster entrepreneurship, and create sustainable social impact through knowledge and collective action.
+            </p>
 
-            {/* Floating secondary image (smaller circle) */}
-            <div className="absolute -bottom-6 -left-6 w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-white shadow-soft">
-              <img
-                src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=400&q=80"
-                alt="Women entrepreneurs"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Floating tertiary image */}
-            <div className="absolute -top-4 -right-4 w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-white shadow-soft">
-              <img
-                src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=400&q=80"
-                alt="Community"
-                className="w-full h-full object-cover"
-              />
+            <div className="flex flex-wrap items-center gap-4 mt-10">
+              <Button
+                variant="primary"
+                to="/partner-with-us"
+                className="!bg-[#C9892D] !text-white hover:!bg-[#B87A1A] !border-[#C9892D]"
+                arrow
+              >
+                Partner With Us
+              </Button>
+              <Button
+                variant="outline"
+                to="/join-our-initiative"
+                className="!border-white !text-white hover:!bg-white/10"
+                arrow
+              >
+                Join Our Initiative
+              </Button>
             </div>
           </motion.div>
         </div>

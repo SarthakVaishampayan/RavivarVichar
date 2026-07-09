@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 export default function SEO() {
   const [settings, setSettings] = useState({
-    siteTitle: 'RavivarVichar',
+    siteTitle: 'Ravivar Vichar',
     siteDescription: 'Empowering rural communities through research, entrepreneurship, and self-help groups.',
     ogImage: '',
     keywords: 'rural development, SHG, entrepreneurship, women empowerment, Rajasthan',

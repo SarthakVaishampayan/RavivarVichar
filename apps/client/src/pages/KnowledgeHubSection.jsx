@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
-import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
 import api from '../lib/axios';
 import { ArrowLeft, ArrowRight, Calendar, Tag } from 'lucide-react';
@@ -32,9 +31,16 @@ const categoryColors = {
 };
 
 export default function KnowledgeHubSection() {
+  const [loaded, setLoaded] = useState(false);
   const { sectionId } = useParams();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/articles-hero.jpg';
+    img.onload = () => setLoaded(true);
+  }, []);
 
   const config = sectionConfig[sectionId];
 
@@ -85,23 +91,36 @@ export default function KnowledgeHubSection() {
   return (
     <>
       <Helmet>
-        <title>{config.title} — RavivarVichar</title>
+        <title>{config.title} — Ravivar Vichar</title>
         <meta name="description" content={config.description} />
+      <link rel="preload" as="image" href="/articles-hero.jpg" />
       </Helmet>
 
       <PageLayout>
-        <section className="relative overflow-hidden bg-surface-secondary py-24 lg:py-28">
-          <FloatingDots />
-          <div className="container-content relative z-10">
-            <Link to="/knowledge-hub" className="inline-flex items-center gap-2 text-sm font-medium text-ink-secondary hover:text-primary-500 transition-colors mb-8">
-              <ArrowLeft size={16} /> Back to Knowledge Hub
-            </Link>
-            <div className="max-w-3xl">
-              <span className="section-label">{config.label.toUpperCase().replace(' & ', ' & ')}</span>
-              <h1 className="text-hero-mobile lg:text-hero text-ink-primary mt-4 leading-tight">
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[25vh]">
+          {/* Background image */}
+          <div className="absolute inset-0 bg-gray-900">
+            <img
+  src="/articles-hero.jpg"
+  alt=""
+  onLoad={() => setLoaded(true)}
+  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+    loaded ? 'opacity-100' : 'opacity-0'
+  }`}
+/>
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
+          </div>
+          {/* Content */}
+          <div className="w-full relative z-10 pl-[5vw]">
+            <div className="max-w-[580px]">
+              <Link to="/knowledge-hub" className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors mb-8">
+                <ArrowLeft size={16} /> Back to Knowledge Hub
+              </Link>
+              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase block mb-5">{config.label.toUpperCase().replace(' & ', ' & ')}</span>
+              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">
                 {config.title}
               </h1>
-              <p className="text-body text-ink-secondary mt-6 max-w-2xl">
+              <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 {config.description}
               </p>
             </div>

@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import PageLayout from '../components/layout/PageLayout';
-import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
 import { Calendar, MapPin } from 'lucide-react';
 import api from '../lib/axios';
 
 export default function Events() {
+  const [loaded, setLoaded] = useState(false);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/events-hero.jpg';
+    img.onload = () => setLoaded(true);
+  }, []);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -39,24 +45,43 @@ export default function Events() {
   return (
     <>
       <Helmet>
-        <title>Events — RavivarVichar</title>
-        <meta name="description" content="Upcoming and past events from RavivarVichar — conferences, workshops, camps, summits, and symposiums." />
+        <title>Events — Ravivar Vichar</title>
+        <meta name="description" content="Upcoming and past events from Ravivar Vichar — conferences, workshops, camps, summits, and symposiums." />
+      <link rel="preload" as="image" href="/events-hero.jpg" />
       </Helmet>
 
       <PageLayout>
-        <section className="relative overflow-hidden bg-surface-secondary py-24 lg:py-32">
-          <FloatingDots />
-          <div className="container-content relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <span className="section-label">EVENTS</span>
-              <h1 className="text-hero-mobile lg:text-hero text-ink-primary mt-4 leading-tight">
-                Join Us at <span className="text-primary-500">Our Events</span>
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[35vh]">
+          {/* Background image */}
+          <div className="absolute inset-0 bg-gray-900">
+            <img
+  src="/events-hero.jpg"
+  alt="Ravivar Vichar Events"
+  onLoad={() => setLoaded(true)}
+  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+    loaded ? 'opacity-100' : 'opacity-0'
+  }`}
+/>
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
+          </div>
+          {/* Content */}
+          <div className="w-full relative z-10 pl-[5vw]">
+            <div className="max-w-[580px]">
+              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">EVENTS</span>
+              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">
+                Join Us at <span className="text-[#F5A623]">Our Events</span>
               </h1>
-              <p className="text-body text-ink-secondary mt-6 max-w-2xl mx-auto">
+              <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 From conferences to community camps, we organize events that bring together changemakers, community leaders, and partners to drive rural development.
               </p>
             </div>
-            <div className="flex items-center justify-center gap-3 mt-10">
+          </div>
+        </section>
+
+        {/* Filter Buttons (Below Hero) */}
+        <section className="bg-surface-white py-8 border-b border-gray-100">
+          <div className="container-content">
+            <div className="flex items-center justify-center gap-3">
               {['all', 'upcoming', 'past'].map((f) => (
                 <button
                   key={f}

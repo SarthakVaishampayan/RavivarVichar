@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import FloatingDots from '../components/shared/FloatingDots';
 import api from '../lib/axios';
-import { ArrowLeft, X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 
 // Stock placeholder images for when no gallery images exist yet
 const stockImages = [
@@ -84,7 +83,7 @@ export default function Gallery() {
   return (
     <>
       <Helmet>
-        <title>Gallery — RavivarVichar</title>
+        <title>Gallery — Ravivar Vichar</title>
         <meta name="description" content="Explore our photo gallery showcasing the impact of our work across rural communities in Rajasthan." />
       </Helmet>
 
@@ -92,9 +91,6 @@ export default function Gallery() {
         <section className="relative overflow-hidden bg-surface-secondary py-24 lg:py-28">
           <FloatingDots />
           <div className="container-content relative z-10">
-            <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-ink-secondary hover:text-primary-500 transition-colors mb-8">
-              <ArrowLeft size={16} /> Back to Home
-            </Link>
             <div className="max-w-3xl">
               <span className="section-label">GALLERY</span>
               <h1 className="text-hero-mobile lg:text-hero text-ink-primary mt-4 leading-tight">

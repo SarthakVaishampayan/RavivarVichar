@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, ArrowRight, Check, Loader2 } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, ArrowRight, Check, Loader2 } from 'lucide-react';
 import api from '../../lib/axios';
 
 const footerLinks = {
@@ -10,7 +10,7 @@ const footerLinks = {
     { label: 'Knowledge Hub', path: '/knowledge-hub' },
     { label: 'Events', path: '/events' },
     { label: 'Gallery', path: '/gallery' },
-    { label: 'Contact', path: '/contact' },
+    { label: 'Contact Us', path: '/contact' },
   ],
   'Knowledge Hub': [
     { label: 'Articles', path: '/knowledge-hub#articles' },
@@ -20,18 +20,21 @@ const footerLinks = {
   ],
   'About Us': [
     { label: 'Our Story', path: '/about#our-story' },
+    { label: 'Our Vision', path: '/about#our-vision' },
     { label: 'Our Values', path: '/about#our-values' },
-    { label: 'Our Journey', path: '/about#our-journey' },
     { label: 'Our Mission', path: '/about#our-mission' },
+    { label: 'Our Journey', path: '/about#our-journey' },
     { label: 'Our Founders', path: '/about#our-founders' },
+    { label: 'Our History', path: '/about#our-history' },
   ],
 };
 
 const socialLinks = [
-  { icon: Facebook, href: 'https://facebook.com/ravivarvichar', label: 'Facebook' },
-  { icon: Twitter, href: 'https://twitter.com/ravivarvichar', label: 'Twitter' },
-  { icon: Instagram, href: 'https://instagram.com/ravivarvichar', label: 'Instagram' },
-  { icon: Linkedin, href: 'https://linkedin.com/company/ravivarvichar', label: 'LinkedIn' },
+  { icon: Facebook, href: 'https://www.facebook.com/ravivarvichar', label: 'Facebook' },
+  { icon: Twitter, href: 'https://twitter.com/RavivarVichar', label: 'Twitter' },
+  { icon: Instagram, href: 'https://www.instagram.com/ravivarvichar', label: 'Instagram' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/company/94272369', label: 'LinkedIn' },
+  { icon: Youtube, href: 'https://www.youtube.com/@ravivarvichar', label: 'YouTube' },
 ];
 
 export default function Footer() {
@@ -132,7 +135,7 @@ export default function Footer() {
       <div className="border-t border-gray-200">
         <div className="container-site py-6 text-center">
           <p className="text-sm text-ink-secondary">
-            © {new Date().getFullYear()} RavivarVichar. All rights reserved.
+            © {new Date().getFullYear()} Ravivar Vichar. All rights reserved.
           </p>
         </div>
       </div>

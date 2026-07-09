@@ -1,13 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
-import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
 import api from '../lib/axios';
 import { Check, Loader2, ArrowLeft, Mail, Handshake } from 'lucide-react';
 
 export default function PartnerWithUs() {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/partner-hero.jpg';
+    img.onload = () => setLoaded(true);
+  }, []);
+
   const [formData, setFormData] = useState({
     name: '',
     organization: '',
@@ -40,7 +47,7 @@ export default function PartnerWithUs() {
   if (submitted) {
     return (
       <>
-        <Helmet><title>Partner With Us — RavivarVichar</title></Helmet>
+        <Helmet><title>Partner With Us — Ravivar Vichar</title></Helmet>
         <PageLayout>
           <section className="section-md min-h-[60vh] flex items-center">
             <div className="container-content text-center">
@@ -62,23 +69,36 @@ export default function PartnerWithUs() {
   return (
     <>
       <Helmet>
-        <title>Partner With Us — RavivarVichar</title>
-        <meta name="description" content="Partner with RavivarVichar to empower rural communities through research, entrepreneurship, and self-help groups." />
+        <title>Partner With Us — Ravivar Vichar</title>
+        <meta name="description" content="Partner with Ravivar Vichar to empower rural communities through research, entrepreneurship, and self-help groups." />
+      <link rel="preload" as="image" href="/partner-hero.jpg" />
       </Helmet>
 
       <PageLayout>
-        <section className="relative overflow-hidden bg-surface-secondary py-24 lg:py-28">
-          <FloatingDots />
-          <div className="container-content relative z-10">
-            <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-ink-secondary hover:text-primary-500 transition-colors mb-8">
-              <ArrowLeft size={16} /> Back to Home
-            </Link>
-            <div className="max-w-3xl">
-              <span className="section-label">PARTNER WITH US</span>
-              <h1 className="text-hero-mobile lg:text-hero text-ink-primary mt-4 leading-tight">
-                Collaborate for <span className="text-primary-500">Change</span>
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[20vh]">
+          {/* Background image */}
+          <div className="absolute inset-0 bg-gray-900">
+            <img
+  src="/partner-hero.jpg"
+  alt=""
+  onLoad={() => setLoaded(true)}
+  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+    loaded ? 'opacity-100' : 'opacity-0'
+  }`}
+/>
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
+          </div>
+          {/* Content */}
+          <div className="w-full relative z-10 pl-[5vw]">
+            <div className="max-w-[580px]">
+              <Link to="/" className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors mb-8">
+                <ArrowLeft size={16} /> Back to Home
+              </Link>
+              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase block mb-5">PARTNER WITH US</span>
+              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">
+                Collaborate for <span className="text-[#F5A623]">Change</span>
               </h1>
-              <p className="text-body text-ink-secondary mt-6 max-w-2xl">
+              <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 We're always looking for partners who share our vision of empowering rural communities. 
                 Whether you're a government agency, corporation, foundation, or educational institution — 
                 let's work together to create lasting impact.
@@ -98,12 +118,12 @@ export default function PartnerWithUs() {
               Prefer to reach out directly? Send us an email with your partnership inquiry and we'll respond promptly.
             </p>
             <a
-              href="mailto:partners@ravivarvichar.org?subject=Partnership%20Inquiry"
+              href="mailto:ravivar.vichar@ravivarvichar.in?subject=Partnership%20Inquiry"
               className="inline-flex items-center gap-2 mt-6 text-lg font-semibold text-primary-500 hover:text-primary-600 transition-colors"
             >
-              <Mail size={20} /> partners@ravivarvichar.org
+              <Mail size={20} /> ravivar.vichar@ravivarvichar.in
             </a>
-            <p className="text-sm text-ink-secondary mt-2">(Email address to be updated — click to open your default mail app)</p>
+            <p className="text-sm text-ink-secondary mt-2">Click to open your default mail app</p>
           </div>
         </section>
 

@@ -244,7 +244,52 @@ systemctl restart nginx
 
 ---
 
-## Step 12: Set Up Domains (DNS)
+## Step 12: Set Up Maintenance Mode (Optional)
+
+> ⚠️ **Do this AFTER Nginx is configured and the site is running**
+
+To set up maintenance mode so you can preview changes privately before going live:
+
+### 12a. Install `apache2-utils` (for `htpasswd`)
+```bash
+apt install -y apache2-utils
+```
+
+### 12b. Enable maintenance mode
+```bash
+cd /var/www/RavivarVichar
+MAINTENANCE_PASS=your-secret-password bash scripts/maintenance-on.sh
+```
+
+### How it works
+
+The maintenance mode uses a **cookie-based bypass** (not Basic Auth on the root URL). This avoids browser URL-stripping issues:
+
+| URL | What happens |
+|-----|-------------|
+| `http://yourdomain.com/` | Public → sees maintenance page (no login dialog) |
+| `http://yourdomain.com/_rv_preview` | Login dialog → enter `admin` / your password → gets cookie |
+| Then `http://yourdomain.com/` | Cookie active → client site loads (2-hour session) |
+| `http://yourdomain.com/?rv=YOUR_PASS` | One-step: cookie set + redirected to `/` |
+| `http://yourdomain.com/admin` | Admin login works normally (no maintenance block) |
+| `curl http://domain.com/api/v1/...` | API returns real data (not blocked) |
+
+### Turn off maintenance
+```bash
+cd /var/www/RavivarVichar
+bash scripts/maintenance-off.sh
+```
+
+### Change password
+```bash
+MAINTENANCE_PASS=new-password bash scripts/maintenance-on.sh
+```
+
+> **Tip:** No password is needed to turn maintenance OFF — only to turn it ON.
+
+---
+
+## Step 13: Set Up Domains (DNS)
 
 In your domain registrar (e.g., GoDaddy, Namecheap), point these A records to your droplet IP:
 
@@ -256,7 +301,7 @@ In your domain registrar (e.g., GoDaddy, Namecheap), point these A records to yo
 
 ---
 
-## Step 13: Enable HTTPS with Let's Encrypt
+## Step 14: Enable HTTPS with Let's Encrypt
 
 ```bash
 apt install -y certbot python3-certbot-nginx
@@ -270,7 +315,7 @@ certbot renew --dry-run
 
 ---
 
-## Step 14: Verify Everything
+## Step 15: Verify Everything
 
 | URL | Expected |
 |-----|----------|

@@ -1,18 +1,19 @@
 import { useState } from 'react';
-import { Settings as SettingsIcon, Save, Globe, Mail, Phone, MapPin } from 'lucide-react';
+import { Settings as SettingsIcon, Save, Globe, Mail, Phone, MapPin, Video } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function Settings() {
   const [settings, setSettings] = useState({
-    siteName: 'RavivarVichar',
-    tagline: 'Empowering Rural Communities',
-    email: 'contact@ravivarvichar.org',
-    phone: '+91-1234567890',
-    address: 'Jaipur, Rajasthan, India',
-    socialFacebook: 'https://facebook.com/ravivarvichar',
-    socialTwitter: 'https://twitter.com/ravivarvichar',
-    socialInstagram: 'https://instagram.com/ravivarvichar',
-    socialLinkedin: 'https://linkedin.com/company/ravivarvichar',
+    siteName: 'Ravivar Vichar',
+    tagline: 'Amplifying Women\'s Voices, Empowering Communities',
+    email: 'ravivar.vichar@ravivarvichar.in',
+    phone: '+91-7470527279',
+    address: '2nd Floor, Corporate House, 210 B-Block, 169, RNT Marg, Indore, Madhya Pradesh 452001',
+    socialFacebook: 'https://www.facebook.com/ravivarvichar',
+    socialTwitter: 'https://twitter.com/RavivarVichar',
+    socialInstagram: 'https://www.instagram.com/ravivarvichar',
+    socialLinkedin: 'https://www.linkedin.com/company/94272369',
+    socialYoutube: 'https://www.youtube.com/@ravivarvichar',
   });
 
   const handleChange = (key, value) => {
@@ -104,6 +105,10 @@ export default function Settings() {
             <div>
               <label className="label">LinkedIn</label>
               <input value={settings.socialLinkedin} onChange={(e) => handleChange('socialLinkedin', e.target.value)} className="input-field" placeholder="https://linkedin.com/..." />
+            </div>
+            <div>
+              <label className="label">YouTube</label>
+              <input value={settings.socialYoutube} onChange={(e) => handleChange('socialYoutube', e.target.value)} className="input-field" placeholder="https://youtube.com/..." />
             </div>
           </div>
         </div>

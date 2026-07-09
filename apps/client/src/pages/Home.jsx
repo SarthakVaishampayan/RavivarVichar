@@ -56,9 +56,9 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>RavivarVichar — Empowering Rural Communities</title>
-        <meta name="description" content="RavivarVichar empowers rural communities through research, entrepreneurship, and self-help groups. Working across Rajasthan for sustainable development." />
-        <meta property="og:title" content="RavivarVichar — Empowering Rural Communities" />
+        <title>Ravivar Vichar — Empowering Rural Communities</title>
+        <meta name="description" content="Ravivar Vichar empowers rural communities through research, entrepreneurship, and self-help groups. Working across Rajasthan for sustainable development." />
+        <meta property="og:title" content="Ravivar Vichar — Empowering Rural Communities" />
         <meta property="og:description" content="Empowering rural communities through research, entrepreneurship, and self-help groups." />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -66,11 +66,11 @@ export default function Home() {
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'NGO',
-            name: 'RavivarVichar',
+            name: 'Ravivar Vichar',
             description: 'Empowering rural communities through research, entrepreneurship, and self-help groups.',
             url: 'https://ravivarvichar.org',
-            logo: 'https://ravivarvichar.org/logo.png',
-            location: { '@type': 'Place', address: { '@type': 'PostalAddress', addressRegion: 'Rajasthan', addressCountry: 'IN' } },
+            logo: 'https://ravivarvichar.org/logo.png', /* ⚠️ Replace with actual logo URL after uploading */
+            location: { '@type': 'Place', address: { '@type': 'PostalAddress', addressRegion: 'Madhya Pradesh', addressCountry: 'IN' } },
           })}
         </script>
       </Helmet>

@@ -10,42 +10,29 @@ const navItems = [
   { label: 'Knowledge Hub', path: '/knowledge-hub' },
   { label: 'Events', path: '/events' },
   { label: 'Gallery', path: '/gallery' },
-  { label: 'Contact', path: '/contact' },
+  { label: 'Contact Us', path: '/contact' },
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const isHome = location.pathname === '/';
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     setMobileOpen(false);
   }, [location]);
 
   return (
-    <header
-      className={clsx(
-        'fixed top-0 left-0 right-0 z-50 h-[90px] transition-all duration-300',
-        scrolled || !isHome
-          ? 'bg-white shadow-nav'
-          : 'bg-transparent'
-      )}
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 h-[90px] bg-white shadow-nav">
       <div className="container-site h-full flex items-center">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 shrink-0">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500 text-lg font-bold text-white">
-            R
-          </div>
+        <Link to="/" className="flex items-center gap-1 shrink-0">
+          <img
+            src="/logo.png"
+            alt="Ravivar Vichar"
+            className="h-12 w-auto"
+          />
           <span className="hidden sm:block text-lg font-bold font-heading text-ink-primary">
-            RavivarVichar
+            Ravivar Vichar
           </span>
         </Link>
 

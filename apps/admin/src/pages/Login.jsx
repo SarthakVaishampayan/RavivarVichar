@@ -41,7 +41,7 @@ export default function Login() {
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-500 text-2xl font-bold text-white shadow-lg shadow-primary-200 mb-4">
             R
           </div>
-          <h1 className="text-2xl font-bold font-heading text-gray-900">RavivarVichar CMS</h1>
+          <h1 className="text-2xl font-bold font-heading text-gray-900">Ravivar Vichar CMS</h1>
           <p className="mt-1 text-sm text-gray-500">Sign in to manage your content</p>
         </div>
 

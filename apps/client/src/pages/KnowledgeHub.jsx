@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useLocation } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
-import FloatingDots from '../components/shared/FloatingDots';
 import api from '../lib/axios';
 import { Search, ArrowRight, Calendar, Tag } from 'lucide-react';
 
@@ -40,11 +39,18 @@ const sectionHeadings = {
 };
 
 export default function KnowledgeHub() {
+  const [loaded, setLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('Articles');
   const location = useLocation();
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/knowledge-hero.jpg';
+    img.onload = () => setLoaded(true);
+  }, []);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -104,27 +110,47 @@ export default function KnowledgeHub() {
   return (
     <>
       <Helmet>
-        <title>Knowledge Hub — RavivarVichar</title>
-        <meta name="description" content="Explore research, case studies, impact stories, and policy briefs from RavivarVichar's work in rural development." />
+        <title>Knowledge Hub — Ravivar Vichar</title>
+        <meta name="description" content="Explore research, case studies, impact stories, and policy briefs from Ravivar Vichar's work in rural development." />
+      <link rel="preload" as="image" href="/knowledge-hero.jpg" />
       </Helmet>
 
       <PageLayout>
         {/* Hero */}
-        <section className="relative overflow-hidden bg-surface-secondary py-24 lg:py-32">
-          <FloatingDots />
-          <div className="container-content relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <span className="section-label">KNOWLEDGE HUB</span>
-              <h1 className="text-hero-mobile lg:text-hero text-ink-primary mt-4 leading-tight">
-                Insights & <span className="text-primary-500">Research</span>
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[35vh]">
+          {/* Background image */}
+          <div className="absolute inset-0 bg-gray-900">
+            <img
+  src="/knowledge-hero.jpg"
+  alt="Knowledge Hub"
+  onLoad={() => setLoaded(true)}
+  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+    loaded ? 'opacity-100' : 'opacity-0'
+  }`}
+/>
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
+          </div>
+          {/* Content */}
+          <div className="w-full relative z-10 pl-[5vw]">
+            <div className="max-w-[580px]">
+              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">KNOWLEDGE HUB</span>
+              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">
+                Insights & <span className="text-[#F5A623]">Research</span>
               </h1>
-              <p className="text-body text-ink-secondary mt-6 max-w-2xl mx-auto">
+              <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 Explore our library of research, case studies, impact stories, and policy recommendations driving evidence-based rural development.
               </p>
             </div>
-            <div className="max-w-lg mx-auto mt-10">
+          </div>
+        </section>
+
+        {/* Search & Section Tabs (Below Hero) */}
+        <section className="bg-surface-white py-12 border-b border-gray-100">
+          <div className="container-content">
+            <div className="max-w-lg mx-auto">
               <div className="relative">
-                <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-secondary" />                  <input
+                <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-secondary" />
+                <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -133,8 +159,7 @@ export default function KnowledgeHub() {
                 />
               </div>
             </div>
-            {/* Section Tab Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
               {sections.map((section) => (
                 <button
                   key={section.id}

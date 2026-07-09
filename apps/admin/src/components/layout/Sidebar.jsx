@@ -27,7 +27,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
             R
           </div>
           <div>
-            <h1 className="text-sm font-bold text-white">RavivarVichar</h1>
+            <h1 className="text-sm font-bold text-white">Ravivar Vichar</h1>
             <p className="text-[10px] text-gray-400">Content Management</p>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
 
       {/* Footer */}
       <div className="border-t border-gray-800 px-6 py-4">
-        <p className="text-xs text-gray-500">RavivarVichar CMS v1.0</p>
+        <p className="text-xs text-gray-500">Ravivar Vichar CMS v1.0</p>
       </div>
     </div>
   );

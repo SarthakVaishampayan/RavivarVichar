@@ -287,14 +287,19 @@ systemctl restart nginx
 
 ## 📡 DNS & SSL (For Production)
 
-### [ ] 24. Point your domain A records
+### [ ] 24. Install apache2-utils (for maintenance mode)
+```bash
+apt install -y apache2-utils
+```
+
+### [ ] 25. Point your domain A records
 | Type | Name | Value |
 |------|------|-------|
 | A | `@` | `<your-droplet-ip>` |
 | A | `www` | `<your-droplet-ip>` |
 | A | `admin` | `<your-droplet-ip>` |
 
-### [ ] 25. Update `.env` with real domains
+### [ ] 26. Update `.env` with real domains
 ```bash
 nano apps/server/.env
 ```
@@ -304,12 +309,12 @@ CLIENT_URL=https://yourdomain.com
 ADMIN_URL=https://admin.yourdomain.com
 ```
 
-### [ ] 26. Restart server with new domains
+### [ ] 27. Restart server with new domains
 ```bash
 pm2 restart ravivarvichar-api
 ```
 
-### [ ] 27. Enable HTTPS with Let's Encrypt
+### [ ] 28. Enable HTTPS with Let's Encrypt
 ```bash
 apt install -y certbot python3-certbot-nginx
 certbot --nginx -d yourdomain.com -d www.yourdomain.com -d admin.yourdomain.com
@@ -322,14 +327,14 @@ certbot renew --dry-run
 
 ## ✅ Final Verification
 
-### [ ] 28. Check all URLs
+### [ ] 29. Check all URLs
 | URL | Expected |
 |-----|----------|
 | `https://yourdomain.com` | Client website loads |
 | `https://admin.yourdomain.com` | Admin login page loads |
 | `https://yourdomain.com/api/v1/health` | `{"success":true,...}` |
 
-### [ ] 29. Login to admin
+### [ ] 30. Login to admin
 - **URL:** `https://admin.yourdomain.com`
 - **Email:** admin@ravivarvichar.org
 - **Password:** Admin@123

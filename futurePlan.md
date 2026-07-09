@@ -352,3 +352,46 @@ Latest Articles | Top Authors | Trending Topics | Recent Visitors | Recent Donat
 **Why Deferred:** This is the final UI that ties all other analytics phases together. Best done after the underlying data sources are implemented.
 
 **Cost:** ✅ Free (uses existing Recharts + Tailwind)
+
+---
+
+## Phase: Admin Maintenance Mode Toggle
+
+**Status:** 🟡 Planned (not started)
+
+### Description
+Add a simple toggle button in the admin panel so team members with admin access can enable/disable maintenance mode without needing SSH access.
+
+### Flow
+- **Turning ON:** Admin clicks toggle → modal asks for maintenance password → enters password → backend runs `MAINTENANCE_PASS=<pass> bash scripts/maintenance-on.sh` → site goes into maintenance
+- **Turning OFF:** Admin clicks toggle → immediate (no password needed) → backend runs `bash scripts/maintenance-off.sh` → site goes live
+
+### Backend Changes
+1. Create `apps/server/src/routes/deployment.routes.js`:
+   - `GET /deployment/maintenance/status` — Check if maintenance is ON (reads Nginx symlink)
+   - `POST /deployment/maintenance/toggle` — Body: `{ password? }` — if password is provided, runs `maintenance-on.sh`; if empty, runs `maintenance-off.sh`
+2. Register route in `apps/server/src/routes/index.js`
+3. Both routes protected by JWT `protect` middleware
+
+### Frontend Changes
+1. Create `apps/admin/src/pages/MaintenanceToggle.jsx` — Simple page with:
+   - Current maintenance status indicator (ON/OFF badge)
+   - Toggle switch/button
+   - Password input modal (only when turning ON)
+2. Add nav item to `NAV_ITEMS` in `apps/admin/src/lib/constants.js`
+3. Add route in `apps/admin/src/routes/AdminRoutes.jsx`
+
+### Security
+- ✅ Only JWT-authenticated admins can access (uses existing `protect` middleware)
+- ✅ Password required to enable (prevents accidental activation)
+- ✅ No password needed to disable (emergency-safe for team members)
+- ✅ Server only runs the two known scripts — no arbitrary command execution
+- ✅ Password flows browser → API → bash, never stored on server
+
+### Why This Matters
+- **Emergency failsafe** — Any admin can instantly lock the site if something goes wrong
+- **No SSH needed** — Team members without SSH access (designers, editors) can still protect the site
+- **Simple** — Just a toggle, no deploy pipeline, no terminal output, no instructions
+
+### Cost
+✅ Free (uses existing infrastructure)

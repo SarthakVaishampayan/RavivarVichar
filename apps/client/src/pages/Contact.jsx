@@ -1,30 +1,37 @@
 import { Helmet } from 'react-helmet-async';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
-import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
 import { Mail, Phone, MapPin, Clock, Send, Check, Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../lib/axios';
 
 const contactInfo = [
-  { icon: MapPin, label: 'Address', value: '123 Village Development Center, Bhilwara, Rajasthan 311001, India' },
-  { icon: Phone, label: 'Phone', value: '+91 98765 43210' },
-  { icon: Mail, label: 'Email', value: 'hello@ravivarvichar.org' },
+  { icon: MapPin, label: 'Address', value: '2nd Floor, Corporate House, 210 B-Block, 169, RNT Marg, Indore, Madhya Pradesh 452001' },
+  { icon: Phone, label: 'Phone', value: '+91-7470527279' },
+  { icon: Phone, label: 'Alternate', value: '0731-4073804' },
+  { icon: Mail, label: 'Email', value: 'ravivar.vichar@ravivarvichar.in' },
   { icon: Clock, label: 'Office Hours', value: 'Mon — Fri, 9:00 AM — 5:00 PM' },
 ];
 
 const faqs = [
-  { q: 'How can I volunteer with RavivarVichar?', a: 'We welcome volunteers with diverse skills. Please fill out the contact form or email us directly, and our team will reach out with current opportunities.' },
+  { q: 'How can I volunteer with Ravivar Vichar?', a: 'We welcome volunteers with diverse skills. Please fill out the contact form or email us directly, and our team will reach out with current opportunities.' },
   { q: 'How do I partner with your organization?', a: 'We collaborate with NGOs, government agencies, corporations, and academic institutions. Reach out through our contact form to discuss partnership possibilities.' },
   { q: 'Can I donate to a specific program?', a: 'Yes! You can specify the program you\'d like to support when donating. Your contribution will be directed to that program\'s activities.' },
   { q: 'How are donations utilized?', a: '85% of donations go directly to program activities, 10% to capacity building and training, and 5% to administrative costs. We publish annual impact reports.' },
 ];
 
 export default function Contact() {
+  const [loaded, setLoaded] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/contact-hero.jpg';
+    img.onload = () => setLoaded(true);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,22 +49,35 @@ export default function Contact() {
   return (
     <>
       <Helmet>
-        <title>Contact Us — RavivarVichar</title>
-        <meta name="description" content="Get in touch with RavivarVichar. Reach out for partnerships, volunteering, donations, or general inquiries." />
+        <title>Contact Us — Ravivar Vichar</title>
+        <meta name="description" content="Get in touch with Ravivar Vichar. Reach out for partnerships, volunteering, donations, or general inquiries." />
+      <link rel="preload" as="image" href="/contact-hero.jpg" />
       </Helmet>
 
       <PageLayout>
         {/* Hero */}
-        <section className="relative overflow-hidden bg-surface-secondary py-24 lg:py-32">
-          <FloatingDots />
-          <div className="container-content relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <span className="section-label">CONTACT US</span>
-              <h1 className="text-hero-mobile lg:text-hero text-ink-primary mt-4 leading-tight">
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[35vh]">
+          {/* Background image */}
+          <div className="absolute inset-0 bg-gray-900">
+            <img
+  src="/contact-hero.jpg"
+  alt="Contact Ravivar Vichar"
+  onLoad={() => setLoaded(true)}
+  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+    loaded ? 'opacity-100' : 'opacity-0'
+  }`}
+/>
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
+          </div>
+          {/* Content */}
+          <div className="w-full relative z-10 pl-[5vw]">
+            <div className="max-w-[580px]">
+              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">CONTACT US</span>
+              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">
                 Let's{' '}
-                <span className="text-primary-500">Work Together</span>
+                <span className="text-[#F5A623]">Work Together</span>
               </h1>
-              <p className="text-body text-ink-secondary mt-6 max-w-2xl mx-auto">
+              <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 Have a question, want to partner with us, or interested in volunteering? 
                 We'd love to hear from you. Reach out and let's make a difference together.
               </p>
