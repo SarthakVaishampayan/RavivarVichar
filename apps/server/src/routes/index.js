@@ -35,4 +35,10 @@ router.get('/health', (req, res) => {
   res.json({ success: true, message: 'RavivarVichar API is running', timestamp: new Date().toISOString() });
 });
 
+// Expose server-side config (CLIENT_URL for admin "Visit Website" button)
+const env = require('../config/env');
+router.get('/config', (req, res) => {
+  res.json({ success: true, data: { clientUrl: env.CLIENT_URL } });
+});
+
 module.exports = router;

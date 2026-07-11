@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import Button from '../shared/Button';
 
@@ -12,9 +13,13 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative mt-[90px] min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[15vh]">
+    <>
+      <Helmet>
+        <link rel="preload" as="image" href="/hero-image.jpg" />
+      </Helmet>
+      <section className="relative mt-[90px] min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[15vh]">
       {/* Full-screen background image fills section (starts below navbar) */}
-      <div className="absolute inset-0 bg-gray-900">
+      <div className="absolute inset-0 bg-[#101010]">
         <img
           src="/hero-image.jpg"
           alt="Ravivar Vichar community work"
@@ -77,5 +82,6 @@ export default function Hero() {
         </div>
       </div>
     </section>
+    </>
   );
 }

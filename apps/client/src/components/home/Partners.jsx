@@ -48,6 +48,7 @@ export default function Partners() {
                   <img
                     src={partner.logo}
                     alt={partner.name}
+                    loading="lazy"
                     className="w-full h-full object-contain p-4"
                   />
                 ) : (

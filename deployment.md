@@ -329,7 +329,28 @@ Login with: admin@ravivarvichar.com / Sarthak@2003
 
 ## Updating the Site (Future Deploys)
 
-### One-command deploy (recommended):
+### Recommended workflow with maintenance mode:
+
+Deploying updates while the site is live can cause visual glitches (broken CSS, missing assets, etc.) if visitors load the page mid-build. Use maintenance mode to show visitors a clean "under maintenance" page while you update.
+
+```bash
+cd /var/www/RavivarVichar
+
+# 1. Enable maintenance mode (visitors see maintenance page)
+MAINTENANCE_PASS=standbymode bash scripts/maintenance-on.sh
+
+# 2. Deploy latest code
+bash scripts/deploy.sh
+
+# 3. (Optional) Test the site with your bypass cookie
+#    Visit http://yourdomain.com/?rv=standbymode in your browser
+#    to get the bypass cookie and verify everything works
+
+# 4. Take the site live again
+bash scripts/maintenance-off.sh
+```
+
+### One-command deploy (without maintenance):
 ```bash
 cd /var/www/RavivarVichar
 bash scripts/deploy.sh
@@ -342,7 +363,7 @@ The script **automatically**:
 - Restarts the server
 - Rolls back everything if any step fails
 
-### Manual update:
+### Manual update (without maintenance):
 ```bash
 cd /var/www/RavivarVichar
 git pull origin main

@@ -97,6 +97,7 @@ export default function MediaMentions() {
                       <img
                         src={item.imageUrl}
                         alt={item.title}
+                        loading="lazy"
                         className="w-full h-80 object-cover"
                       />
                     </div>

@@ -54,6 +54,7 @@ export default function Testimonials() {
                   <img
                     src={t.image || t.photo}
                     alt={t.name}
+                    loading="lazy"
                     className="w-full h-full object-cover"
                   />
                 ) : (

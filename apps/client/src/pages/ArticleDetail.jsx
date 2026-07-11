@@ -132,6 +132,7 @@ export default function ArticleDetail() {
                     key={i}
                     src={img}
                     alt={`${article.title} - Image ${i + 1}`}
+                    loading="lazy"
                     className="w-full h-40 object-cover rounded-lg shadow-sm"
                     onError={(e) => { e.target.style.display = 'none'; }}
                   />

@@ -46,6 +46,7 @@ export default function FeaturedResearch() {
                     <img
                       src={item.thumbnail}
                       alt={item.title}
+                      loading="lazy"
                       className="w-full h-80 object-cover"
                     />
                   ) : (
@@ -58,10 +59,12 @@ export default function FeaturedResearch() {
 
               {/* Content */}
               <div className={i % 2 === 1 ? 'lg:order-1' : ''}>
-                <div className="flex items-center gap-3 mb-4">
-                  <Quote size={24} className="text-primary-500/40" />
-                  <span className="text-sm text-ink-secondary font-medium">{item.location || item.author || ''}</span>
-                </div>
+                {item.location && (
+                  <div className="flex items-center gap-3 mb-4">
+                    <Quote size={24} className="text-primary-500/40" />
+                    <span className="text-sm text-ink-secondary font-medium">{item.location}</span>
+                  </div>
+                )}
                 <h3 className="text-[32px] font-heading font-bold text-ink-primary leading-tight mb-4">
                   {item.title}
                 </h3>

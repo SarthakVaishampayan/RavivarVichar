@@ -218,7 +218,7 @@ export default function KnowledgeHub() {
                           >
                             <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">
                               {article.thumbnail ? (
-                                <img src={article.thumbnail} alt={article.title} className="w-full h-full object-cover" />
+                                <img src={article.thumbnail} alt={article.title} loading="lazy" className="w-full h-full object-cover" />
                               ) : (
                                 <Tag size={28} className="text-primary-400" />
                               )}
