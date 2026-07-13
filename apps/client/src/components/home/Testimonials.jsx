@@ -96,9 +96,9 @@ export default function Testimonials() {
                 <button
                   key={i}
                   onClick={() => setCurrent(i)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                  className={`max-lg:w-3 max-lg:h-3 w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                     i === current
-                      ? 'bg-primary-500 w-8'
+                      ? 'bg-primary-500 max-lg:w-7 w-8'
                       : 'bg-gray-300 hover:bg-gray-400'
                   }`}
                   aria-label={`Go to testimonial ${i + 1}`}

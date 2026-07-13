@@ -82,7 +82,7 @@ export default function JoinInitiative() {
       </Helmet>
 
       <PageLayout>
-        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[20vh]">
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[20vh]">
           {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
@@ -96,13 +96,13 @@ export default function JoinInitiative() {
             <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
           </div>
           {/* Content */}
-          <div className="w-full relative z-10 pl-[5vw]">
+          <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
               <Link to="/" className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors mb-8">
                 <ArrowLeft size={16} /> Back to Home
               </Link>
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase block mb-5">JOIN OUR INITIATIVE</span>
-              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">
+              <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
                 Be Part of the <span className="text-[#F5A623]">Change</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">

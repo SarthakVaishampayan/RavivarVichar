@@ -96,7 +96,7 @@ export default function WhatWeDoDetail() {
       </Helmet>
 
       <PageLayout>
-        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[15vh]">
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[15vh]">
           {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
@@ -110,7 +110,7 @@ export default function WhatWeDoDetail() {
             <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
           </div>
           {/* Content */}
-          <div className="w-full relative z-10 pl-[5vw]">
+          <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
               <Link to="/" className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors mb-8">
                 <ArrowLeft size={16} /> Back to Home
@@ -118,7 +118,7 @@ export default function WhatWeDoDetail() {
               <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 ${content.color} mb-5`}>
                 <Icon size={28} />
               </div>
-              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">{content.title}</h1>
+              <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">{content.title}</h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">{content.heroDescription}</p>
             </div>
           </div>

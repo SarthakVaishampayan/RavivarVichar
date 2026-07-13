@@ -56,7 +56,7 @@ export default function Contact() {
 
       <PageLayout>
         {/* Hero */}
-        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[35vh]">
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[35vh]">
           {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
@@ -70,10 +70,10 @@ export default function Contact() {
             <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
           </div>
           {/* Content */}
-          <div className="w-full relative z-10 pl-[5vw]">
+          <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">CONTACT US</span>
-              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">
+              <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
                 Let's{' '}
                 <span className="text-[#F5A623]">Work Together</span>
               </h1>

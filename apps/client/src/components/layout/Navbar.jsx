@@ -31,7 +31,7 @@ export default function Navbar() {
             alt="Ravivar Vichar"
             className="h-12 w-auto"
           />
-          <span className="hidden sm:block text-lg font-bold font-heading text-ink-primary">
+          <span className="block text-lg font-bold font-heading text-ink-primary">
             Ravivar Vichar
           </span>
         </Link>
@@ -62,7 +62,7 @@ export default function Navbar() {
         {/* Mobile Hamburger */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden rounded-lg p-2 text-ink-secondary hover:bg-gray-100"
+          className="lg:hidden ml-auto rounded-lg p-3 text-ink-secondary hover:bg-gray-100"
           aria-label="Toggle menu"
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}

@@ -23,18 +23,18 @@ const stockImages = [
 
 // Assign varying sizes for masonry effect
 const sizeClasses = [
-  'row-span-2 col-span-2', // hero size
-  'row-span-2 col-span-1',
-  'row-span-2 col-span-1',
-  'row-span-3 col-span-2',
-  'row-span-2 col-span-1',
-  'row-span-1 col-span-1',
-  'row-span-2 col-span-2',
-  'row-span-1 col-span-1',
-  'row-span-2 col-span-1',
-  'row-span-2 col-span-1',
-  'row-span-1 col-span-2',
-  'row-span-2 col-span-1',
+  'md:row-span-2 md:col-span-2', // hero size
+  'md:row-span-2 md:col-span-1',
+  'md:row-span-2 md:col-span-1',
+  'md:row-span-3 md:col-span-2',
+  'md:row-span-2 md:col-span-1',
+  'md:row-span-1 md:col-span-1',
+  'md:row-span-2 md:col-span-2',
+  'md:row-span-1 md:col-span-1',
+  'md:row-span-2 md:col-span-1',
+  'md:row-span-2 md:col-span-1',
+  'md:row-span-1 md:col-span-2',
+  'md:row-span-2 md:col-span-1',
 ];
 
 export default function Gallery() {
@@ -88,7 +88,7 @@ export default function Gallery() {
       </Helmet>
 
       <PageLayout>
-        <section className="relative overflow-hidden bg-surface-secondary py-24 lg:py-28">
+        <section className="relative overflow-hidden bg-surface-secondary max-lg:py-16 py-24 lg:py-28">
           <FloatingDots />
           <div className="container-content relative z-10">
             <div className="max-w-3xl">
@@ -117,7 +117,7 @@ export default function Gallery() {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
                 {images.map((img, index) => {
                   const sizeClass = sizeClasses[index % sizeClasses.length];
-                  const isLarge = sizeClass.includes('col-span-2');
+                  const isLarge = sizeClass.includes('md:col-span-2');
                   return (
                     <button
                       key={img._id || img.id}

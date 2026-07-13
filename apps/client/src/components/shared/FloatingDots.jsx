@@ -15,7 +15,7 @@ export default function FloatingDots({ count = 5, className = '' }) {
   const dots = dotConfigs.slice(0, count);
 
   return (
-    <div className={clsx('absolute inset-0 pointer-events-none overflow-hidden', className)}>
+    <div className={clsx('max-lg:hidden absolute inset-0 pointer-events-none overflow-hidden', className)}>
       {dots.map((dot, i) => (
         <div
           key={i}

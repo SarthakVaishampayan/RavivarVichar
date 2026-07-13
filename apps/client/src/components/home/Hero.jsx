@@ -17,14 +17,14 @@ export default function Hero() {
       <Helmet>
         <link rel="preload" as="image" href="/hero-image.jpg" />
       </Helmet>
-      <section className="relative mt-[90px] min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[15vh]">
+      <section className="relative mt-[90px] min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[15vh]">
       {/* Full-screen background image fills section (starts below navbar) */}
       <div className="absolute inset-0 bg-[#101010]">
         <img
           src="/hero-image.jpg"
           alt="Ravivar Vichar community work"
           onLoad={() => setLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+          className={`absolute inset-0 w-full h-full object-cover object-[65%_center] transition-opacity duration-1000 ${
             loaded ? 'opacity-100' : 'opacity-0'
           }`}
         />
@@ -38,7 +38,7 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="w-full pb-24 relative z-10 pl-[5vw]">
+      <div className="w-full pb-24 relative z-10 max-lg:px-6 pl-[5vw]">
         <div className="max-w-[580px]">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -48,7 +48,7 @@ export default function Hero() {
             <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">
               EMPOWERING RURAL INDIA
             </span>
-            <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">
+            <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
               Building Stronger{' '}
               <span className="text-[#6AA84F]">Communities</span>{' '}
               Through{' '}

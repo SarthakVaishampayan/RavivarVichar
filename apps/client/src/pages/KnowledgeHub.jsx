@@ -117,24 +117,24 @@ export default function KnowledgeHub() {
 
       <PageLayout>
         {/* Hero */}
-        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden pt-[35vh]">
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[35vh]">
           {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
   src="/knowledge-hero.jpg"
   alt="Knowledge Hub"
   onLoad={() => setLoaded(true)}
-  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+  className={`absolute inset-0 w-full h-full object-cover object-[65%_center] transition-opacity duration-1000 ${
     loaded ? 'opacity-100' : 'opacity-0'
   }`}
 />
             <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
           </div>
           {/* Content */}
-          <div className="w-full relative z-10 pl-[5vw]">
+          <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">KNOWLEDGE HUB</span>
-              <h1 className="text-3xl lg:text-5xl text-white leading-[1.2]">
+              <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
                 Insights & <span className="text-[#F5A623]">Research</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
@@ -159,12 +159,12 @@ export default function KnowledgeHub() {
                 />
               </div>
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+            <div className="max-lg:overflow-x-auto max-lg:flex-nowrap max-lg:justify-start max-lg:pb-2 flex flex-wrap items-center justify-center gap-3 mt-6">
               {sections.map((section) => (
                 <button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
-                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`max-lg:shrink-0 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
                     activeSection === section.label
                       ? 'bg-primary-500 text-white shadow-soft'
                       : 'bg-white text-ink-secondary hover:text-primary-500 border border-gray-200'

@@ -72,7 +72,7 @@ export default function Footer() {
             <p className="text-body text-ink-secondary mb-6">
               Subscribe to our newsletter for updates on programs, research, and impact stories.
             </p>
-            <form onSubmit={handleNewsletter} className="flex gap-3 max-w-sm">
+            <form onSubmit={handleNewsletter} className="max-lg:flex-col flex gap-3 max-w-sm">
               <input
                 type="email"
                 value={email}
@@ -99,7 +99,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-white border border-gray-200 text-ink-secondary hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-300"
+                    className="flex max-lg:h-11 max-lg:w-11 h-10 w-10 items-center justify-center rounded-full bg-white border border-gray-200 text-ink-secondary hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-300"
                   >
                     <Icon size={16} />
                   </a>
