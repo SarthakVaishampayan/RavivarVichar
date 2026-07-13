@@ -152,7 +152,7 @@ export default function ArticleDetail() {
                 <button className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-ink-secondary hover:bg-primary-500 hover:text-white transition-all"><Linkedin size={16} /></button>
                 <button className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-ink-secondary hover:bg-primary-500 hover:text-white transition-all"><Facebook size={16} /></button>
               </div>
-              <div className="flex-1 max-w-3xl" dangerouslySetInnerHTML={{ __html: article.content || '' }} />
+              <div className="article-content flex-1 max-w-3xl" dangerouslySetInnerHTML={{ __html: article.content || '' }} />
             </div>
           </div>
         </section>

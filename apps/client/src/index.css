@@ -153,3 +153,86 @@
     @apply bg-gray-400;
   }
 }
+
+/* ─── Article Content Styles (unlayered) ─── */
+.article-content h1 { font-size: 2.5em; font-weight: 700; line-height: 1.2; margin: 0.5em 0; }
+.article-content h2 { font-size: 2em; font-weight: 700; line-height: 1.25; margin: 0.5em 0; }
+.article-content h3 { font-size: 1.75em; font-weight: 600; line-height: 1.3; margin: 0.4em 0; }
+.article-content h4 { font-size: 1.5em; font-weight: 600; line-height: 1.35; margin: 0.3em 0; }
+.article-content h5 { font-size: 1.25em; font-weight: 600; line-height: 1.4; margin: 0.3em 0; }
+.article-content h6 { font-size: 1.1em; font-weight: 600; line-height: 1.4; margin: 0.3em 0; }
+
+.article-content p { margin: 0.75em 0; line-height: 1.8; font-size: 18px; color: #4B5563; }
+
+.article-content ul { list-style-type: disc; padding-left: 1.5em; margin: 0.5em 0; }
+.article-content ol { list-style-type: decimal; padding-left: 1.5em; margin: 0.5em 0; }
+.article-content li { margin: 0.25em 0; }
+
+.article-content blockquote {
+  border-left: 4px solid #F5A623;
+  padding: 0.75em 1.25em;
+  margin: 1.25em 0;
+  font-style: italic;
+  color: #4B5563;
+  background: #FFFBF0;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.article-content pre {
+  background: #1f2937;
+  color: #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.875rem;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.article-content code {
+  background: #f3f4f6;
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.875em;
+}
+
+.article-content pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.article-content img {
+  border-radius: 0.75rem;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5em 0;
+}
+
+.article-content a {
+  color: #F5A623;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.2s;
+}
+
+.article-content a:hover {
+  opacity: 0.8;
+}
+
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+.article-content th,
+.article-content td {
+  border: 1px solid #d1d5db;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.article-content th {
+  background: #f9fafb;
+  font-weight: 600;
+}

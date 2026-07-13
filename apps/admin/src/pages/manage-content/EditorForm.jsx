@@ -47,8 +47,26 @@ export default function EditorForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  // Handle nested key changes like 'seo.metaTitle'
   const handleChange = (key, value) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+    if (key.includes('.')) {
+      const parts = key.split('.');
+      setFormData((prev) => {
+        const updated = { ...prev };
+        let obj = updated;
+        for (let i = 0; i < parts.length - 1; i++) {
+          if (!obj[parts[i]] || typeof obj[parts[i]] !== 'object') {
+            obj[parts[i]] = {};
+          }
+          obj[parts[i]] = { ...obj[parts[i]] };
+          obj = obj[parts[i]];
+        }
+        obj[parts[parts.length - 1]] = value;
+        return updated;
+      });
+    } else {
+      setFormData((prev) => ({ ...prev, [key]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -79,7 +97,7 @@ export default function EditorForm({
   if (loading) return <LoadingSpinner className="min-h-[60vh]" />;
 
   return (
-    <div className="page-container max-w-4xl mx-auto">
+    <div className="page-container max-w-6xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
         <button onClick={() => navigate(`/content/${resourceKey}`)} className="btn-ghost">
           <ArrowLeft size={18} />
