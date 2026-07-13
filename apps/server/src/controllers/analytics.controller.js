@@ -126,18 +126,68 @@ const recordPageview = catchAsync(async (req, res) => {
 
 // GET /api/v1/analytics/traffic — aggregated traffic stats
 const getTraffic = catchAsync(async (req, res) => {
-  const days = Math.min(Math.max(parseInt(req.query.days) || 30, 1), 365);
   const now = new Date();
-  const sinceDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterdayStart = new Date(todayStart.getTime() - 24 * 60 * 60 * 1000);
   const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const thisYearStart = new Date(now.getFullYear(), 0, 1);
   const fiveMinAgo = new Date(now.getTime() - 5 * 60 * 1000);
+
+  // Determine date range from preset or days param
+  let sinceDate, endDate, rangeLabel, filter;
+  const preset = req.query.range || '';
+
+  switch (preset) {
+    case 'today':
+      sinceDate = todayStart;
+      endDate = now;
+      rangeLabel = 'Today';
+      break;
+    case 'yesterday':
+      sinceDate = yesterdayStart;
+      endDate = todayStart;
+      rangeLabel = 'Yesterday';
+      break;
+    case 'month':
+      sinceDate = thisMonthStart;
+      endDate = now;
+      rangeLabel = 'This Month';
+      break;
+    case 'year':
+      sinceDate = thisYearStart;
+      endDate = now;
+      rangeLabel = 'This Year';
+      break;
+    case 'all':
+      sinceDate = null;
+      endDate = null;
+      rangeLabel = 'All Time';
+      break;
+    default: {
+      // Fallback to days param (backward compatible)
+      const days = Math.min(Math.max(parseInt(req.query.days) || 30, 1), 365);
+      sinceDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+      endDate = now;
+      rangeLabel = `Last ${days} Days`;
+      break;
+    }
+  }
+
+  // Build timestamp filter
+  if (sinceDate && endDate) {
+    filter = { timestamp: { $gte: sinceDate, $lte: endDate } };
+  } else if (sinceDate) {
+    filter = { timestamp: { $gte: sinceDate } };
+  } else {
+    filter = {}; // no filter = all time
+  }
 
   const [
     totalPageviews,
     visitorsToday,
     visitorsThisWeek,
-    visitorsThisMonth,
+    visitorsInRange,
     activeNow,
     totalUniqueSessions,
     topPages,
@@ -145,20 +195,20 @@ const getTraffic = catchAsync(async (req, res) => {
     visitorTrend,
   ] = await Promise.all([
     // Total pageviews in date range
-    PageView.countDocuments({ timestamp: { $gte: sinceDate } }),
+    PageView.countDocuments(filter),
 
     // Unique visitors today (unique IP hashes)
-    PageView.distinct('ipHash', { timestamp: { $gte: todayStart } }).then(
+    PageView.distinct('ipHash', { timestamp: { $gte: todayStart, $lte: now } }).then(
       (ips) => ips.length
     ),
 
     // Unique visitors this week
-    PageView.distinct('ipHash', { timestamp: { $gte: weekAgo } }).then(
+    PageView.distinct('ipHash', { timestamp: { $gte: weekAgo, $lte: now } }).then(
       (ips) => ips.length
     ),
 
-    // Unique visitors this month (30 days)
-    PageView.distinct('ipHash', { timestamp: { $gte: sinceDate } }).then(
+    // Unique visitors in the selected range
+    PageView.distinct('ipHash', filter).then(
       (ips) => ips.length
     ),
 
@@ -168,13 +218,13 @@ const getTraffic = catchAsync(async (req, res) => {
     ),
 
     // Total unique sessions in date range
-    PageView.distinct('sessionId', { timestamp: { $gte: sinceDate } }).then(
+    PageView.distinct('sessionId', filter).then(
       (sessions) => sessions.length
     ),
 
     // Top pages (group by path, count, limit 20)
     PageView.aggregate([
-      { $match: { timestamp: { $gte: sinceDate } } },
+      { $match: filter },
       { $group: { _id: '$path', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
       { $limit: 20 },
@@ -183,7 +233,7 @@ const getTraffic = catchAsync(async (req, res) => {
 
     // Top referrers (group by referrer, count, limit 20)
     PageView.aggregate([
-      { $match: { timestamp: { $gte: sinceDate }, referrer: { $ne: '' } } },
+      { $match: { ...filter, referrer: { $ne: '' } } },
       { $group: { _id: '$referrer', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
       { $limit: 20 },
@@ -192,7 +242,7 @@ const getTraffic = catchAsync(async (req, res) => {
 
     // Visitor trend (daily counts for date range)
     PageView.aggregate([
-      { $match: { timestamp: { $gte: sinceDate } } },
+      { $match: filter },
       {
         $group: {
           _id: {
@@ -229,7 +279,7 @@ const getTraffic = catchAsync(async (req, res) => {
     summary: {
       visitorsToday,
       visitorsThisWeek,
-      visitorsThisMonth,
+      visitorsThisMonth: visitorsInRange,
       activeNow,
       totalPageviews,
       totalSessions: totalUniqueSessions,
@@ -237,18 +287,13 @@ const getTraffic = catchAsync(async (req, res) => {
     topPages,
     topReferrers: topReferrers.map((r) => ({
       ...r,
-      // Clean up referrer for display
       referrer: r.referrer
         .replace(/^https?:\/\//, '')
         .replace(/\/.*$/, '')
         .slice(0, 100),
     })),
     visitorTrend,
-    period: {
-      days,
-      startDate: sinceDate,
-      endDate: now,
-    },
+    period: { range: rangeLabel, startDate: sinceDate || null, endDate: endDate || null },
   });
 });
 

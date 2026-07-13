@@ -10,28 +10,31 @@ import LoadingSpinner from '../components/ui/LoadingSpinner';
 import StatCard from '../components/ui/StatCard';
 
 const DATE_RANGES = [
-  { label: '7 Days', value: 7 },
-  { label: '30 Days', value: 30 },
-  { label: '90 Days', value: 90 },
-  { label: 'Year', value: 365 },
+  { label: 'Today', value: 'today' },
+  { label: 'Yesterday', value: 'yesterday' },
+  { label: '7 Days', value: 'week' },
+  { label: 'This Month', value: 'month' },
+  { label: 'This Year', value: 'year' },
+  { label: 'All', value: 'all' },
 ];
 
 export default function Traffic() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [days, setDays] = useState(30);
+  const [activeRange, setActiveRange] = useState('month');
 
   const fetchTraffic = useCallback(async () => {
     setLoading(true);
     try {
-      const { data: res } = await api.get(`/analytics/traffic?days=${days}`);
+      const query = `?range=${activeRange}`;
+      const { data: res } = await api.get(`/analytics/traffic${query}`);
       setData(res.data);
     } catch (err) {
       console.error('Failed to load traffic data:', err);
     } finally {
       setLoading(false);
     }
-  }, [days]);
+  }, [activeRange]);
 
   useEffect(() => {
     fetchTraffic();
@@ -59,9 +62,9 @@ export default function Traffic() {
           {DATE_RANGES.map((range) => (
             <button
               key={range.value}
-              onClick={() => setDays(range.value)}
+              onClick={() => setActiveRange(range.value)}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                days === range.value
+                activeRange === range.value
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-500 hover:text-gray-700'
               }`}

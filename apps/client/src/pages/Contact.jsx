@@ -85,12 +85,13 @@ export default function Contact() {
           </div>
         </section>
 
-        {/* Contact Grid */}
+        {/* Contact Grid — 3 Columns: Info, Form, Map */}
         <section className="section-md bg-surface-white">
           <div className="container-content">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-              {/* Contact Info */}
-              <div className="lg:col-span-2 space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+              {/* Column 1: Contact Info & Address */}
+              <div className="space-y-8">
+                <h3 className="text-lg font-heading font-bold text-ink-primary mb-6">Get in Touch</h3>
                 {contactInfo.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -107,8 +108,8 @@ export default function Contact() {
                 })}
               </div>
 
-              {/* Contact Form */}
-              <div className="lg:col-span-3">
+              {/* Column 2: Contact Form */}
+              <div>
                 <div className="card p-8 lg:p-10">
                   {submitted ? (
                     <div className="text-center py-12">
@@ -123,7 +124,7 @@ export default function Contact() {
                     </div>
                   ) : (
                     <form onSubmit={handleSubmit} className="space-y-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 gap-6">
                         <div>
                           <label className="label">Full Name *</label>
                           <input type="text" className="input-field" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required placeholder="Your name" />
@@ -148,12 +149,28 @@ export default function Contact() {
                         <label className="label">Message *</label>
                         <textarea className="input-field min-h-[150px] resize-y" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required placeholder="Tell us how you'd like to connect..." />
                       </div>
-                      <Button type="submit" variant="primary" className="w-full sm:w-auto" disabled={loading}>
+                      <Button type="submit" variant="primary" className="w-full" disabled={loading}>
                         {loading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
                         {loading ? 'Sending...' : 'Send Message'}
                       </Button>
                     </form>
                   )}
+                </div>
+              </div>
+
+              {/* Column 3: Google Maps */}
+              <div>
+                <h3 className="text-lg font-heading font-bold text-ink-primary mb-6">Visit Our Office</h3>
+                <div className="rounded-2xl overflow-hidden shadow-card border border-gray-100">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d460.03908791609507!2d75.87185030092873!3d22.716615808751925!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fd16b91f31af%3A0xef32971080ddee88!2sRavivar%20Vichar!5e0!3m2!1sen!2sin!4v1783927697991!5m2!1sen!2sin"
+                    width="100%"
+                    style={{ border: 0, height: '520px' }}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    title="Ravivar Vichar Office Location"
+                  />
                 </div>
               </div>
             </div>
