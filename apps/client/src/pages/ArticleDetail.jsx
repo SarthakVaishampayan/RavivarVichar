@@ -148,9 +148,21 @@ export default function ArticleDetail() {
             <div className="flex gap-12 max-w-5xl mx-auto">
               <div className="hidden lg:flex flex-col items-center gap-4 pt-4 sticky top-[120px] h-fit">
                 <span className="text-xs font-semibold text-ink-secondary uppercase tracking-wider">Share</span>
-                <button className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-ink-secondary hover:bg-primary-500 hover:text-white transition-all"><Twitter size={16} /></button>
-                <button className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-ink-secondary hover:bg-primary-500 hover:text-white transition-all"><Linkedin size={16} /></button>
-                <button className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-ink-secondary hover:bg-primary-500 hover:text-white transition-all"><Facebook size={16} /></button>
+                <button
+                  onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(window.location.href)}`, '_blank', 'noopener,noreferrer,width=600,height=400')}
+                  className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-ink-secondary hover:bg-primary-500 hover:text-white transition-all"
+                  title="Share on Twitter"
+                ><Twitter size={16} /></button>
+                <button
+                  onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank', 'noopener,noreferrer,width=600,height=400')}
+                  className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-ink-secondary hover:bg-primary-500 hover:text-white transition-all"
+                  title="Share on LinkedIn"
+                ><Linkedin size={16} /></button>
+                <button
+                  onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank', 'noopener,noreferrer,width=600,height=400')}
+                  className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-ink-secondary hover:bg-primary-500 hover:text-white transition-all"
+                  title="Share on Facebook"
+                ><Facebook size={16} /></button>
               </div>
               <div className="article-content flex-1 max-w-3xl" dangerouslySetInnerHTML={{ __html: article.content || '' }} />
             </div>
