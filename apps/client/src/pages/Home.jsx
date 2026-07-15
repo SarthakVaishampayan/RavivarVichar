@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Hero from '../components/home/Hero';
+import ImpactStats from '../components/home/ImpactStats';
 import WhatWeDo from '../components/home/ProgramsGrid';
 import SuccessStories from '../components/home/FeaturedResearch';
 import Partners from '../components/home/Partners';
@@ -12,6 +13,7 @@ import api from '../lib/axios';
 
 const sectionComponents = {
   hero: Hero,
+  impactStats: ImpactStats,
   programs: WhatWeDo,
   research: SuccessStories,
   partners: Partners,
@@ -21,11 +23,12 @@ const sectionComponents = {
 
 const defaultSections = [
   { key: 'hero', order: 0, visible: true },
-  { key: 'programs', order: 1, visible: true },
-  { key: 'research', order: 2, visible: true },
-  { key: 'partners', order: 3, visible: true },
-  { key: 'mediaMentions', order: 4, visible: true },
-  { key: 'testimonials', order: 5, visible: true },
+  { key: 'impactStats', order: 1, visible: true },
+  { key: 'programs', order: 2, visible: true },
+  { key: 'research', order: 3, visible: true },
+  { key: 'partners', order: 4, visible: true },
+  { key: 'mediaMentions', order: 5, visible: true },
+  { key: 'testimonials', order: 6, visible: true },
 ];
 
 export default function Home() {

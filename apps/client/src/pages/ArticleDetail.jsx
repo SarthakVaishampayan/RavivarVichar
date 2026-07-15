@@ -11,6 +11,7 @@ export default function ArticleDetail() {
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [readingProgress, setReadingProgress] = useState(0);
   useEffect(() => {
     const fetchArticle = async () => {
       try {
@@ -27,6 +28,18 @@ export default function ArticleDetail() {
     };
     fetchArticle();
   }, [slug]);
+
+  // Reading progress indicator
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      setReadingProgress(Math.min(100, Math.max(0, scrollPercent)));
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   if (loading) {
     return (
@@ -59,6 +72,14 @@ export default function ArticleDetail() {
 
   return (
     <>
+      {/* Reading Progress Bar */}
+      <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] bg-gray-100">
+        <div
+          className="h-full bg-primary-500 transition-all duration-100 ease-out"
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
+
       <Helmet>
         <title>{article.title} — Ravivar Vichar</title>
         <meta name="description" content={(article.excerpt || article.content || '').replace(/<[^>]*>/g, '').slice(0, 160)} />

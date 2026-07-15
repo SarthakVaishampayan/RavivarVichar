@@ -4,13 +4,13 @@ import { Link, useLocation } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import api from '../lib/axios';
-import { Search, ArrowRight, Calendar, Tag } from 'lucide-react';
+import { Search, ArrowRight, Calendar, Tag, FileText, BarChart3, Star, Mic, Clock, Eye } from 'lucide-react';
 
 const sections = [
-  { id: 'articles', label: 'Articles' },
-  { id: 'research-reports', label: 'Research & Reports' },
-  { id: 'success-stories', label: 'Success Stories' },
-  { id: 'interviews', label: 'Interviews' },
+  { id: 'articles', label: 'Articles', icon: FileText },
+  { id: 'research-reports', label: 'Research & Reports', icon: BarChart3 },
+  { id: 'success-stories', label: 'Success Stories', icon: Star },
+  { id: 'interviews', label: 'Interviews', icon: Mic },
 ];
 
 // Maps each section to the article categories it should show
@@ -100,6 +100,13 @@ export default function KnowledgeHub() {
     });
   };
 
+  const getReadingTime = (content) => {
+    if (!content) return 1;
+    const text = content.replace(/<[^>]*>/g, '');
+    const words = text.split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.ceil(words / 200));
+  };
+
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
     return new Date(dateStr).toLocaleDateString('en-IN', {
@@ -160,16 +167,16 @@ export default function KnowledgeHub() {
               </div>
             </div>
             <div className="max-lg:overflow-x-auto max-lg:flex-nowrap max-lg:justify-start max-lg:pb-2 flex flex-wrap items-center justify-center gap-3 mt-6">
-              {sections.map((section) => (
-                <button
+              {sections.map((section) => (                  <button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
-                  className={`max-lg:shrink-0 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`max-lg:shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
                     activeSection === section.label
                       ? 'bg-primary-500 text-white shadow-soft'
                       : 'bg-white text-ink-secondary hover:text-primary-500 border border-gray-200'
                   }`}
                 >
+                  {section.icon && <section.icon size={16} />}
                   {section.label}
                 </button>
               ))}
@@ -237,6 +244,14 @@ export default function KnowledgeHub() {
                                 <span className="flex items-center gap-1.5">
                                   <Calendar size={14} /> {formatDate(article.publishedAt || article.createdAt)}
                                 </span>
+                                <div className="flex items-center gap-3">
+                                  <span className="flex items-center gap-1" title="Reading time">
+                                    <Clock size={13} /> {getReadingTime(article.content)} min read
+                                  </span>
+                                  <span className="flex items-center gap-1" title="Views">
+                                    <Eye size={13} /> {article.views || 0}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                             <div className="px-6 pb-6">

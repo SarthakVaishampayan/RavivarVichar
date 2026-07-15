@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import Button from '../components/shared/Button';
 import api from '../lib/axios';
-import { ArrowLeft, ArrowRight, Calendar, Tag } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Calendar, Tag, Clock, Eye } from 'lucide-react';
 
 const sectionConfig = {
   'articles': { label: 'Articles', title: 'All Articles', description: 'Thought-provoking pieces on rural development, community stories, and sector analysis.' },
@@ -80,6 +80,13 @@ export default function KnowledgeHubSection() {
     }
     return allowedCategories.includes(a.category);
   });
+
+  const getReadingTime = (content) => {
+    if (!content) return 1;
+    const text = content.replace(/<[^>]*>/g, '');
+    const words = text.split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.ceil(words / 200));
+  };
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
@@ -164,6 +171,14 @@ export default function KnowledgeHubSection() {
                         <span className="flex items-center gap-1.5">
                           <Calendar size={14} /> {formatDate(article.publishedAt || article.createdAt)}
                         </span>
+                        <div className="flex items-center gap-3">
+                          <span className="flex items-center gap-1" title="Reading time">
+                            <Clock size={13} /> {getReadingTime(article.content)} min read
+                          </span>
+                          <span className="flex items-center gap-1" title="Views">
+                            <Eye size={13} /> {article.views || 0}
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <div className="px-6 pb-6">
