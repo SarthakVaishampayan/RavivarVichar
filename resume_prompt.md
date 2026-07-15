@@ -10,17 +10,23 @@ Building a **full-stack CMS platform** for **RavivarVichar** — an NGO/research
 
 ### Architecture
 ```
-ravivarvichar-cms/                  ← Monorepo (npm workspaces)
+ravivarVichar/                     ← Monorepo (npm workspaces)
 ├── apps/
 │   ├── client/                    ← Public website (React 18 + Vite + Tailwind)
 │   ├── admin/                     ← Admin dashboard (React 18 + Vite + Tailwind)
 │   └── server/                    ← Express API
 ├── packages/
 │   └── shared/                    ← Shared Zod validation schemas
-├── phase.md                       ← Phase tracking & progress
-├── resume_prompt.md               ← This file
-├── futurePlan.md                  ← Local storage migration plan + pending tasks
-├── RavivarVichar_CMS_Implementation_Plan.md  ← Full implementation plan
+├── scripts/
+│   ├── deploy.sh                  ← Deploy with auto-rollback
+│   ├── sanity-check.js            ← Pre-commit verification
+│   ├── maintenance-on.sh          ← Enable maintenance mode
+│   └── maintenance-off.sh         ← Disable maintenance mode
+├── DEPLOYMENT_GUIDE.md            ← Deployment guide (merged from 3 old files)
+├── DEPLOYMENT_REFERENCE.md        ← Schema/API reference (actively maintained)
+├── OriginalDeploymentGuide.md     ← Lessons learned for final production deploy
+├── ROADMAP.md                     ← Consolidated roadmap (merged from 4 old files)
+├── resume_prompt.md               ← ← This file
 ├── package.json                   ← Root workspace config
 └── .env.example
 ```
@@ -59,8 +65,10 @@ Border radius system: pill = 999px, card = 28px, image = 24px, input = 18px. Sha
 - All write routes require admin JWT auth
 - Public GET routes require no auth
 
-### Content Models (18+ Mongoose schemas)
-Article, Program, Project, Partner, Report, Entrepreneur, SHG, Mentor, Event, MediaItem, Testimonial, Newsletter, Donation, Membership, PageSection, SeoMeta, ActivityLog, ContactMessage, FeatureRequest, JoinInitiative, PartnerApplication, GalleryImage, MediaMention
+### Content Models (16 Collections)
+User, Article, Event, ContactMessage, Newsletter, GalleryImage, Partner, PartnerApplication, Testimonial, FeatureRequest, JoinInitiative, MediaMention, PageSection, PageView, ActivityLog, SeoMeta
+
+*Note: Several models from the original plan (Program, Project, Report, Entrepreneur, SHG, Mentor, Donation, Membership, MediaItem) were removed from server code as part of earlier cleanup.*
 
 ### Tech Stack
 - **Frontend (client)**: React 18 + Vite + Tailwind CSS 3 + React Router v6 + Framer Motion + clsx + react-helmet-async + lucide-react
@@ -79,10 +87,41 @@ Article, Program, Project, Partner, Report, Entrepreneur, SHG, Mentor, Event, Me
 | 2 — Core CMS APIs | ✅ Complete |
 | 3 — Admin Dashboard | ✅ Complete |
 | 4 — Public Website | ✅ Complete |
+| 4b — Mobile Responsive Polish | ✅ Complete |
 | 5 — Integrations | ⏳ Not started |
 | 6 — Polish & Deploy | ⏳ Not started |
 
-### Last Session (July 2026) — Summary of All Changes
+### Staging Server Deployed
+- **IP:** DigitalOcean droplet (current testing/staging server)
+- **Deployment method:** `bash scripts/deploy.sh` with auto-rollback
+- **Maintenance mode:** Cookie-based bypass via `_rv_preview` endpoint
+- **Notable issues encountered:** `package-lock.json` tracking conflict, platform mismatch between Windows/Linux
+- **Status:** Server is live and running with latest code
+
+### Breakpoint Change
+- `lg` breakpoint changed from 1024px → **1150px** in `apps/client/tailwind.config.js`
+- Below 1150px = mobile/tablet view (iPad Pro included)
+- Above 1150px = desktop view
+
+### File Consolidation (July 13, 2026)
+- Old files DELETED (7): `deployment.md`, `DEPLOYMENT_CHECKLIST.md`, `instructions.md`, `phase.md`, `RavivarVichar_CMS_Implementation_Plan.md`, `futurePlan.md`, `ToBeDone.md`
+- New files CREATED (3): `DEPLOYMENT_GUIDE.md`, `ROADMAP.md`, `OriginalDeploymentGuide.md`
+- Kept: `DEPLOYMENT_REFERENCE.md` (updated), `resume_prompt.md` (this file)
+- See `ROADMAP.md` for full project status and execution priority
+- See `DEPLOYMENT_GUIDE.md` for deployment instructions
+- See `OriginalDeploymentGuide.md` for lessons learned (final production deploy prep)
+
+### Deploy Script Updated
+- `scripts/deploy.sh` — Quick Commands section updated with Deploy Workflow (5-step) and Maintenance Helpers sections
+
+### AI Workflow Commands
+- **"Run sanity check"** — Compares current code against `DEPLOYMENT_REFERENCE.md` Sections 1-8, runs builds, reports PASS/FAIL
+- **"Update deployment reference"** — Only after successful push. Buffy captures current state into `DEPLOYMENT_REFERENCE.md` with version/date/metadata
+- **"Pull up deployment procedure"** — Shows the deploy workflow from `DEPLOYMENT_GUIDE.md`
+
+---
+
+### Last Session — Summary of All Changes
 
 #### Bug Fixes
 1. **Server crash fix** — `contact.routes.js` was missing `updateStatus` in the destructured import from the controller. Caused `ReferenceError` on startup.
@@ -133,11 +172,11 @@ All 4 homepage components now fetch from APIs and return `null` when no data:
 ## Next Steps / Remaining Work
 
 ### Immediate Items
-1. **ProgramsGrid.jsx** — Still has hardcoded "What We Do" content (Empowerment, Entrepreneurship Support, Capacity Building, Ground Work). User wants NO hardcoded data — needs to be dynamic.
+1. **ProgramsGrid.jsx** — Still has hardcoded "What We Do" content. Needs to be dynamic.
 2. **About.jsx** — Still has hardcoded stats, timeline, team, values. Needs to be dynamic.
-3. **Hero.jsx** — Has hardcoded images from Unsplash. May need to be configurable.
-4. **Deployment** — Server needs PM2 + Nginx setup on DigitalOcean. See `scripts/deploy.sh`.
-5. **futurePlan.md** — Has local storage migration plan that hasn't been started yet.
+3. **Hero.jsx** — Has hardcoded images. May need to be configurable.
+4. **Deployment** — Server already deployed on staging droplet. For final production, see `OriginalDeploymentGuide.md`.
+5. **See `ROADMAP.md` Future Features section** for local storage migration plan, seed data population, etc.
 6. **Seed data** — `npm run seed` is outdated. New models (MediaMention, GalleryImage, FeatureRequest, JoinInitiative, PartnerApplication) aren't seeded.
 
 ### Infrastructure / CI
@@ -168,4 +207,4 @@ When the user says "continue", first check:
 2. Which issue do they want to work on next?
 3. Read the full conversation summary in this file for context.
 
-See `phase.md` for the complete task breakdown.
+See `ROADMAP.md` for the complete project roadmap and execution priority.
