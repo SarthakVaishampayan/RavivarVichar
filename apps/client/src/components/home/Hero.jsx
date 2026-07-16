@@ -46,18 +46,17 @@ export default function Hero() {
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">
-              EMPOWERING RURAL INDIA
+              EMPOWERING INDIA'S WOMEN
             </span>
             <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
-              Building Stronger{' '}
-              <span className="text-[#6AA84F]">Communities</span>{' '}
-              Through{' '}
-              <span className="text-[#F5A623]">Knowledge</span>,{' '}
-              <span className="text-[#C9892D]">Livelihood</span>{' '}
-              &amp; Collective Action
+              Building{' '}
+              <span className="text-[#6AA84F]">Independent</span>{' '}
+              <span className="text-[#F5A623]">Women</span>.{' '}
+              Strengthening{' '}
+              <span className="text-[#C9892D]">Communities</span>
             </h1>
             <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
-              Ravivar Vichar works alongside rural communities to strengthen livelihoods, empower women, foster entrepreneurship, and create sustainable social impact through knowledge and collective action.
+              Ravivar Vichar empowers women through entrepreneurship, knowledge, partnerships, and community-driven action to create lasting social and economic impact.
             </p>
 
             <div className="flex flex-wrap items-center gap-4 mt-10">

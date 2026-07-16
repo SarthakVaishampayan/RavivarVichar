@@ -25,15 +25,13 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 h-[90px] bg-white shadow-nav">
       <div className="container-site h-full flex items-center">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-1 shrink-0">
+        <Link to="/" className="flex items-center shrink-0">
           <img
             src="/logo.png"
             alt="Ravivar Vichar"
             className="h-12 w-auto"
           />
-          <span className="block text-lg font-bold font-heading text-ink-primary">
-            Ravivar Vichar
-          </span>
+          <img src="/logo-hindi.png" alt="रविवार" className="h-10 w-auto -ml-3" />
         </Link>
 
         {/* Desktop Navigation - centered */}

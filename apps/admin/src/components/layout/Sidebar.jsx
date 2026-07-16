@@ -5,6 +5,7 @@ import { NAV_ITEMS } from '../../lib/constants';
 
 export default function Sidebar({ mobileOpen, onMobileClose }) {
   const [logoFailed, setLogoFailed] = useState(false);
+  const [hindiLogoFailed, setHindiLogoFailed] = useState(false);
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState(['Manage Content']);
 
@@ -23,14 +24,21 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
     <div className="flex h-full flex-col bg-gray-900">
       {/* Logo */}
       <div className="flex h-16 items-center justify-between px-6 border-b border-gray-800">
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="flex items-center min-w-0">
           {!logoFailed && (
-            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Ravivar Vichar" className="h-7 w-auto shrink-0" onError={() => setLogoFailed(true)} />
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Ravivar Vichar" className="h-9 w-auto shrink-0" onError={() => setLogoFailed(true)} />
           )}
-          <div>
-            <h1 className="text-sm font-bold text-white whitespace-nowrap">Ravivar Vichar</h1>
-            <p className="text-[10px] text-gray-400">Content Management</p>
-          </div>
+    <div className="flex flex-col items-start justify-center">
+      <div className="flex items-center">
+        {!hindiLogoFailed && (
+          <img src={`${import.meta.env.BASE_URL}logo-hindi.png`} alt="रविवार" className="h-7 w-auto -ml-1 translate-y-3" onError={() => setHindiLogoFailed(true)} />
+        )}
+        {hindiLogoFailed && (
+          <p className="text-xs font-medium text-gray-300">रविवार</p>
+        )}
+      </div>
+      <p className="text-[12px] text-gray-400 mt-3 -ml-12">Content Management</p>
+    </div>
         </div>
         <button onClick={onMobileClose} className="text-gray-400 hover:text-white lg:hidden">
           <X size={20} />

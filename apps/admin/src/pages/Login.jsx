@@ -39,7 +39,8 @@ export default function Login() {
         {/* Logo */}
         <div className="text-center mb-8">
           <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Ravivar Vichar" className="h-16 w-auto mx-auto mb-4" />
-          <h1 className="text-2xl font-bold font-heading text-gray-900">Ravivar Vichar CMS</h1>
+          <img src={`${import.meta.env.BASE_URL}logo-hindi.png`} alt="रविवार" className="h-12 w-auto mx-auto mb-2 -ml-3" />
+          <h1 className="text-2xl font-bold font-heading text-gray-900">Content Management</h1>
           <p className="mt-1 text-sm text-gray-500">Sign in to manage your content</p>
         </div>
 
