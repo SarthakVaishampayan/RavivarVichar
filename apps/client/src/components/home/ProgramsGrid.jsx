@@ -1,36 +1,36 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import SectionHeading from '../shared/SectionHeading';
-import { ArrowRight, Users, Briefcase, BookOpen, Globe } from 'lucide-react';
+import { ArrowRight, Briefcase, HeartHandshake, PiggyBank, Award } from 'lucide-react';
 
 const whatWeDoItems = [
   {
-    slug: 'empowerment',
-    title: 'Empowerment',
-    icon: Users,
-    color: 'bg-primary-50 text-primary-500',
-    description: 'We empower rural women and marginalized communities through financial literacy, leadership training, and grassroots organizing, enabling them to take charge of their own development.',
-  },
-  {
-    slug: 'entrepreneurship-support',
-    title: 'Entrepreneurship Support',
+    slug: 'women-entrepreneurship',
+    title: 'Women Entrepreneurship',
     icon: Briefcase,
+    color: 'bg-primary-50 text-primary-500',
+    description: 'Helping women build, grow, and sustain successful businesses through knowledge, mentorship, market access, and partnerships.',
+  },
+  {
+    slug: 'shgs',
+    title: 'SHGs',
+    icon: HeartHandshake,
     color: 'bg-secondary-50 text-secondary-500',
-    description: 'We provide mentorship, seed funding access, and market linkages to rural entrepreneurs, helping them launch and scale sustainable micro-enterprises.',
+    description: 'Strengthening Self Help Groups through capacity building, financial inclusion, market linkages, and community-led development.',
   },
   {
-    slug: 'capacity-building',
-    title: 'Capacity Building',
-    icon: BookOpen,
+    slug: 'financial-literacy',
+    title: 'Financial Literacy & Economic Independence',
+    icon: PiggyBank,
     color: 'bg-blue-50 text-blue-600',
-    description: 'Through workshops, training programs, and knowledge-sharing, we strengthen the skills and capabilities of community members and local institutions.',
+    description: 'Promoting financial awareness, entrepreneurship, digital payments, government schemes, and sustainable livelihoods for women.',
   },
   {
-    slug: 'ground-work',
-    title: 'Ground Work',
-    icon: Globe,
+    slug: 'leadership-skill-development',
+    title: 'Leadership & Skill Development',
+    icon: Award,
     color: 'bg-amber-50 text-amber-600',
-    description: 'Our field teams work directly with communities on the ground — conducting surveys, facilitating SHG meetings, and implementing village-level development projects.',
+    description: 'Equipping women and young leaders with the skills, confidence, and opportunities needed to lead businesses, communities, and institutions.',
   },
 ];
 

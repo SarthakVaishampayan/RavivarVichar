@@ -1,66 +1,171 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
+import { useInView } from 'framer-motion';
 import PageLayout from '../components/layout/PageLayout';
 import FloatingDots from '../components/shared/FloatingDots';
 import SectionHeading from '../components/shared/SectionHeading';
 import Button from '../components/shared/Button';
-import { ArrowLeft, Users, Briefcase, BookOpen, Globe, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Briefcase, HeartHandshake, PiggyBank, Award, CheckCircle, Users } from 'lucide-react';
+
+const iconMap = {
+  Users,
+  PiggyBank,
+  Award,
+  HeartHandshake,
+  Briefcase,
+};
 
 const contentMap = {
-  'empowerment': {
-    title: 'Empowerment',
-    icon: Users,
+  'women-entrepreneurship': {
+    title: 'Women Entrepreneurship',
+    icon: Briefcase,
     color: 'text-primary-500',
     bgColor: 'bg-primary-50',
-    heroDescription: 'We believe that true change begins when individuals and communities gain the confidence, knowledge, and agency to shape their own futures.',
+    heroDescription: 'We support women in starting, strengthening, and growing their businesses. Our focus is on helping women move from ideas and informal livelihoods towards sustainable and independent enterprises. We work with women entrepreneurs, aspiring entrepreneurs, Self Help Groups, artisans, and grassroots businesses across different sectors.',
     sections: [
-      { heading: 'Financial Literacy', body: 'Training women in budgeting, saving, digital banking, and understanding credit. We conduct hands-on workshops that demystify finance and build lasting habits.' },
-      { heading: 'Leadership Development', body: 'Identifying and nurturing community leaders through structured programs that build public speaking, negotiation, and organizational skills.' },
-      { heading: 'Community Organizing', body: 'Facilitating the formation of self-help groups and community-based organizations that serve as platforms for collective action and mutual support.' },
+      { heading: 'Mentorship & Market Access', body: 'Connect women entrepreneurs with mentors, institutions, industry networks, and potential markets.' },
+      { heading: 'Awareness & Opportunities', body: 'Create awareness about government schemes, funding opportunities, loans, grants, and entrepreneurship programmes.' },
+      { heading: 'Networking & Collaboration', body: 'Facilitate networking and collaboration among women-led businesses.' },
+      { heading: 'Visibility & Promotion', body: 'Promote women-owned businesses and help increase their visibility.' },
+      { heading: 'Skill Development', body: 'Support skill development in areas such as branding, digital marketing, financial management, technology, and business growth.' },
+      { heading: 'Partnerships', body: 'Build partnerships with chambers of commerce, corporates, NGOs, government bodies, and other institutions.' },
+      { heading: 'Showcase Platforms', body: 'Create platforms where women entrepreneurs can showcase their work, products, and stories.' },
     ],
-    impact: ['5,000+ women trained in financial literacy', '200+ SHGs formed and active', '80% increase in savings behavior', '300+ community leaders identified'],
+    impact: [
+      { value: 1200, suffix: '+', label: 'Women Entrepreneurs Supported' },
+      { value: 500, suffix: '+', label: 'Businesses Launched' },
+      { value: 2, prefix: '₹', suffix: 'Cr+', label: 'Funding Facilitated' },
+      { value: 85, suffix: '%', label: 'Business Sustainability Rate' },
+    ],
+    goal: 'To help more women move from earning a livelihood to building sustainable enterprises.',
+    goalVision: 'We believe every woman has the potential to build a sustainable enterprise. Our mission is to remove barriers, create opportunities, and provide the support systems women need to thrive as entrepreneurs and community leaders.',
+    goalPillars: [
+      { icon: 'Users', heading: 'Mentorship & Networks', body: 'Connecting women with mentors, industry networks, and peer communities that fuel growth and open doors.' },
+      { icon: 'PiggyBank', heading: 'Access & Awareness', body: 'Creating pathways to capital, government schemes, funding, and market opportunities for women-led businesses.' },
+      { icon: 'Award', heading: 'Skills & Visibility', body: 'Building capabilities in branding, digital tools, financial management, and amplifying women-owned businesses.' },
+    ],
   },
-  'entrepreneurship-support': {
-    title: 'Entrepreneurship Support',
-    icon: Briefcase,
+  'shgs': {
+    title: 'SHGs',
+    icon: HeartHandshake,
     color: 'text-secondary-500',
     bgColor: 'bg-secondary-50',
-    heroDescription: 'We provide rural entrepreneurs with the tools, capital, and networks they need to turn their ideas into sustainable businesses.',
+    heroDescription: 'We work with Self Help Groups as important engines of women\'s economic empowerment and community development. Our focus is not only on highlighting SHG stories, but on helping strengthen their visibility, knowledge, leadership, and access to opportunities.',
     sections: [
-      { heading: 'Mentorship & Training', body: 'Connecting aspiring entrepreneurs with experienced mentors who provide guidance on business planning, marketing, and operations.' },
-      { heading: 'Access to Capital', body: 'Facilitating connections with microfinance institutions, banks, and government schemes to help entrepreneurs access the funding they need.' },
-      { heading: 'Market Linkages', body: 'Building bridges between rural producers and urban markets, enabling entrepreneurs to reach wider audiences and get fair prices for their products.' },
+      { heading: 'Documentation & Amplification', body: 'Document and amplify successful SHG models and community-led initiatives.' },
+      { heading: 'Market & Partner Connections', body: 'Connect SHGs with markets, institutions, brands, and potential partners.' },
+      { heading: 'Capacity Building', body: 'Support capacity building in entrepreneurship, digital skills, financial literacy, leadership, and business management.' },
+      { heading: 'Awareness & Opportunities', body: 'Create awareness about government schemes, support programmes, and market opportunities.' },
+      { heading: 'Showcase & Visibility', body: 'Help showcase SHG products, businesses, and local enterprises.' },
+      { heading: 'Network Facilitation', body: 'Facilitate connections between SHGs, entrepreneurs, NGOs, corporates, and government institutions.' },
+      { heading: 'Knowledge Sharing', body: 'Promote knowledge-sharing between different communities and SHG networks.' },
     ],
-    impact: ['800+ businesses launched', '2,500+ women trained', '₹5Cr+ in microfinance disbursed', '85% business survival rate after 2 years'],
+    impact: [
+      { value: 300, suffix: '+', label: 'SHGs Strengthened' },
+      { value: 5000, suffix: '+', label: 'Women SHG Members' },
+      { value: 150, prefix: '₹', suffix: 'L+', label: 'Group Savings' },
+      { value: 90, suffix: '%', label: 'Loan Repayment Rate' },
+    ],
+    goal: 'To help Self Help Groups evolve from savings and credit collectives into stronger, sustainable, and market-connected community enterprises.',
+    goalVision: 'We believe Self Help Groups are powerful engines of grassroots change. Our mission is to strengthen their capabilities, amplify their impact, and connect them to markets, networks, and opportunities that drive sustainable growth.',
+    goalPillars: [
+      { icon: 'Users', heading: 'Visibility & Storytelling', body: 'Documenting and amplifying SHG success stories, models, and community-led initiatives to inspire and inform.' },
+      { icon: 'HeartHandshake', heading: 'Capacity & Connections', body: 'Building skills in entrepreneurship, digital literacy, and financial management while connecting SHGs to markets and partners.' },
+      { icon: 'PiggyBank', heading: 'Markets & Growth', body: 'Creating pathways for SHG products and enterprises to reach wider markets, access funding, and achieve sustainability.' },
+    ],
   },
-  'capacity-building': {
-    title: 'Capacity Building',
-    icon: BookOpen,
+  'financial-literacy': {
+    title: 'Financial Literacy & Economic Independence',
+    icon: PiggyBank,
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
-    heroDescription: 'Strengthening the skills, knowledge, and capabilities of individuals and institutions to drive sustainable development from within.',
+    heroDescription: 'Economic independence begins with the ability to understand, manage, and control one\'s finances. We work to make financial knowledge more accessible to women and communities, particularly those who may not have easy access to formal financial education.',
     sections: [
-      { heading: 'Skill Development Workshops', body: 'Regular training programs covering digital literacy, bookkeeping, communication skills, and technical knowledge relevant to local livelihoods.' },
-      { heading: 'Institutional Strengthening', body: 'Working with local NGOs, government bodies, and community organizations to improve their operational efficiency and program delivery.' },
-      { heading: 'Knowledge Resources', body: 'Creating and distributing educational materials, toolkits, and research reports that empower communities with actionable information.' },
+      { heading: 'Financial Resources', body: 'Create simple and accessible resources on saving, budgeting, banking, credit, insurance, and digital payments.' },
+      { heading: 'Scheme Awareness', body: 'Build awareness about government schemes, loans, grants, and financial support available to women.' },
+      { heading: 'Business Finance', body: 'Promote understanding of business finances, pricing, bookkeeping, and cash flow.' },
+      { heading: 'Banking Access', body: 'Encourage women to access formal banking and financial services.' },
+      { heading: 'Digital Finance Education', body: 'Create educational content on digital financial tools and safe digital transactions.' },
+      { heading: 'Institutional Connections', body: 'Connect women entrepreneurs and SHGs with relevant financial institutions and support networks.' },
+      { heading: 'Financial Independence', body: 'Promote the importance of independent income and financial decision-making.' },
     ],
-    impact: ['10,000+ individuals trained', '300+ workshops conducted', '8 districts covered', '60% digital payment adoption rate'],
+    impact: [
+      { value: 8000, suffix: '+', label: 'Women Trained in Financial Literacy' },
+      { value: 70, suffix: '%', label: 'Digital Payment Adoption' },
+      { value: 200, suffix: '+', label: 'Bank Linkages Established' },
+      { value: 40, suffix: '%', label: 'Increase in Household Savings' },
+    ],
+    goal: 'To help women make informed financial decisions, build independent incomes, and participate more confidently in the formal economy.',
+    goalVision: 'We believe financial literacy is the foundation of economic independence. Our mission is to make financial knowledge accessible, practical, and actionable for every woman — enabling her to take control of her financial future.',
+    goalPillars: [
+      { icon: 'PiggyBank', heading: 'Knowledge & Resources', body: 'Creating simple, accessible resources on saving, budgeting, banking, credit, insurance, and digital payments tailored for women.' },
+      { icon: 'Users', heading: 'Access & Inclusion', body: 'Building awareness of government schemes, banking services, and financial support while connecting women to formal financial systems.' },
+      { icon: 'Award', heading: 'Income & Independence', body: 'Empowering women to understand business finances, build independent incomes, and make confident financial decisions.' },
+    ],
   },
-  'ground-work': {
-    title: 'Ground Work',
-    icon: Globe,
+  'leadership-skill-development': {
+    title: 'Leadership & Skill Development',
+    icon: Award,
     color: 'text-amber-600',
     bgColor: 'bg-amber-50',
-    heroDescription: 'Our field teams are the heart of our organization — working shoulder-to-shoulder with communities to implement programs that create real, measurable change.',
+    heroDescription: 'Empowerment is not only about earning. It is also about having the confidence, skills, and opportunity to lead. We work to build the capabilities of women and young people so they can lead businesses, communities, institutions, and social change.',
     sections: [
-      { heading: 'Field Surveys & Research', body: 'Conducting community needs assessments, baseline surveys, and impact evaluations that inform our program design and policy recommendations.' },
-      { heading: 'SHG Facilitation', body: 'Regular visits to self-help groups to provide handholding support, resolve challenges, and ensure groups are functioning effectively.' },
-      { heading: 'Village-Level Implementation', body: 'On-the-ground execution of development projects — from organizing health camps to setting up community libraries and water conservation initiatives.' },
+      { heading: 'Training & Workshops', body: 'Organise training programmes, workshops, and learning initiatives that build practical skills and knowledge.' },
+      { heading: 'Skill Building', body: 'Build skills in communication, leadership, entrepreneurship, digital technology, and business management.' },
+      { heading: 'Mentorship & Expert Connect', body: 'Connect women with mentors, professionals, trainers, and industry experts who can guide and inspire them.' },
+      { heading: 'Knowledge Sharing', body: 'Create opportunities for women to share their knowledge and experiences with peers and communities.' },
+      { heading: 'Community Leadership', body: 'Support leadership development within communities and Self Help Groups to foster grassroots change.' },
+      { heading: 'Peer Networks', body: 'Promote networking and peer-to-peer learning as powerful tools for growth and confidence building.' },
+      { heading: 'Public Participation', body: 'Build platforms where women can participate in conversations, decision-making, and public life.' },
     ],
-    impact: ['500+ villages reached', '50K+ lives impacted', '150+ village-level projects', '15+ years of grassroots presence'],
+    impact: [
+      { value: 2500, suffix: '+', label: 'Women Trained in Leadership' },
+      { value: 400, suffix: '+', label: 'Community Leaders Identified' },
+      { value: 150, suffix: '+', label: 'Youth Skill Workshops' },
+      { value: 60, suffix: '%', label: 'Women in Leadership Roles' },
+    ],
+    goal: 'To equip women with the knowledge, skills, confidence, and networks needed to lead and create change.',
+    goalVision: 'We believe leadership is not defined by position, but by the ability to inspire, influence, and create change. Our mission is to build a pipeline of women leaders who can drive transformation in their communities, businesses, and institutions.',
+    goalPillars: [
+      { icon: 'Award', heading: 'Training & Skill Building', body: 'Organising workshops, training programmes, and learning initiatives that build communication, leadership, entrepreneurship, and digital skills.' },
+      { icon: 'Users', heading: 'Mentorship & Connections', body: 'Connecting women with mentors, professionals, trainers, and industry experts while promoting networking and peer-to-peer learning.' },
+      { icon: 'HeartHandshake', heading: 'Platforms & Opportunities', body: 'Creating platforms for women to participate in conversations, decision-making, and public life while sharing their knowledge and experiences.' },
+    ],
   },
 };
+
+function AnimatedCounter({ value, prefix = '', suffix = '', duration = 2000 }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  useEffect(() => {
+    if (!isInView) return;
+    let startTime = null;
+    let animationFrame;
+
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * value));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(step);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [isInView, value, duration]);
+
+  return (
+    <span ref={ref} className="tabular-nums">
+      {prefix}{count.toLocaleString('en-IN')}{suffix}
+    </span>
+  );
+}
 
 export default function WhatWeDoDetail() {
   const [loaded, setLoaded] = useState(false);
@@ -127,23 +232,73 @@ export default function WhatWeDoDetail() {
         <section className="section-md bg-surface-white">
           <div className="container-content">
             <SectionHeading
-              label="WHAT WE DO"
-              title={`Our Approach to ${content.title}`}
+              label="HOW WE DO IT"
+              title={`How We Do It`}
               description=""
             />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
               {content.sections.map((section, i) => (
-                <div key={section.heading} className="card p-8 lg:p-10">
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary-50 text-primary-600 font-bold font-heading text-lg mb-5">
+                <div
+                  key={section.heading}
+                  className={`card p-8 lg:p-10 transition-all duration-300 hover:-translate-y-1 hover:shadow-hover group ${
+                    i === content.sections.length - 1 && content.sections.length % 3 === 1 ? 'lg:col-start-2' : ''
+                  }`}
+                >
+                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary-50 text-primary-600 font-bold font-heading text-lg mb-5 group-hover:scale-110 group-hover:bg-primary-100 transition-all duration-300">
                     {i + 1}
                   </span>
-                  <h3 className="text-xl font-heading font-bold text-ink-primary mb-4">{section.heading}</h3>
-                  <p className="text-body text-ink-secondary">{section.body}</p>
+                  <h3 className="text-xl font-heading font-bold text-ink-primary mb-4 group-hover:text-primary-600 transition-colors duration-300">{section.heading}</h3>
+                  <p className="text-body text-ink-secondary group-hover:text-ink-primary transition-colors duration-300">{section.body}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
+
+        {content.goal && (
+          <section className="section-md bg-surface-white relative overflow-hidden">
+            <div className="container-content">
+              <SectionHeading
+                label="OUR GOAL"
+                title="What We Aim For"
+                description=""
+              />
+
+              <div className="max-w-4xl mx-auto mt-12">
+                <blockquote className="text-center relative">
+                  <span className="text-6xl lg:text-8xl text-primary-200 absolute -top-8 -left-4 select-none">"</span>
+                  <p className="text-2xl lg:text-3xl text-ink-primary leading-relaxed font-heading font-bold px-8">
+                    {content.goal}
+                  </p>
+                  <span className="text-6xl lg:text-8xl text-primary-200 absolute -bottom-16 -right-4 select-none">"</span>
+                </blockquote>
+
+                {content.goalVision && (
+                  <p className="text-center text-lg text-ink-secondary mt-8 max-w-3xl mx-auto leading-relaxed">
+                    {content.goalVision}
+                  </p>
+                )}
+              </div>
+
+              {content.goalPillars && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14 max-w-5xl mx-auto">
+                  {content.goalPillars.map((pillar) => {
+                    const PillarIcon = iconMap[pillar.icon] || Users;
+                    return (
+                      <div key={pillar.heading} className="card p-6 lg:p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-hover group">
+                        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-50 text-primary-600 mb-5 group-hover:scale-110 transition-transform duration-300">
+                          <PillarIcon size={28} />
+                        </div>
+                        <h4 className="text-lg font-heading font-bold text-ink-primary mb-2 group-hover:text-primary-600 transition-colors">{pillar.heading}</h4>
+                        <p className="text-sm text-ink-secondary leading-relaxed">{pillar.body}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
 
         <section className="section-md bg-surface-section">
           <div className="container-content">
@@ -154,9 +309,25 @@ export default function WhatWeDoDetail() {
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
               {content.impact.map((item) => (
-                <div key={item} className="card p-6 flex items-start gap-4">
-                  <CheckCircle size={20} className="text-primary-500 shrink-0 mt-0.5" />
-                  <span className="text-body text-ink-secondary">{item}</span>
+                <div
+                  key={item.label || item}
+                  className="card p-6 lg:p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-hover group"
+                >
+                  {typeof item === 'object' ? (
+                    <>
+                      <div className="text-3xl lg:text-4xl font-bold font-heading text-primary-500">
+                        <AnimatedCounter value={item.value} prefix={item.prefix || ''} suffix={item.suffix || ''} />
+                      </div>
+                      <p className="text-sm font-semibold text-ink-primary mt-2 group-hover:text-primary-600 transition-colors">
+                        {item.label}
+                      </p>
+                    </>
+                  ) : (
+                    <div className="flex items-start gap-4">
+                      <CheckCircle size={20} className="text-primary-500 shrink-0 mt-0.5" />
+                      <span className="text-body text-ink-secondary text-left">{item}</span>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

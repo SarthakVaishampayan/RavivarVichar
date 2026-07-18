@@ -114,9 +114,7 @@ export default function About() {
                 <span className="text-[#F5A623]">Voices</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
-                Ravivar Vichar, a prominent digital and print platform, is a publication under the esteemed banner 
-                of Ravivar Publications Pvt. Ltd. We are dedicated to empowering and uplifting women from self-help 
-                groups in India and around the world.
+                Ravivar Vichar is a social impact organization empowering women through entrepreneurship, knowledge, leadership, and community-driven action. We connect women, Self Help Groups, entrepreneurs, and institutions to create opportunities that foster economic independence and lasting social impact.
               </p>
             </div>
           </div>
