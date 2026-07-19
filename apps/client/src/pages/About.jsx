@@ -5,7 +5,7 @@ import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
-import { Eye, Heart, BookOpen, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone } from 'lucide-react';
+import { Eye, Heart, BookOpen, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf, Quote } from 'lucide-react';
 
 const stats = [
   { number: '32+', label: 'Years of Publication' },
@@ -16,34 +16,36 @@ const stats = [
 
 const coreValues = [
   {
-    icon: Eye,
+    icon: Zap,
     title: 'Empowerment',
-    description: 'We believe in the innate potential of women and aim to empower them by showcasing their achievements and providing them with resources, knowledge, and support.',
+    description: 'We believe every woman should have the knowledge, skills, opportunities, and agency to shape her own future.',
+  },
+  {
+    icon: Users,
+    title: 'Collective Action',
+    description: 'We believe lasting change is created when communities, institutions, businesses, and individuals work together.',
   },
   {
     icon: Heart,
-    title: 'Inclusivity',
-    description: 'We are committed to inclusivity and diversity, recognizing that women from different backgrounds, cultures, and experiences bring unique perspectives and strengths to the table.',
+    title: 'Inclusion',
+    description: 'We work to ensure that opportunities reach women and communities across different social, economic, geographic, and cultural backgrounds.',
   },
   {
-    icon: BookOpen,
-    title: 'Literacy',
-    description: 'We value the importance of education and knowledge-sharing, aiming to provide valuable insights, information, and resources to our audience. A source to provide financial literacy and digital literacy to women across India is close to our hearts.',
+    icon: Shield,
+    title: 'Integrity',
+    description: 'We are committed to transparency, responsible partnerships, and being accountable for the impact we seek to create.',
   },
   {
-    icon: Zap,
-    title: 'Inspiration',
-    description: 'We strive to inspire women to overcome challenges, pursue their dreams, and become role models for others.',
+    icon: Leaf,
+    title: 'Sustainable Impact',
+    description: 'We focus on solutions that build long-term independence, resilient livelihoods, and stronger communities, not temporary interventions.',
   },
 ];
 
 const goals = [
-  { icon: Megaphone, title: "Amplify Women's Voices", description: 'We aim to provide a platform for women to share their stories, ideas, and perspectives, fostering a sense of community and solidarity.' },
-  { icon: Zap, title: 'Highlight Success Stories', description: 'We will feature success stories of women who have made significant achievements, whether in their personal lives, careers, or within self-help groups, to motivate and inspire others.' },
-  { icon: Search, title: 'Address Issues', description: 'We are committed to addressing critical issues that women face, including gender-based discrimination, economic disparities, healthcare, and education, by providing well-researched analysis and practical solutions.' },
-  { icon: BookOpen, title: 'Knowledge Hub', description: "We aspire to become a knowledge hub, offering resources, articles, and guides on a wide range of topics relevant to women's empowerment, financial independence, health, and well-being." },
-  { icon: Globe, title: 'Global Reach', description: 'We aim to expand our reach beyond India to encompass self-help groups of women from diverse cultures and backgrounds, fostering cross-cultural understanding and support.' },
-  { icon: Users, title: 'Collaboration', description: 'We will collaborate with organisations, experts, and influencers who share our mission and values to amplify our impact and reach.' },
+  { icon: Briefcase, title: 'Enable Economic Independence', description: 'Create pathways for women and communities to build sustainable livelihoods through entrepreneurship, skill development, financial literacy, market access, and opportunities.' },
+  { icon: Users, title: 'Strengthen Community-Led Growth', description: 'Support Self Help Groups, women entrepreneurs, and rural communities through knowledge, capacity building, partnerships, and access to networks and resources.' },
+  { icon: Globe, title: 'Build Inclusive Ecosystems for Lasting Impact', description: 'Bring together institutions, businesses, policymakers, civil society, and communities to foster collaboration, leadership, innovation, and sustainable social change.' },
 ];
 
 const initiatives = [
@@ -178,33 +180,8 @@ export default function About() {
           </div>
         </section>
 
-        {/* Core Values */}
-        <section id="our-values" className="section-md bg-surface-section">
-          <div className="container-content">
-            <SectionHeading
-              label="CORE VALUES"
-              title="What Drives Us"
-              description="The principles that guide every story we tell and every initiative we undertake."
-            />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
-              {coreValues.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.title} className="card p-8 lg:p-10">
-                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 mb-6">
-                      <Icon size={28} />
-                    </div>
-                    <h3 className="text-card font-heading font-bold text-ink-primary mb-4">{item.title}</h3>
-                    <p className="text-body text-ink-secondary">{item.description}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
         {/* Goals & Objectives */}
-        <section id="our-goals" className="section-md bg-surface-white">
+        <section id="our-goals" className="section-md bg-surface-section">
           <div className="container-content">
             <SectionHeading
               label="GOALS & OBJECTIVES"
@@ -215,19 +192,53 @@ export default function About() {
               {goals.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <div key={item.title} className="card-hover p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="shrink-0 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50 text-primary-500">
-                        <Icon size={20} />
+                  <div key={item.title} className="card-hover p-6 lg:p-8">
+                    <div className="flex flex-col items-start gap-4">
+                      <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
+                        <Icon size={24} />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold font-heading text-ink-primary">{item.title}</h3>
-                        <p className="text-sm text-ink-secondary mt-2">{item.description}</p>
+                        <h3 className="text-lg font-bold font-heading text-ink-primary">{item.title}</h3>
+                        <p className="text-sm text-ink-secondary mt-2 leading-relaxed">{item.description}</p>
                       </div>
                     </div>
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* Core Values */}
+        <section id="our-values" className="section-md bg-surface-white">
+          <div className="container-content">
+            <SectionHeading
+              label="OUR CORE VALUES"
+              title="What Drives Us"
+              description="The principles that guide every partnership, program, and story we share."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mt-16">
+              {coreValues.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.title} className="card-hover p-6 lg:p-8 text-center group">
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 mb-4 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
+                      <Icon size={22} />
+                    </div>
+                    <h3 className="text-base font-bold font-heading text-ink-primary mb-2 group-hover:text-primary-500 transition-colors duration-300">{item.title}</h3>
+                    <p className="text-sm text-ink-secondary leading-relaxed">{item.description}</p>
+                  </div>
+                );
+              })}
+            </div>
+            {/* Quote */}
+            <div className="mt-16 text-center max-w-2xl mx-auto">
+              <div className="relative">
+                <Quote size={40} className="text-primary-200 absolute -top-4 -left-4 opacity-50" />
+                <p className="text-xl lg:text-2xl font-heading font-bold text-ink-primary italic leading-relaxed">
+                  "We believe meaningful change is built with people, not simply delivered to them"
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -269,7 +280,7 @@ export default function About() {
         </section>
 
         {/* Key Initiatives */}
-        <section className="section-md bg-surface-section">
+        <section className="section-md bg-surface-white">
           <div className="container-content">
             <SectionHeading
               label="KEY INITIATIVES"
@@ -298,7 +309,7 @@ export default function About() {
         </section>
 
         {/* Our History */}
-        <section id="our-history" className="section-md bg-surface-white">
+        <section id="our-history" className="section-md bg-surface-section">
           <div className="container-content">
             <SectionHeading
               label="OUR HISTORY"
@@ -335,7 +346,7 @@ export default function About() {
         </section>
 
         {/* Our Team */}
-        <section id="our-team" className="section-md bg-surface-section">
+        <section id="our-team" className="section-md bg-surface-white">
           <div className="container-content">
             <SectionHeading
               label="OUR TEAM"
