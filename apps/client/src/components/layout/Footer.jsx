@@ -24,7 +24,7 @@ const footerLinks = {
     { label: 'Our Values', path: '/about#our-values' },
     { label: 'Our Mission', path: '/about#our-mission' },
     { label: 'Our Journey', path: '/about#our-journey' },
-    { label: 'Our Founders', path: '/about#our-founders' },
+    { label: 'Our Team', path: '/about#our-team' },
     { label: 'Our History', path: '/about#our-history' },
   ],
 };

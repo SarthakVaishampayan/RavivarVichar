@@ -62,7 +62,12 @@ const visionTexts = [
 
 export default function About() {
   const [loaded, setLoaded] = useState(false);
+  const [failedImages, setFailedImages] = useState({});
   const location = useLocation();
+
+  const handleImageError = (name) => {
+    setFailedImages(prev => ({ ...prev, [name]: true }));
+  };
 
   useEffect(() => {
     const img = new Image();
@@ -329,26 +334,36 @@ export default function About() {
           </div>
         </section>
 
-        {/* Our Founders */}
-        <section id="our-founders" className="section-md bg-surface-section">
+        {/* Our Team */}
+        <section id="our-team" className="section-md bg-surface-section">
           <div className="container-content">
             <SectionHeading
-              label="OUR FOUNDERS"
+              label="OUR TEAM"
               title="Meet the People Behind the Mission"
               description="Passionate individuals committed to driving change in rural communities."
             />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
               {[
-                { name: 'Dr. Priya Sharma', role: 'Founder & Executive Director', bio: 'PhD in Rural Development with 20+ years of experience in community-led initiatives across Rajasthan.' },
-                { name: 'Rajesh Meena', role: 'Head of Programs', bio: 'Former district development officer who brings grassroots expertise to program design and implementation.' },
-                { name: 'Anita Verma', role: 'Research Director', bio: 'Economist specializing in rural livelihoods, impact assessment, and policy research.' },
-                { name: 'Vikram Singh', role: 'Operations Lead', bio: 'Expert in scaling grassroots operations and building sustainable community partnerships.' },
+                { name: 'Rohan Sharma', role: 'Chief Executive Officer', bio: 'Leading the vision and strategy of Ravivar Vichar with a passion for driving social impact and empowering women across India.', image: '/images/team/1.jpg' },
+                { name: 'Sampath', role: 'Chief Financial Officer', bio: 'Overseeing financial strategy and operations to ensure sustainable growth and effective resource management.', image: '/images/team/2.jpg' },
+                { name: 'Rishika Joshi', role: 'Chief Operational Manager', bio: 'Managing day-to-day operations and ensuring seamless execution of programs and initiatives.', image: '/images/team/3.jpg' },
+                { name: 'Sarthak Vaishampayan', role: 'Software Developer', bio: 'Building and maintaining the digital platform to amplify our reach and impact in the digital space.', image: '/images/team/4.jpg' },
               ].map((member) => (
                 <div key={member.name} className="card-hover overflow-hidden text-center group">
-                  <div className="h-48 bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center">
-                    <div className="h-20 w-20 rounded-full bg-primary-200 flex items-center justify-center">
-                      <Users size={32} className="text-primary-500" />
-                    </div>
+                  <div className="h-48 bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center overflow-hidden">
+                    {failedImages[member.name] ? (
+                      <div className="h-20 w-20 rounded-full bg-primary-200 flex items-center justify-center">
+                        <Users size={32} className="text-primary-500" />
+                      </div>
+                    ) : (
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                        onError={() => handleImageError(member.name)}
+                      />
+                    )}
                   </div>
                   <div className="p-6">
                     <h3 className="text-lg font-bold font-heading text-ink-primary">{member.name}</h3>
