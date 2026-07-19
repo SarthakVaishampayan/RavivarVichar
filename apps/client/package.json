@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ravivarvichar/shared": "*",
+    "@xyflow/react": "^12.11.2",
     "axios": "^1.7.0",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.0",

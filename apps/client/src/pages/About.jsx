@@ -6,6 +6,7 @@ import SectionHeading from '../components/shared/SectionHeading';
 import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
 import { Eye, Heart, BookOpen, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf, Quote } from 'lucide-react';
+import RavivarModel from '../components/shared/RavivarModel';
 
 const stats = [
   { number: '32+', label: 'Years of Publication' },
@@ -179,6 +180,9 @@ export default function About() {
             </div>
           </div>
         </section>
+
+        {/* Our Model */}
+        <RavivarModel />
 
         {/* Goals & Objectives */}
         <section id="our-goals" className="section-md bg-surface-section">
