@@ -16,6 +16,11 @@
 
   body {
     @apply font-body antialiased text-ink-primary bg-surface-white;
+    caret-color: transparent;
+  }
+
+  input, textarea, select, option, [contenteditable], [contenteditable] * {
+    caret-color: auto;
   }
 
   h1, h2, h3, h4, h5, h6 {
