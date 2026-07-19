@@ -69,7 +69,7 @@ export default function Events() {
             <div className="max-w-[580px]">
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">EVENTS</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
-                Join Us at <span className="text-[#F5A623]">Our Events</span>
+                Join Us at <span className="text-primary-500">Our Events</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 From conferences to community camps, we organize events that bring together changemakers, community leaders, and partners to drive rural development.

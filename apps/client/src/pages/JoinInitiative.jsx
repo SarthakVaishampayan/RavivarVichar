@@ -103,7 +103,7 @@ export default function JoinInitiative() {
               </Link>
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase block mb-5">JOIN OUR INITIATIVE</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
-                Be Part of the <span className="text-[#F5A623]">Change</span>
+                Be Part of the <span className="text-primary-500">Change</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 At Ravivar Vichar, we believe that real change happens when passionate individuals come together. 

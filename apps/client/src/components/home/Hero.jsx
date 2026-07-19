@@ -51,9 +51,9 @@ export default function Hero() {
             <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
               Building{' '}
               <span className="text-[#6AA84F]">Independent</span>{' '}
-              <span className="text-[#F5A623]">Women</span>.{' '}
+              <span className="text-primary-500">Women</span>.{' '}
               Strengthening{' '}
-              <span className="text-[#C9892D]">Communities</span>
+              <span className="text-primary-500">Communities</span>
             </h1>
             <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
               Ravivar Vichar empowers women through entrepreneurship, knowledge, partnerships, and community-driven action to create lasting social and economic impact.
@@ -63,7 +63,7 @@ export default function Hero() {
               <Button
                 variant="primary"
                 to="/partner-with-us"
-                className="!bg-[#C9892D] !text-white hover:!bg-[#B87A1A] !border-[#C9892D]"
+                className="!bg-primary-500 !text-white hover:!bg-primary-600 !border-primary-500"
                 arrow
               >
                 Partner With Us

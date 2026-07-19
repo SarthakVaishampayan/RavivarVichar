@@ -61,7 +61,7 @@ export default function MediaMentions() {
             <div className="max-w-[580px]">
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">MEDIA MENTIONS</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
-                Coverage & <span className="text-[#F5A623]">Mentions</span>
+                Coverage & <span className="text-primary-500">Mentions</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 Coverage and mentions from media outlets featuring our work and impact.

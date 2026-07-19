@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --color-primary: #F5A623;
+    --color-primary: #FF6300;
     --color-secondary: #6AA84F;
     --color-accent-blue: #5DADE2;
     --color-accent-red: #D96C6C;
@@ -169,7 +169,7 @@
 .article-content li { margin: 0.25em 0; }
 
 .article-content blockquote {
-  border-left: 4px solid #F5A623;
+  border-left: 4px solid var(--color-primary);
   padding: 0.75em 1.25em;
   margin: 1.25em 0;
   font-style: italic;
@@ -209,7 +209,7 @@
 }
 
 .article-content a {
-  color: #F5A623;
+  color: var(--color-primary);
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: opacity 0.2s;

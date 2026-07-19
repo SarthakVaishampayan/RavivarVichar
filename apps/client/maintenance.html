@@ -8,6 +8,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --color-primary: #FF6300;
+      --color-primary-dark: #CC4F00;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
@@ -34,7 +39,7 @@
       font-family: 'Playfair Display', serif;
       font-size: 28px;
       font-weight: 700;
-      color: #F5A623;
+      color: var(--color-primary);
       margin-bottom: 2rem;
       letter-spacing: -0.3px;
     }
@@ -61,7 +66,7 @@
     .divider {
       width: 60px;
       height: 3px;
-      background: linear-gradient(90deg, #F5A623, #D98F1A);
+      background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
       border-radius: 2px;
       margin: 0 auto 2rem;
     }
@@ -72,12 +77,12 @@
       align-items: center;
       gap: 0.6rem;
       padding: 0.7rem 1.6rem;
-      background: #FEF7EC;
-      border: 1px solid #FDEDD0;
+      background: #FFF0E6;
+      border: 1px solid #FFD1B3;
       border-radius: 999px;
       font-size: 14px;
       font-weight: 600;
-      color: #B87814;
+      color: var(--color-primary-dark);
       margin-bottom: 1.2rem;
     }
 
@@ -85,7 +90,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #F5A623;
+      background: var(--color-primary);
       animation: pulse 1.5s ease-in-out infinite;
     }
 
@@ -124,13 +129,13 @@
       display: inline-block;
       font-size: 16px;
       font-weight: 500;
-      color: #F5A623;
+      color: var(--color-primary);
       text-decoration: none;
       transition: color 0.2s;
     }
 
     .contact-email:hover {
-      color: #D98F1A;
+      color: var(--color-primary-dark);
     }
 
     /* Social Links */
@@ -157,11 +162,11 @@
     }
 
     .social-links a:hover {
-      background: #F5A623;
-      border-color: #F5A623;
+      background: var(--color-primary);
+      border-color: var(--color-primary);
       color: white;
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(245, 166, 35, 0.3);
+      box-shadow: 0 4px 12px rgba(255, 99, 0, 0.3);
     }
 
     .social-links a svg {

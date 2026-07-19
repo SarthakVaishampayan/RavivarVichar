@@ -72,7 +72,7 @@ export default function Media() {
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">MEDIA</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
                 See Our{' '}
-                <span className="text-[#F5A623]">Impact</span>
+                <span className="text-primary-500">Impact</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 Browse through photos, videos, and press coverage showcasing our work and the communities we serve.
@@ -85,7 +85,7 @@ export default function Media() {
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`flex-1 max-lg:px-3 px-5 max-lg:text-xs py-2.5 rounded-pill text-sm font-medium transition-all duration-300 ${
-                      activeTab === tab ? 'bg-[#C9892D] text-white shadow-soft' : 'text-white/80 hover:text-white'
+                      activeTab === tab ? 'bg-primary-500 text-white shadow-soft' : 'text-white/80 hover:text-white'
                     }`}
                   >
                     {tab === 'Gallery' && <Image size={16} className="inline mr-1.5" />}

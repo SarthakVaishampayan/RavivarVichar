@@ -75,7 +75,7 @@ export default function Contact() {
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">CONTACT US</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
                 Let's{' '}
-                <span className="text-[#F5A623]">Work Together</span>
+                <span className="text-primary-500">Work Together</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 Have a question, want to partner with us, or interested in volunteering? 

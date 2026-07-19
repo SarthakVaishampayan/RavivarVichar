@@ -96,7 +96,7 @@ export default function PartnerWithUs() {
               </Link>
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase block mb-5">PARTNER WITH US</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
-                Collaborate for <span className="text-[#F5A623]">Change</span>
+                Collaborate for <span className="text-primary-500">Change</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 We're always looking for partners who share our vision of empowering rural communities. 

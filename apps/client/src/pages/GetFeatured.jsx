@@ -101,7 +101,7 @@ export default function GetFeatured() {
               </Link>
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase block mb-5">GET FEATURED</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
-                Share Your <span className="text-[#F5A623]">Story</span>
+                Share Your <span className="text-primary-500">Story</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 Have an inspiring story to tell? We'd love to feature you on our platform. 

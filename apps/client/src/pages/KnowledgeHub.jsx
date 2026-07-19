@@ -142,7 +142,7 @@ export default function KnowledgeHub() {
             <div className="max-w-[580px]">
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">KNOWLEDGE HUB</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
-                Insights & <span className="text-[#F5A623]">Research</span>
+                Insights & <span className="text-primary-500">Research</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 Explore our library of research, case studies, impact stories, and policy recommendations driving evidence-based rural development.
