@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
@@ -10,10 +10,10 @@ import { Eye, Heart, BookOpen, Zap, Users, Globe, Newspaper, Monitor, Calendar, 
 import RavivarModel from '../components/shared/RavivarModel';
 
 const stats = [
-  { number: '32+', label: 'Years of Publication' },
-  { number: '2023', label: 'Ravivar Vichar Launched' },
-  { number: '10K+', label: 'Digital Reach' },
-  { number: '100+', label: 'Issues Published' },
+  { value: 32, suffix: '+', label: 'Years of Publication' },
+  { value: 2023, suffix: '', label: 'Ravivar Vichar Launched' },
+  { value: 10, suffix: 'K+', label: 'Digital Reach' },
+  { value: 100, suffix: '+', label: 'Issues Published' },
 ];
 
 const coreValues = [
@@ -63,6 +63,37 @@ const visionTexts = [
   'Ravivar Vichar envisions a world where women from self-help groups and beyond can reach their full potential, break barriers, and lead fulfilling lives. By sharing stories of success, addressing issues, and providing valuable resources, we aim to be a catalyst for positive change and contribute to a more equitable and empowered society. Together, we can build a brighter future for women everywhere.',
   'Our vision is to be a leading global platform that serves as a beacon of inspiration, support, and knowledge for women involved in self-help groups and all women in general. We aspire to foster positive change, empowerment, and gender equality through our content and engagement.',
 ];
+
+function AnimatedCounter({ value, suffix = '', duration = 2000 }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  useEffect(() => {
+    if (!isInView) return;
+    let startTime = null;
+    let animationFrame;
+
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * value));
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(step);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [isInView, value, duration]);
+
+  const display = value === 2023
+    ? count
+    : count.toLocaleString('en-IN');
+
+  return <span ref={ref} className="tabular-nums">{display}{suffix}</span>;
+}
 
 export default function About() {
   const [loaded, setLoaded] = useState(false);
@@ -134,8 +165,10 @@ export default function About() {
           <div className="container-content">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-4xl lg:text-5xl font-bold font-heading text-primary-500">{stat.number}</div>
+                <div key={stat.label} className="text-center group">
+                  <div className="text-4xl lg:text-5xl font-bold font-heading text-primary-500 group-hover:text-primary-600 transition-colors duration-300">
+                    <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                  </div>
                   <div className="text-sm text-ink-secondary mt-2 font-medium uppercase tracking-wider">{stat.label}</div>
                 </div>
               ))}

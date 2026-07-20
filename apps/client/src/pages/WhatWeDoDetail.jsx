@@ -22,28 +22,67 @@ const contentMap = {
     icon: Briefcase,
     color: 'text-primary-500',
     bgColor: 'bg-primary-50',
-    heroDescription: 'We support women in starting, strengthening, and growing their businesses. Our focus is on helping women move from ideas and informal livelihoods towards sustainable and independent enterprises. We work with women entrepreneurs, aspiring entrepreneurs, Self Help Groups, artisans, and grassroots businesses across different sectors.',
-    sections: [
-      { heading: 'Mentorship & Market Access', body: 'Connect women entrepreneurs with mentors, institutions, industry networks, and potential markets.' },
-      { heading: 'Awareness & Opportunities', body: 'Create awareness about government schemes, funding opportunities, loans, grants, and entrepreneurship programmes.' },
-      { heading: 'Networking & Collaboration', body: 'Facilitate networking and collaboration among women-led businesses.' },
-      { heading: 'Visibility & Promotion', body: 'Promote women-owned businesses and help increase their visibility.' },
-      { heading: 'Skill Development', body: 'Support skill development in areas such as branding, digital marketing, financial management, technology, and business growth.' },
-      { heading: 'Partnerships', body: 'Build partnerships with chambers of commerce, corporates, NGOs, government bodies, and other institutions.' },
-      { heading: 'Showcase Platforms', body: 'Create platforms where women entrepreneurs can showcase their work, products, and stories.' },
-    ],
+    heroDescription:
+      'We support women in starting, strengthening, and growing their businesses. Our focus is on helping women move from ideas and informal livelihoods towards sustainable and independent enterprises. We work with women entrepreneurs, aspiring entrepreneurs, Self Help Groups, artisans, and grassroots businesses across different sectors.',
+    sections: {
+      intro:
+        "Our approach to women entrepreneurship is holistic and hands-on. We don't just share information — we actively connect, mentor, and create pathways that help women turn their ideas into thriving enterprises. From building foundational skills to accessing markets and funding, we're with them at every stage of their journey.",
+      items: [
+        {
+          heading: 'Mentorship & Market Access',
+          body: 'We connect women entrepreneurs with experienced mentors, industry networks, financial institutions, and potential markets. These connections open doors to new opportunities, partnerships, and customers that help businesses grow and scale.',
+        },
+        {
+          heading: 'Awareness & Opportunities',
+          body: 'We create awareness about government schemes, funding opportunities, loans, grants, and entrepreneurship programmes. Many women miss out simply because they don\'t know what\'s available — we bridge that gap.',
+        },
+        {
+          heading: 'Networking & Collaboration',
+          body: 'We facilitate networking and collaboration among women-led businesses, creating a community of support where entrepreneurs can share experiences, learn from each other, and collaborate on new initiatives.',
+        },
+        {
+          heading: 'Visibility & Promotion',
+          body: 'We promote women-owned businesses through our platform, helping them gain visibility among potential customers, partners, and investors. Every business deserves to be seen and celebrated.',
+        },
+        {
+          heading: 'Skill Development',
+          body: 'We support skill development in areas such as branding, digital marketing, financial management, technology adoption, and business growth strategies. These practical skills empower women to run their businesses more effectively.',
+        },
+        {
+          heading: 'Partnerships',
+          body: 'We build partnerships with chambers of commerce, corporates, NGOs, government bodies, and other institutions to create a supportive ecosystem for women entrepreneurs.',
+        },
+        {
+          heading: 'Showcase Platforms',
+          body: 'We create platforms where women entrepreneurs can showcase their work, products, and stories — giving them the recognition they deserve and connecting them with wider audiences.',
+        },
+      ],
+    },
     impact: [
       { value: 1200, suffix: '+', label: 'Women Entrepreneurs Supported' },
       { value: 500, suffix: '+', label: 'Businesses Launched' },
-      { value: 2, prefix: '₹', suffix: 'Cr+', label: 'Funding Facilitated' },
+      { value: 2, prefix: '\u20b9', suffix: 'Cr+', label: 'Funding Facilitated' },
       { value: 85, suffix: '%', label: 'Business Sustainability Rate' },
     ],
     goal: 'To help more women move from earning a livelihood to building sustainable enterprises.',
-    goalVision: 'We believe every woman has the potential to build a sustainable enterprise. Our mission is to remove barriers, create opportunities, and provide the support systems women need to thrive as entrepreneurs and community leaders.',
+    goalVision:
+      'We believe every woman has the potential to build a sustainable enterprise. Our mission is to remove barriers, create opportunities, and provide the support systems women need to thrive as entrepreneurs and community leaders.',
     goalPillars: [
-      { icon: 'Users', heading: 'Mentorship & Networks', body: 'Connecting women with mentors, industry networks, and peer communities that fuel growth and open doors.' },
-      { icon: 'PiggyBank', heading: 'Access & Awareness', body: 'Creating pathways to capital, government schemes, funding, and market opportunities for women-led businesses.' },
-      { icon: 'Award', heading: 'Skills & Visibility', body: 'Building capabilities in branding, digital tools, financial management, and amplifying women-owned businesses.' },
+      {
+        icon: 'Users',
+        heading: 'Mentorship & Networks',
+        body: 'Connecting women with mentors, industry networks, and peer communities that fuel growth and open doors.',
+      },
+      {
+        icon: 'PiggyBank',
+        heading: 'Access & Awareness',
+        body: 'Creating pathways to capital, government schemes, funding, and market opportunities for women-led businesses.',
+      },
+      {
+        icon: 'Award',
+        heading: 'Skills & Visibility',
+        body: 'Building capabilities in branding, digital tools, financial management, and amplifying women-owned businesses.',
+      },
     ],
   },
   'shgs': {
@@ -51,28 +90,67 @@ const contentMap = {
     icon: HeartHandshake,
     color: 'text-secondary-500',
     bgColor: 'bg-secondary-50',
-    heroDescription: 'We work with Self Help Groups as important engines of women\'s economic empowerment and community development. Our focus is not only on highlighting SHG stories, but on helping strengthen their visibility, knowledge, leadership, and access to opportunities.',
-    sections: [
-      { heading: 'Documentation & Amplification', body: 'Document and amplify successful SHG models and community-led initiatives.' },
-      { heading: 'Market & Partner Connections', body: 'Connect SHGs with markets, institutions, brands, and potential partners.' },
-      { heading: 'Capacity Building', body: 'Support capacity building in entrepreneurship, digital skills, financial literacy, leadership, and business management.' },
-      { heading: 'Awareness & Opportunities', body: 'Create awareness about government schemes, support programmes, and market opportunities.' },
-      { heading: 'Showcase & Visibility', body: 'Help showcase SHG products, businesses, and local enterprises.' },
-      { heading: 'Network Facilitation', body: 'Facilitate connections between SHGs, entrepreneurs, NGOs, corporates, and government institutions.' },
-      { heading: 'Knowledge Sharing', body: 'Promote knowledge-sharing between different communities and SHG networks.' },
-    ],
+    heroDescription:
+      "We work with Self Help Groups as important engines of women's economic empowerment and community development. Our focus is not only on highlighting SHG stories, but on helping strengthen their visibility, knowledge, leadership, and access to opportunities.",
+    sections: {
+      intro:
+        'Our work with Self Help Groups goes beyond recognition — we actively strengthen their capabilities, connect them to wider networks, and create opportunities for growth. We believe SHGs are powerful engines of grassroots change, and we are committed to helping them evolve and thrive.',
+      items: [
+        {
+          heading: 'Documentation & Amplification',
+          body: 'We document and amplify successful SHG models and community-led initiatives, sharing their stories to inspire others and attract support from partners and institutions.',
+        },
+        {
+          heading: 'Market & Partner Connections',
+          body: 'We connect SHGs with markets, institutions, brands, and potential partners who can help them scale their products and services beyond local boundaries.',
+        },
+        {
+          heading: 'Capacity Building',
+          body: 'We support capacity building in entrepreneurship, digital skills, financial literacy, leadership, and business management — equipping SHG members with the tools they need to succeed.',
+        },
+        {
+          heading: 'Awareness & Opportunities',
+          body: 'We create awareness about government schemes, support programmes, and market opportunities that can benefit SHGs and their members.',
+        },
+        {
+          heading: 'Showcase & Visibility',
+          body: 'We help showcase SHG products, businesses, and local enterprises through our platform, giving them the visibility they deserve among wider audiences.',
+        },
+        {
+          heading: 'Network Facilitation',
+          body: 'We facilitate connections between SHGs, entrepreneurs, NGOs, corporates, and government institutions to create a collaborative ecosystem for growth.',
+        },
+        {
+          heading: 'Knowledge Sharing',
+          body: 'We promote knowledge-sharing between different communities and SHG networks, creating a culture of learning and mutual support.',
+        },
+      ],
+    },
     impact: [
       { value: 300, suffix: '+', label: 'SHGs Strengthened' },
       { value: 5000, suffix: '+', label: 'Women SHG Members' },
-      { value: 150, prefix: '₹', suffix: 'L+', label: 'Group Savings' },
+      { value: 150, prefix: '\u20b9', suffix: 'L+', label: 'Group Savings' },
       { value: 90, suffix: '%', label: 'Loan Repayment Rate' },
     ],
     goal: 'To help Self Help Groups evolve from savings and credit collectives into stronger, sustainable, and market-connected community enterprises.',
-    goalVision: 'We believe Self Help Groups are powerful engines of grassroots change. Our mission is to strengthen their capabilities, amplify their impact, and connect them to markets, networks, and opportunities that drive sustainable growth.',
+    goalVision:
+      'We believe Self Help Groups are powerful engines of grassroots change. Our mission is to strengthen their capabilities, amplify their impact, and connect them to markets, networks, and opportunities that drive sustainable growth.',
     goalPillars: [
-      { icon: 'Users', heading: 'Visibility & Storytelling', body: 'Documenting and amplifying SHG success stories, models, and community-led initiatives to inspire and inform.' },
-      { icon: 'HeartHandshake', heading: 'Capacity & Connections', body: 'Building skills in entrepreneurship, digital literacy, and financial management while connecting SHGs to markets and partners.' },
-      { icon: 'PiggyBank', heading: 'Markets & Growth', body: 'Creating pathways for SHG products and enterprises to reach wider markets, access funding, and achieve sustainability.' },
+      {
+        icon: 'Users',
+        heading: 'Visibility & Storytelling',
+        body: 'Documenting and amplifying SHG success stories, models, and community-led initiatives to inspire and inform.',
+      },
+      {
+        icon: 'HeartHandshake',
+        heading: 'Capacity & Connections',
+        body: 'Building skills in entrepreneurship, digital literacy, and financial management while connecting SHGs to markets and partners.',
+      },
+      {
+        icon: 'PiggyBank',
+        heading: 'Markets & Growth',
+        body: 'Creating pathways for SHG products and enterprises to reach wider markets, access funding, and achieve sustainability.',
+      },
     ],
   },
   'financial-literacy': {
@@ -80,16 +158,42 @@ const contentMap = {
     icon: PiggyBank,
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
-    heroDescription: 'Economic independence begins with the ability to understand, manage, and control one\'s finances. We work to make financial knowledge more accessible to women and communities, particularly those who may not have easy access to formal financial education.',
-    sections: [
-      { heading: 'Financial Resources', body: 'Create simple and accessible resources on saving, budgeting, banking, credit, insurance, and digital payments.' },
-      { heading: 'Scheme Awareness', body: 'Build awareness about government schemes, loans, grants, and financial support available to women.' },
-      { heading: 'Business Finance', body: 'Promote understanding of business finances, pricing, bookkeeping, and cash flow.' },
-      { heading: 'Banking Access', body: 'Encourage women to access formal banking and financial services.' },
-      { heading: 'Digital Finance Education', body: 'Create educational content on digital financial tools and safe digital transactions.' },
-      { heading: 'Institutional Connections', body: 'Connect women entrepreneurs and SHGs with relevant financial institutions and support networks.' },
-      { heading: 'Financial Independence', body: 'Promote the importance of independent income and financial decision-making.' },
-    ],
+    heroDescription:
+      "Economic independence begins with the ability to understand, manage, and control one\u2019s finances. We work to make financial knowledge more accessible to women and communities, particularly those who may not have easy access to formal financial education.",
+    sections: {
+      intro:
+        'Financial literacy is the foundation of economic independence. Our approach is practical, accessible, and tailored to the real needs of women and communities. We break down complex financial concepts into simple, actionable knowledge that empowers women to take control of their financial futures.',
+      items: [
+        {
+          heading: 'Financial Resources',
+          body: 'We create simple and accessible resources on saving, budgeting, banking, credit, insurance, and digital payments — making financial knowledge available to everyone, regardless of their educational background.',
+        },
+        {
+          heading: 'Scheme Awareness',
+          body: 'We build awareness about government schemes, loans, grants, and financial support available to women, ensuring they can access the benefits and opportunities they are entitled to.',
+        },
+        {
+          heading: 'Business Finance',
+          body: 'We promote understanding of business finances, pricing, bookkeeping, and cash flow — essential skills for women entrepreneurs who want to build sustainable enterprises.',
+        },
+        {
+          heading: 'Banking Access',
+          body: 'We encourage women to access formal banking and financial services, helping them open accounts, use digital banking, and build a formal financial identity.',
+        },
+        {
+          heading: 'Digital Finance Education',
+          body: 'We create educational content on digital financial tools and safe digital transactions, helping women navigate the digital economy with confidence.',
+        },
+        {
+          heading: 'Institutional Connections',
+          body: 'We connect women entrepreneurs and SHGs with relevant financial institutions and support networks that can provide the resources they need to grow.',
+        },
+        {
+          heading: 'Financial Independence',
+          body: "We promote the importance of independent income and financial decision-making, empowering women to take charge of their economic lives and build a secure future.",
+        },
+      ],
+    },
     impact: [
       { value: 8000, suffix: '+', label: 'Women Trained in Financial Literacy' },
       { value: 70, suffix: '%', label: 'Digital Payment Adoption' },
@@ -97,11 +201,24 @@ const contentMap = {
       { value: 40, suffix: '%', label: 'Increase in Household Savings' },
     ],
     goal: 'To help women make informed financial decisions, build independent incomes, and participate more confidently in the formal economy.',
-    goalVision: 'We believe financial literacy is the foundation of economic independence. Our mission is to make financial knowledge accessible, practical, and actionable for every woman — enabling her to take control of her financial future.',
+    goalVision:
+      'We believe financial literacy is the foundation of economic independence. Our mission is to make financial knowledge accessible, practical, and actionable for every woman \u2014 enabling her to take control of her financial future.',
     goalPillars: [
-      { icon: 'PiggyBank', heading: 'Knowledge & Resources', body: 'Creating simple, accessible resources on saving, budgeting, banking, credit, insurance, and digital payments tailored for women.' },
-      { icon: 'Users', heading: 'Access & Inclusion', body: 'Building awareness of government schemes, banking services, and financial support while connecting women to formal financial systems.' },
-      { icon: 'Award', heading: 'Income & Independence', body: 'Empowering women to understand business finances, build independent incomes, and make confident financial decisions.' },
+      {
+        icon: 'PiggyBank',
+        heading: 'Knowledge & Resources',
+        body: 'Creating simple, accessible resources on saving, budgeting, banking, credit, insurance, and digital payments tailored for women.',
+      },
+      {
+        icon: 'Users',
+        heading: 'Access & Inclusion',
+        body: 'Building awareness of government schemes, banking services, and financial support while connecting women to formal financial systems.',
+      },
+      {
+        icon: 'Award',
+        heading: 'Income & Independence',
+        body: 'Empowering women to understand business finances, build independent incomes, and make confident financial decisions.',
+      },
     ],
   },
   'leadership-skill-development': {
@@ -109,16 +226,42 @@ const contentMap = {
     icon: Award,
     color: 'text-amber-600',
     bgColor: 'bg-amber-50',
-    heroDescription: 'Empowerment is not only about earning. It is also about having the confidence, skills, and opportunity to lead. We work to build the capabilities of women and young people so they can lead businesses, communities, institutions, and social change.',
-    sections: [
-      { heading: 'Training & Workshops', body: 'Organise training programmes, workshops, and learning initiatives that build practical skills and knowledge.' },
-      { heading: 'Skill Building', body: 'Build skills in communication, leadership, entrepreneurship, digital technology, and business management.' },
-      { heading: 'Mentorship & Expert Connect', body: 'Connect women with mentors, professionals, trainers, and industry experts who can guide and inspire them.' },
-      { heading: 'Knowledge Sharing', body: 'Create opportunities for women to share their knowledge and experiences with peers and communities.' },
-      { heading: 'Community Leadership', body: 'Support leadership development within communities and Self Help Groups to foster grassroots change.' },
-      { heading: 'Peer Networks', body: 'Promote networking and peer-to-peer learning as powerful tools for growth and confidence building.' },
-      { heading: 'Public Participation', body: 'Build platforms where women can participate in conversations, decision-making, and public life.' },
-    ],
+    heroDescription:
+      'Empowerment is not only about earning. It is also about having the confidence, skills, and opportunity to lead. We work to build the capabilities of women and young people so they can lead businesses, communities, institutions, and social change.',
+    sections: {
+      intro:
+        'Leadership is built, not born. Our approach focuses on creating opportunities for women to discover and develop their leadership potential. Through training, mentorship, and real-world experiences, we equip women with the skills, confidence, and networks they need to lead effectively in every sphere of life.',
+      items: [
+        {
+          heading: 'Training & Workshops',
+          body: 'We organise training programmes, workshops, and learning initiatives that build practical skills and knowledge — from communication and public speaking to project management and community organising.',
+        },
+        {
+          heading: 'Skill Building',
+          body: 'We build skills in communication, leadership, entrepreneurship, digital technology, and business management — creating well-rounded leaders who can navigate complex challenges.',
+        },
+        {
+          heading: 'Mentorship & Expert Connect',
+          body: 'We connect women with mentors, professionals, trainers, and industry experts who can guide, inspire, and support them on their leadership journey.',
+        },
+        {
+          heading: 'Knowledge Sharing',
+          body: 'We create opportunities for women to share their knowledge and experiences with peers and communities, building confidence and reinforcing learning through teaching.',
+        },
+        {
+          heading: 'Community Leadership',
+          body: 'We support leadership development within communities and Self Help Groups, nurturing grassroots leaders who can drive change from within.',
+        },
+        {
+          heading: 'Peer Networks',
+          body: 'We promote networking and peer-to-peer learning as powerful tools for growth and confidence building, creating communities of mutual support and accountability.',
+        },
+        {
+          heading: 'Public Participation',
+          body: 'We build platforms where women can participate in conversations, decision-making, and public life — ensuring their voices are heard and their perspectives shape the decisions that affect them.',
+        },
+      ],
+    },
     impact: [
       { value: 2500, suffix: '+', label: 'Women Trained in Leadership' },
       { value: 400, suffix: '+', label: 'Community Leaders Identified' },
@@ -126,11 +269,24 @@ const contentMap = {
       { value: 60, suffix: '%', label: 'Women in Leadership Roles' },
     ],
     goal: 'To equip women with the knowledge, skills, confidence, and networks needed to lead and create change.',
-    goalVision: 'We believe leadership is not defined by position, but by the ability to inspire, influence, and create change. Our mission is to build a pipeline of women leaders who can drive transformation in their communities, businesses, and institutions.',
+    goalVision:
+      'We believe leadership is not defined by position, but by the ability to inspire, influence, and create change. Our mission is to build a pipeline of women leaders who can drive transformation in their communities, businesses, and institutions.',
     goalPillars: [
-      { icon: 'Award', heading: 'Training & Skill Building', body: 'Organising workshops, training programmes, and learning initiatives that build communication, leadership, entrepreneurship, and digital skills.' },
-      { icon: 'Users', heading: 'Mentorship & Connections', body: 'Connecting women with mentors, professionals, trainers, and industry experts while promoting networking and peer-to-peer learning.' },
-      { icon: 'HeartHandshake', heading: 'Platforms & Opportunities', body: 'Creating platforms for women to participate in conversations, decision-making, and public life while sharing their knowledge and experiences.' },
+      {
+        icon: 'Award',
+        heading: 'Training & Skill Building',
+        body: 'Organising workshops, training programmes, and learning initiatives that build communication, leadership, entrepreneurship, and digital skills.',
+      },
+      {
+        icon: 'Users',
+        heading: 'Mentorship & Connections',
+        body: 'Connecting women with mentors, professionals, trainers, and industry experts while promoting networking and peer-to-peer learning.',
+      },
+      {
+        icon: 'HeartHandshake',
+        heading: 'Platforms & Opportunities',
+        body: 'Creating platforms for women to participate in conversations, decision-making, and public life while sharing their knowledge and experiences.',
+      },
     ],
   },
 };
@@ -201,8 +357,8 @@ export default function WhatWeDoDetail() {
       </Helmet>
 
       <PageLayout>
+        {/* ── Hero ── */}
         <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[15vh]">
-          {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
   src="/whatwedo-hero.jpg"
@@ -214,7 +370,6 @@ export default function WhatWeDoDetail() {
 />
             <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
           </div>
-          {/* Content */}
           <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
               <Link to="/" className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors mb-8">
@@ -229,32 +384,55 @@ export default function WhatWeDoDetail() {
           </div>
         </section>
 
+        {/* ── How We Do It (paragraphs & bullet points) ── */}
         <section className="section-md bg-surface-white">
           <div className="container-content">
             <SectionHeading
               label="HOW WE DO IT"
-              title={`How We Do It`}
+              title={`Our Approach to ${content.title}`}
               description=""
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-              {content.sections.map((section, i) => (
+
+            {/* Intro paragraph */}
+            {content.sections.intro && (
+              <div className="max-w-3xl mx-auto mt-8">
+                <p className="text-lg text-ink-secondary leading-relaxed text-center">
+                  {content.sections.intro}
+                </p>
+              </div>
+            )}
+
+            {/* Divider */}
+            <div className="max-w-3xl mx-auto mt-12 mb-10 border-t border-gray-100" />
+
+            {/* Bullet-point items */}
+            <div className="max-w-4xl mx-auto space-y-5">
+              {content.sections.items.map((item, i) => (
                 <div
-                  key={section.heading}
-                  className={`card p-8 lg:p-10 transition-all duration-300 hover:-translate-y-1 hover:shadow-hover group ${
-                    i === content.sections.length - 1 && content.sections.length % 3 === 1 ? 'lg:col-start-2' : ''
-                  }`}
+                  key={i}
+                  className="flex items-start gap-5 p-6 lg:p-7 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-primary-100 hover:-translate-y-0.5 transition-all duration-300 group"
                 >
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary-50 text-primary-600 font-bold font-heading text-lg mb-5 group-hover:scale-110 group-hover:bg-primary-100 transition-all duration-300">
-                    {i + 1}
-                  </span>
-                  <h3 className="text-xl font-heading font-bold text-ink-primary mb-4 group-hover:text-primary-600 transition-colors duration-300">{section.heading}</h3>
-                  <p className="text-body text-ink-secondary group-hover:text-ink-primary transition-colors duration-300">{section.body}</p>
+                  {/* Check circle */}
+                  <div className="shrink-0 flex items-center justify-center w-11 h-11 rounded-full bg-primary-50 text-primary-600 group-hover:bg-primary-100 group-hover:scale-110 group-hover:text-primary-700 transition-all duration-300">
+                    <CheckCircle size={22} />
+                  </div>
+
+                  {/* Content */}
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-heading font-bold text-ink-primary mb-2 group-hover:text-primary-600 transition-colors duration-300">
+                      {item.heading}
+                    </h3>
+                    <p className="text-body text-ink-secondary leading-relaxed">
+                      {item.body}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
+        {/* ── Our Goal ── */}
         {content.goal && (
           <section className="section-md bg-surface-white relative overflow-hidden">
             <div className="container-content">
@@ -300,6 +478,7 @@ export default function WhatWeDoDetail() {
           </section>
         )}
 
+        {/* ── Impact ── */}
         <section className="section-md bg-surface-section">
           <div className="container-content">
             <SectionHeading
@@ -334,6 +513,7 @@ export default function WhatWeDoDetail() {
           </div>
         </section>
 
+        {/* ── CTA ── */}
         <section className="section-md bg-primary-500 relative overflow-hidden text-center">
           <FloatingDots count={4} />
           <div className="container-content relative z-10">
