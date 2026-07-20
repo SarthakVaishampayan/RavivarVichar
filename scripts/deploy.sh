@@ -197,22 +197,21 @@ info "Step 1: Checking git status and backing up current builds..."
 if ! command -v git &>/dev/null; then
   fail "Git is not installed"
   exit 1
-fi
-
-UNCOMMITTED=$(git status --porcelain 2>/dev/null | wc -l)
-if [ "$UNCOMMITTED" -gt 0 ]; then
-  if [ "$FORCE" = true ]; then
-    warn "$UNCOMMITTED uncommitted change(s) found. Stashing them..."
-    git stash --include-untracked 2>/dev/null || true
-    pass "Local changes stashed"
-  else
-    warn "You have $UNCOMMITTED uncommitted change(s):"
-    git status --short
-    echo ""
-    echo "  Commit or stash them first, or use --force to deploy anyway."
-    exit 1
+fi  # Ignore package-lock.json — it's auto-generated and gets modified by npm install
+  UNCOMMITTED=$(git status --porcelain 2>/dev/null | grep -v 'package-lock.json' | wc -l)
+  if [ "$UNCOMMITTED" -gt 0 ]; then
+    if [ "$FORCE" = true ]; then
+      warn "$UNCOMMITTED uncommitted change(s) found. Stashing them..."
+      git stash --include-untracked 2>/dev/null || true
+      pass "Local changes stashed"
+    else
+      warn "You have $UNCOMMITTED uncommitted change(s) (excluding package-lock.json):"
+      git status --short | grep -v 'package-lock.json'
+      echo ""
+      echo "  Commit or stash them first, or use --force to deploy anyway."
+      exit 1
+    fi
   fi
-fi
 
 BEFORE_COMMIT=$(git rev-parse HEAD)
 info "  Current commit: $(echo $BEFORE_COMMIT | head -c 12)"
@@ -233,6 +232,13 @@ pass "State backed up at $BACKUP_DIR"
 
 # ─── Step 2: Pull latest code ───
 info "Step 2: Pulling latest code from $GIT_BRANCH..."
+
+# Auto-discard local package-lock.json changes (auto-generated, will be regenerated)
+if git diff --name-only 2>/dev/null | grep -q 'package-lock.json'; then
+  warn "package-lock.json has local changes. Discarding them (npm install will regenerate)..."
+  git checkout package-lock.json 2>/dev/null || true
+fi
+
 run_cmd "git fetch origin $GIT_BRANCH"
 run_cmd "git pull origin $GIT_BRANCH"
 AFTER_COMMIT=$(git rev-parse HEAD)
