@@ -170,6 +170,7 @@ export const EVENT_TYPES = ['upcoming', 'past'];
 
 export const HOMEPAGE_SECTIONS = [
   { key: 'hero', label: 'Hero Banner' },
+  { key: 'impactStats', label: 'Impact Stats' },
   { key: 'programs', label: 'What We Do' },
   { key: 'research', label: 'Success Stories' },
   { key: 'partners', label: 'Partners' },

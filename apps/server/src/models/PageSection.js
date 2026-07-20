@@ -7,8 +7,8 @@ const pageSectionSchema = new mongoose.Schema(
       required: true,
       unique: true,
       enum: [
-        'hero', 'programs', 'research', 'partners',
-        'mediaMentions', 'testimonials',
+        'hero', 'impactStats', 'programs', 'research',
+        'partners', 'mediaMentions', 'testimonials',
       ],
     },
     order: { type: Number, default: 0 },

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
-import { Eye, Heart, BookOpen, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf, Quote } from 'lucide-react';
+import { Eye, Heart, BookOpen, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf, Quote, Linkedin, Mail } from 'lucide-react';
 import RavivarModel from '../components/shared/RavivarModel';
 
 const stats = [
@@ -350,42 +351,92 @@ export default function About() {
         </section>
 
         {/* Our Team */}
-        <section id="our-team" className="section-md bg-surface-white">
-          <div className="container-content">
+        <section
+          id="our-team"
+          className="section-md relative overflow-hidden"
+          style={{ background: 'linear-gradient(180deg, #FFF9F4 0%, #FFFFFF 40%, #FFF7F1 100%)' }}
+        >
+          {/* Subtle background blobs */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute -top-20 left-1/3 w-64 h-64 rounded-full bg-primary-100/30 blur-3xl" />
+            <div className="absolute -bottom-20 right-1/4 w-72 h-72 rounded-full bg-secondary-100/20 blur-3xl" />
+          </div>
+
+          <div className="container-content relative z-10">
             <SectionHeading
               label="OUR TEAM"
               title="Meet the People Behind the Mission"
               description="Passionate individuals committed to driving change in rural communities."
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mt-16">
               {[
                 { name: 'Rohan Sharma', role: 'Chief Executive Officer', bio: 'Leading the vision and strategy of Ravivar Vichar with a passion for driving social impact and empowering women across India.', image: '/images/team/1.jpg' },
                 { name: 'Sampath', role: 'Chief Financial Officer', bio: 'Overseeing financial strategy and operations to ensure sustainable growth and effective resource management.', image: '/images/team/2.jpg' },
                 { name: 'Rishika Joshi', role: 'Chief Operational Manager', bio: 'Managing day-to-day operations and ensuring seamless execution of programs and initiatives.', image: '/images/team/3.jpg' },
                 { name: 'Sarthak Vaishampayan', role: 'Software Developer', bio: 'Building and maintaining the digital platform to amplify our reach and impact in the digital space.', image: '/images/team/4.jpg' },
-              ].map((member) => (
-                <div key={member.name} className="card-hover overflow-hidden text-center group">
-                  <div className="h-48 bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center overflow-hidden">
+              ].map((member, i) => (
+                <motion.div
+                  key={member.name}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.5, delay: i * 0.1, ease: 'easeOut' }}
+                  className="group relative overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 hover:scale-[1.02]"
+                >
+                  {/* ── Image (60% of card) ── */}
+                  <div className="relative h-56 lg:h-64 overflow-hidden">
                     {failedImages[member.name] ? (
-                      <div className="h-20 w-20 rounded-full bg-primary-200 flex items-center justify-center">
-                        <Users size={32} className="text-primary-500" />
+                      <div className="w-full h-full bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center">
+                        <Users size={44} className="text-primary-400" />
                       </div>
                     ) : (
                       <img
                         src={member.image}
                         alt={member.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:rotate-[1deg]"
                         loading="lazy"
                         onError={() => handleImageError(member.name)}
                       />
                     )}
+
+                    {/* Gradient overlay — visible on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                    {/* Social icons — slide up on hover */}
+                    <div className="absolute bottom-3 right-3 flex items-center gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
+                      <span className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center hover:bg-primary-50 transition-colors cursor-pointer">
+                        <Linkedin size={14} className="text-primary-600" />
+                      </span>
+                      <span className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center hover:bg-primary-50 transition-colors cursor-pointer">
+                        <Mail size={14} className="text-primary-600" />
+                      </span>
+                    </div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold font-heading text-ink-primary">{member.name}</h3>
-                    <p className="text-sm font-medium text-primary-500 mt-1">{member.role}</p>
-                    <p className="text-sm text-ink-secondary mt-3">{member.bio}</p>
+
+                  {/* ── Content ── */}
+                  <div className="relative p-5 lg:p-6">
+                    {/* Name */}
+                    <h3 className="text-lg font-bold font-heading text-ink-primary">
+                      {member.name}
+                    </h3>
+
+                    {/* Glass role badge */}
+                    <span className="inline-block mt-2 px-3 py-1 rounded-full text-[11px] font-semibold text-primary-600 bg-primary-50/80 border border-primary-100/50 shadow-sm">
+                      {member.role}
+                    </span>
+
+                    {/* Bio — hidden by default, reveals on hover */}
+                    <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 group-hover:max-h-28 opacity-0 group-hover:opacity-100 mt-0 group-hover:mt-3">
+                      <p className="text-sm text-ink-secondary leading-relaxed">
+                        {member.bio}
+                      </p>
+                    </div>
                   </div>
-                </div>
+
+                  {/* Bottom hover accent bar */}
+                  <div className="absolute bottom-0 left-4 right-4 h-0.5 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                </motion.div>
               ))}
             </div>
           </div>
