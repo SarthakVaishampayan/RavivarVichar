@@ -52,12 +52,12 @@ const goals = [
 ];
 
 const initiatives = [
-  { icon: Monitor, title: 'Digital Platform', description: "Ravivar Vichar is an innovative platform spread across various social media channels that is dedicated to shedding light on the critical issues concerning self-help groups and women's challenges in contemporary society. It leverages the power of social media to bridge the gap between information and action." },
-  { icon: Newspaper, title: 'Monthly Magazine', description: "Launch a monthly print and digital magazine featuring success stories, interviews, and in-depth articles on women's issues." },
-  { icon: Calendar, title: 'Webinars and Workshops', description: 'Organise webinars, workshops, and training sessions to provide women with practical skills and knowledge.' },
-  { icon: Users, title: 'Community Building', description: 'Create online communities and forums where women can connect, share experiences, and seek support.' },
-  { icon: Search, title: 'Research and Analysis', description: "Conduct research and analysis on self-help group initiatives, women's economic empowerment, and gender-related issues, publishing our findings to inform policies and practices." },
-  { icon: Megaphone, title: 'Advocacy', description: "Engage in advocacy efforts to promote gender equality and women's rights and support policies that empower women." },
+  { icon: Monitor, title: 'Digital Platform', description: 'An innovative platform across social media channels dedicated to shedding light on critical issues concerning self-help groups and women\'s challenges, bridging the gap between information and action.' },
+  { icon: Newspaper, title: 'Monthly Magazine', description: 'A monthly print and digital magazine featuring success stories, interviews, and in-depth articles on women\'s issues and empowerment.' },
+  { icon: Calendar, title: 'Webinars & Workshops', description: 'Regular webinars, workshops, and training sessions designed to equip women with practical skills, knowledge, and confidence.' },
+  { icon: Users, title: 'Community Building', description: 'Online communities and forums where women can connect, share experiences, seek support, and grow together.' },
+  { icon: Search, title: 'Research & Analysis', description: 'In-depth research and analysis on SHG initiatives, women\'s economic empowerment, and gender issues to inform policies and practices.' },
+  { icon: Megaphone, title: 'Advocacy', description: 'Advocacy efforts to promote gender equality, women\'s rights, and policies that empower women at every level.' },
 ];
 
 const visionTexts = [
@@ -331,14 +331,14 @@ export default function About() {
               {initiatives.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <div key={item.title} className="card p-6 lg:p-8">
-                    <div className="flex items-start gap-5">
+                  <div key={item.title} className="card p-6 lg:p-8 h-full">
+                    <div className="flex items-start gap-5 h-full">
                       <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
                         <Icon size={24} />
                       </div>
-                      <div>
-                        <h3 className="text-card font-heading font-bold text-ink-primary mb-2">{item.title}</h3>
-                        <p className="text-body text-ink-secondary">{item.description}</p>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-bold font-heading text-ink-primary mb-1.5">{item.title}</h3>
+                        <p className="text-sm text-ink-secondary leading-relaxed">{item.description}</p>
                       </div>
                     </div>
                   </div>
