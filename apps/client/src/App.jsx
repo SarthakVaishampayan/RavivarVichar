@@ -15,6 +15,7 @@ import Gallery from './pages/Gallery';
 import PartnerWithUs from './pages/PartnerWithUs';
 import WhatWeDoDetail from './pages/WhatWeDoDetail';
 import MediaMentions from './pages/MediaMentions';
+import FAQ from './pages/FAQ';
 
 function PageviewTracker() {
   usePageviewTracking();
@@ -41,6 +42,7 @@ export default function App() {
       <Route path="/partner-with-us" element={<PartnerWithUs />} />
       <Route path="/what-we-do/:slug" element={<WhatWeDoDetail />} />
       <Route path="/media-mentions" element={<MediaMentions />} />
+      <Route path="/faq" element={<FAQ />} />
     </Routes>
     </>
   );

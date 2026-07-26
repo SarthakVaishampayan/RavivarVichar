@@ -2,7 +2,8 @@ import { Helmet } from 'react-helmet-async';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import Button from '../components/shared/Button';
-import { Mail, Phone, MapPin, Clock, Send, Check, Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Mail, Phone, MapPin, Clock, Send, Check, Loader2, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import api from '../lib/axios';
 
@@ -14,11 +15,11 @@ const contactInfo = [
   { icon: Clock, label: 'Office Hours', value: 'Mon — Fri, 9:00 AM — 5:00 PM' },
 ];
 
-const faqs = [
-  { q: 'How can I volunteer with Ravivar Vichar?', a: 'We welcome volunteers with diverse skills. Please fill out the contact form or email us directly, and our team will reach out with current opportunities.' },
-  { q: 'How do I partner with your organization?', a: 'We collaborate with NGOs, government agencies, corporations, and academic institutions. Reach out through our contact form to discuss partnership possibilities.' },
-  { q: 'Can I donate to a specific program?', a: 'Yes! You can specify the program you\'d like to support when donating. Your contribution will be directed to that program\'s activities.' },
-  { q: 'How are donations utilized?', a: '85% of donations go directly to program activities, 10% to capacity building and training, and 5% to administrative costs. We publish annual impact reports.' },
+const topFaqs = [
+  { q: 'How can I become part of the Ravivar Vichar network?', a: 'You can participate as a woman entrepreneur, SHG member, mentor, volunteer, trainer, institutional partner, or organisation. Explore the relevant section on our website or contact us to find the best way to get involved.' },
+  { q: 'How can I partner with Ravivar Vichar?', a: 'Organisations, businesses, NGOs, government bodies, CSR teams, educational institutions, and industry networks can partner with us through programmes, training, research, market access, funding, mentorship, and community initiatives.' },
+  { q: 'How can I volunteer with Ravivar Vichar?', a: 'You can express your interest through our volunteer form. Opportunities may include research, communication, documentation, events, community engagement, and other areas depending on our ongoing initiatives.' },
+  { q: 'How can I support Ravivar Vichar\'s work?', a: 'You can support our work by partnering with us, volunteering, mentoring, sharing opportunities, supporting programmes, collaborating on research, or helping connect women and communities with relevant resources.' },
 ];
 
 export default function Contact() {
@@ -186,12 +187,12 @@ export default function Contact() {
               description="Quick answers to common questions about our work and how to get involved."
             />
             <div className="max-w-3xl mx-auto mt-12 space-y-4">
-              {faqs.map((faq) => (
+              {topFaqs.map((faq) => (
                 <details key={faq.q} className="card group open:ring-1 open:ring-primary-200 open:shadow-soft">
                   <summary className="p-6 cursor-pointer text-lg font-semibold text-ink-primary flex items-center justify-between gap-4 marker:content-none">
                     {faq.q}
                     <span className="shrink-0 transition-transform duration-300 group-open:rotate-180 text-primary-500">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                      <ChevronDown size={20} />
                     </span>
                   </summary>
                   <div className="px-6 pb-6 text-body text-ink-secondary">
@@ -199,6 +200,16 @@ export default function Contact() {
                   </div>
                 </details>
               ))}
+            </div>
+
+            {/* View All FAQs */}
+            <div className="text-center mt-10">
+              <Link
+                to="/faq"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500 hover:text-primary-600 transition-colors border border-primary-200 hover:border-primary-300 px-6 py-3 rounded-full"
+              >
+                View All FAQs <ChevronDown size={16} className="-rotate-90" />
+              </Link>
             </div>
           </div>
         </section>

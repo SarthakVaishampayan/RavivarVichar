@@ -6,8 +6,9 @@ import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
-import { Eye, Heart, BookOpen, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf, Quote, Linkedin, Mail } from 'lucide-react';
+import { Heart, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf, Quote } from 'lucide-react';
 import RavivarModel from '../components/shared/RavivarModel';
+import TeamMemberModal from '../components/shared/TeamMemberModal';
 
 const stats = [
   { value: 32, suffix: '+', label: 'Years of Publication' },
@@ -98,6 +99,7 @@ function AnimatedCounter({ value, suffix = '', duration = 2000 }) {
 export default function About() {
   const [loaded, setLoaded] = useState(false);
   const [failedImages, setFailedImages] = useState({});
+  const [selectedMember, setSelectedMember] = useState(null);
   const location = useLocation();
 
   const handleImageError = (name) => {
@@ -402,12 +404,50 @@ export default function About() {
               description="Passionate individuals committed to driving change in rural communities."
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mt-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-16">
               {[
-                { name: 'Rohan Sharma', role: 'Chief Executive Officer', bio: 'Leading the vision and strategy of Ravivar Vichar with a passion for driving social impact and empowering women across India.', image: '/images/team/1.jpg' },
-                { name: 'Sampath', role: 'Chief Financial Officer', bio: 'Overseeing financial strategy and operations to ensure sustainable growth and effective resource management.', image: '/images/team/2.jpg' },
-                { name: 'Rishika Joshi', role: 'Chief Operational Manager', bio: 'Managing day-to-day operations and ensuring seamless execution of programs and initiatives.', image: '/images/team/3.jpg' },
-                { name: 'Sarthak Vaishampayan', role: 'Software Developer', bio: 'Building and maintaining the digital platform to amplify our reach and impact in the digital space.', image: '/images/team/4.jpg' },
+                {
+                  name: 'Rohan Sharma',
+                  role: 'Chief Executive Officer',
+                  bio: 'Technology leader, storyteller, and social impact entrepreneur. As CEO of Ravivar Vichar, he leads a platform dedicated to empowering SHGs and advancing women\'s financial independence through innovation and media.',
+                  fullBio: 'Rohan Sharma is a technology leader, storyteller, and social impact entrepreneur committed to creating meaningful change through innovation and media.' + '\n\n' + 'As the CEO of Ravivar Vichar, he leads a digital media and print platform dedicated to empowering Self-Help Groups (SHGs) and advancing women\'s financial independence. Under his leadership, Ravivar Vichar connects grassroots communities with institutions, promoting financial literacy, inclusion, and sustainable livelihoods.' + '\n\n' + 'Rohan began his career at TCS before working with Accenture and Oracle Corporation, building expertise in technology, strategy, and digital transformation. Alongside his corporate journey, he has written for podcasts, films, and web series, creating stories inspired by India\'s cultural and social ethos.',
+                  image: '/images/team/rohan.jpeg',
+                },
+                {
+                  name: 'Satyam Khandelwal',
+                  role: 'Managing Director',
+                  bio: 'Driving Ravivar Vichar\'s mission of empowering SHGs and advancing women\'s economic development through financial inclusion, community engagement, and sustainable livelihood initiatives.',
+                  fullBio: 'Satyam Khandelwal is the Managing Director of Ravivar Vichar, where he drives the platform\'s mission of empowering Self-Help Groups (SHGs) and advancing women\'s economic and social development through financial inclusion, community engagement, and sustainable livelihood initiatives.' + '\n\n' + 'With academic qualifications in Mass Communication, Commerce, and Law, Satyam brings a multidisciplinary perspective to leadership.' + '\n\n' + 'An entrepreneur with extensive experience in land development and construction, he combines business acumen, legal expertise, and strategic vision to build impactful partnerships and strengthen Ravivar Vichar\'s commitment to inclusive growth.',
+                  image: '/images/team/satyam.jpeg',
+                },
+                {
+                  name: 'Dr. Subhash Khandelwal',
+                  role: 'Editor-in-Chief',
+                  bio: 'Editor-in-Chief of Ravivar for over 30 years, establishing it as a respected platform for incisive analysis and informed commentary on national and international affairs.',
+                  fullBio: 'Dr. Subhash Khandelwal is the Editor-in-Chief of Ravivar, a position he has held for over 30 years. Under his editorial leadership, Ravivar has established itself as a respected platform for incisive analysis and informed commentary on national and international affairs, covering politics, economics, society, governance, culture, and global developments.' + '\n\n' + 'Inspired by the ideals of socialism, Dr. Khandelwal began his public life through active student politics and later served on the University Executive Council. He holds an LL.B. and a Doctorate in the Economics of the Ramayana Era, reflecting his interest in the intersection of India\'s intellectual traditions and contemporary public discourse.' + '\n\n' + 'Known for his balanced perspectives and commitment to independent journalism, Dr. Khandelwal has consistently championed democratic values, social justice, and the preservation of India\'s social fabric. Through Ravivar, he continues to contribute meaningfully to public debate, offering thoughtful analysis that informs, challenges, and inspires readers across generations.',
+                  image: '/images/team/subhash.jpeg',
+                },
+                {
+                  name: 'Arvind Mandloi',
+                  role: 'Author & Social Commentator',
+                  bio: 'Distinguished author and social commentator, recognized for his insightful contributions to literature and journalism with bestselling works and respected commentaries in leading Hindi publications.',
+                  fullBio: 'Arvind Mandloi is a distinguished author and social commentator, widely recognized for his insightful contributions to the literary and journalistic world.' + '\n\n' + 'Born with a passion for words and a keen sense of social consciousness, his literary journey has been marked by a series of thought-provoking works like JADUNAMA: JAVED AKHTAR-EK SAFAR (Bestselling book of the year 2022, 2023 & 2024), SAHIR KI SHAYARANA JADUGIRI, SRIJAN KE SAAT DASHAK, AWAAZ DO HUM EK HAI & KHWAAB KE GAON MEIN (Amazon Bestseller book) that have left a mark on the hearts and minds of his readers.' + '\n\n' + 'Over the years, he has contributed insightful perspectives and commentaries to various Hindi publications like DAINIK BHASKAR, Outlook etc., making him a respected voice in the world of journalism.' + '\n\n' + 'He is actively involved with "Roopankan," a multipurpose space dedicated to nurturing the talents of underprivileged youth in Indore.',
+                  image: '/images/team/arvind.jpeg',
+                },
+                {
+                  name: 'Abhishek Sharma',
+                  role: 'Media & Entertainment Leader',
+                  bio: 'Seasoned media and entertainment leader with an esteemed journalistic career spanning years of impactful storytelling and editorial excellence, driving strategic growth and innovative entertainment initiatives.',
+                  fullBio: 'Abhishek Sharma is a seasoned media and entertainment leader with an esteemed journalistic career spanning years of impactful storytelling and editorial excellence.' + '\n\n' + 'Renowned for his strategic vision and deep understanding of the media landscape, he has successfully bridged journalism with the evolving world of entertainment.' + '\n\n' + 'As the driving force behind multiple entertainment verticals, Mr. Sharma leads the strategic growth and expansion of innovative entertainment initiatives. He is instrumental in building high-value partnerships, developing original entertainment properties, and strengthening the brand\'s presence across events, media, and experiential platforms.' + '\n\n' + 'With a sharp focus on creativity, audience engagement, and scalable business models, Mr. Sharma continues to shape compelling experiences that resonate with contemporary audiences. Under his leadership, Ravivar Vichar has evolved into a dynamic platform for women empowerment, storytelling, and cultural experiences, setting new benchmarks.',
+                  image: '/images/team/abhishek.jpeg',
+                },
+                {
+                  name: 'Dr. Vivek Vardhan Shrivastava',
+                  role: 'Senior Journalist & Media Academic',
+                  bio: 'A senior journalist, media academic, and advocate of positive and developmental journalism with over 25 years of experience across India\'s leading news channels and publications, committed to meaningful public discourse and sustainable progress.',
+                  fullBio: 'Dr. Vivek Vardhan Shrivastava is a senior journalist, media academic, and advocate of positive and developmental journalism with over 25 years of experience across some of India\'s leading news channels and publications.' + '\n\n' + 'His work has consistently focused on issues of social development, literature, environment, public health, arts, culture, and traditional ways of living, promoting meaningful public discourse and sustainable progress.' + '\n\n' + 'Dr. Shrivastava holds a Ph.D. for his research on the role of media in the conservation of the Narmada River, reflecting his deep commitment to environmental communication and responsible journalism. Throughout his career, he has combined editorial excellence with a strong focus on public interest reporting, highlighting stories that inspire awareness, community participation, and positive change.' + '\n\n' + 'A recipient of numerous awards and recognitions across journalism, literature, environmental awareness, and social communication, Dr. Shrivastava continues to contribute to the media landscape through insightful writing, research, and thought leadership.',
+                  image: '/images/team/vivek.jpeg',
+                },
               ].map((member, i) => (
                 <motion.div
                   key={member.name}
@@ -415,7 +455,7 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.5, delay: i * 0.1, ease: 'easeOut' }}
-                  className="group relative overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 hover:scale-[1.02]"
+                  className="group relative overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-500 delay-200 hover:-translate-y-1.5 hover:scale-[1.02]"
                 >
                   {/* ── Image (60% of card) ── */}
                   <div className="relative h-56 lg:h-64 overflow-hidden">
@@ -427,28 +467,18 @@ export default function About() {
                       <img
                         src={member.image}
                         alt={member.name}
-                        className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:rotate-[1deg]"
+                        className="w-full h-full object-cover transition-all duration-700 delay-200 ease-out group-hover:scale-110 group-hover:rotate-[1deg]"
                         loading="lazy"
                         onError={() => handleImageError(member.name)}
                       />
                     )}
 
                     {/* Gradient overlay — visible on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                    {/* Social icons — slide up on hover */}
-                    <div className="absolute bottom-3 right-3 flex items-center gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                      <span className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center hover:bg-primary-50 transition-colors cursor-pointer">
-                        <Linkedin size={14} className="text-primary-600" />
-                      </span>
-                      <span className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center hover:bg-primary-50 transition-colors cursor-pointer">
-                        <Mail size={14} className="text-primary-600" />
-                      </span>
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200" />
                   </div>
 
                   {/* ── Content ── */}
-                  <div className="relative p-5 lg:p-6">
+                  <div className="relative p-5 lg:p-6 flex flex-col">
                     {/* Name */}
                     <h3 className="text-lg font-bold font-heading text-ink-primary">
                       {member.name}
@@ -459,20 +489,42 @@ export default function About() {
                       {member.role}
                     </span>
 
-                    {/* Bio — hidden by default, reveals on hover */}
-                    <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 group-hover:max-h-28 opacity-0 group-hover:opacity-100 mt-0 group-hover:mt-3">
-                      <p className="text-sm text-ink-secondary leading-relaxed">
+                    {/* Bio — 2-3 intro lines, hidden by default, reveals on hover */}
+                    <div className="overflow-hidden transition-all duration-500 delay-200 ease-out max-h-0 group-hover:max-h-24 opacity-0 group-hover:opacity-100 mt-0 group-hover:mt-3">
+                      <p className="text-sm text-ink-secondary leading-relaxed line-clamp-3">
                         {member.bio}
                       </p>
+                    </div>
+
+                    {/* Read More button — hidden by default, reveals on hover below bio */}
+                    <div className="overflow-hidden transition-all duration-500 delay-200 ease-out max-h-0 group-hover:max-h-12 opacity-0 group-hover:opacity-100 mt-0 group-hover:mt-3">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedMember(member);
+                        }}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-primary-500 hover:bg-primary-600 px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all duration-200 active:scale-95"
+                      >
+                        Read More
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
 
                   {/* Bottom hover accent bar */}
-                  <div className="absolute bottom-0 left-4 right-4 h-0.5 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                  <div className="absolute bottom-0 left-4 right-4 h-0.5 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-200 origin-left" />
                 </motion.div>
               ))}
             </div>
           </div>
+
+          {/* Team Member Detail Modal */}
+          <TeamMemberModal
+            member={selectedMember}
+            onClose={() => setSelectedMember(null)}
+          />
         </section>
 
         {/* CTA */}
