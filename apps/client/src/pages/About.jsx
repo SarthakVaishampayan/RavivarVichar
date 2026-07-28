@@ -6,7 +6,7 @@ import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
-import { Heart, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf, Quote } from 'lucide-react';
+import { Heart, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf } from 'lucide-react';
 import RavivarModel from '../components/shared/RavivarModel';
 import TeamMemberModal from '../components/shared/TeamMemberModal';
 
@@ -270,15 +270,6 @@ export default function About() {
                   </div>
                 );
               })}
-            </div>
-            {/* Quote */}
-            <div className="mt-16 text-center max-w-2xl mx-auto">
-              <div className="relative">
-                <Quote size={40} className="text-primary-200 absolute -top-4 -left-4 opacity-50" />
-                <p className="text-xl lg:text-2xl font-heading font-bold text-ink-primary italic leading-relaxed">
-                  "We believe meaningful change is built with people, not simply delivered to them"
-                </p>
-              </div>
             </div>
           </div>
         </section>

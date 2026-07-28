@@ -26,12 +26,7 @@ export default function Navbar() {
       <div className="container-site h-full flex items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center shrink-0">
-          <img
-            src="/logo.png"
-            alt="Ravivar Vichar"
-            className="h-12 w-auto"
-          />
-          <img src="/logo-hindi.png" alt="रविवार" className="h-10 w-auto -ml-3" />
+          <img src="/logo-hindi.png" alt="रविवार" className="h-11 w-auto" />
         </Link>
 
         {/* Desktop Navigation - centered */}

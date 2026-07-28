@@ -1,40 +1,31 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Users, Heart, Building2, BookOpen } from 'lucide-react';
+import { Users, Heart, BookOpen } from 'lucide-react';
 
 const stats = [
   {
     icon: Heart,
-    end: 50000,
+    end: 1000,
     suffix: '+',
     label: 'Lives Impacted',
-    description: 'Across rural communities in Rajasthan',
+    description: 'Across rural communities in Central India',
     color: 'text-primary-500',
     bgColor: 'bg-primary-50',
   },
   {
     icon: Users,
-    end: 5000,
+    end: 500,
     suffix: '+',
-    label: 'Women Empowered',
+    label: 'Women with us',
     description: 'Through training and leadership programs',
     color: 'text-secondary-500',
     bgColor: 'bg-secondary-50',
   },
   {
-    icon: Building2,
-    end: 200,
-    suffix: '+',
-    label: 'SHGs Formed',
-    description: 'Active self-help groups across districts',
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
-  },
-  {
     icon: BookOpen,
-    end: 500,
+    end: 50,
     suffix: '+',
-    label: 'Villages Reached',
+    label: 'Villages reached',
     description: 'On-the-ground programs and initiatives',
     color: 'text-amber-600',
     bgColor: 'bg-amber-50',
@@ -94,11 +85,11 @@ export default function ImpactStats() {
           <span className="section-label">OUR IMPACT</span>
           <h2 className="section-title">Making a Difference</h2>
           <p className="section-desc">
-            Tangible outcomes from our programs and community initiatives across Rajasthan.
+            Tangible outcomes from our programs and community initiatives across Central India.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-8">
           {stats.map((stat, i) => {
             const Icon = stat.icon;
             return (
