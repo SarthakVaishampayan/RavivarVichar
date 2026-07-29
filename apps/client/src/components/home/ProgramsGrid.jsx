@@ -40,7 +40,7 @@ export default function ProgramsGrid() {
       <div className="container-site">
         <SectionHeading
           label="What We Do"
-          title="Our Focus Areas"
+          title="Ravivar's Focus"
           description="We drive change through four interconnected pillars of community development."
         />
 

@@ -109,10 +109,10 @@ export default function Media() {
                     <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">
                       <Image size={40} className="text-gray-300" />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="absolute bottom-0 left-0 right-0 p-5">
-                        <span className="text-xs font-semibold text-white/80 bg-primary-500 px-2.5 py-1 rounded-full">{item.category}</span>
-                        <p className="text-sm text-white mt-2">{item.caption}</p>
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-black/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="absolute top-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-5">
+                        <span className="text-xs font-semibold text-white/80 bg-primary-500 px-2.5 py-1 rounded-full inline-block mb-2">{item.category}</span>
+                        <p className="text-white text-sm font-medium text-center leading-tight">{item.caption}</p>
                       </div>
                     </div>
                   </div>

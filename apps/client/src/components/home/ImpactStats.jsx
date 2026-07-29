@@ -1,32 +1,32 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Users, Heart, BookOpen } from 'lucide-react';
+import { FileText, Video, Globe } from 'lucide-react';
 
 const stats = [
   {
-    icon: Heart,
-    end: 1000,
+    icon: FileText,
+    end: 5000,
     suffix: '+',
-    label: 'Lives Impacted',
-    description: 'Across rural communities in Central India',
+    label: 'No. of Stories',
+    description: 'Inspiring stories of impact and transformation',
     color: 'text-primary-500',
     bgColor: 'bg-primary-50',
   },
   {
-    icon: Users,
-    end: 500,
+    icon: Video,
+    end: 3000,
     suffix: '+',
-    label: 'Women with us',
-    description: 'Through training and leadership programs',
+    label: 'No. of Videos',
+    description: 'Visual stories and documentaries',
     color: 'text-secondary-500',
     bgColor: 'bg-secondary-50',
   },
   {
-    icon: BookOpen,
+    icon: Globe,
     end: 50,
-    suffix: '+',
-    label: 'Villages reached',
-    description: 'On-the-ground programs and initiatives',
+    suffix: 'M+',
+    label: 'Digital Reach',
+    description: 'Across all platforms and channels',
     color: 'text-amber-600',
     bgColor: 'bg-amber-50',
   },
@@ -82,8 +82,8 @@ export default function ImpactStats() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <span className="section-label">OUR IMPACT</span>
-          <h2 className="section-title">Making a Difference</h2>
+          <span className="section-label">OUR STORIES</span>
+          <h2 className="section-title">Creating an Impact</h2>
           <p className="section-desc">
             Tangible outcomes from our programs and community initiatives across Central India.
           </p>
