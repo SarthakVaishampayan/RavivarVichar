@@ -11,10 +11,10 @@ import RavivarModel from '../components/shared/RavivarModel';
 import TeamMemberModal from '../components/shared/TeamMemberModal';
 
 const stats = [
-  { value: 32, suffix: '+', label: 'Years of Publication' },
+  { value: 15, suffix: '+', label: 'Years of Ravivar Digest' },
   { value: 2023, suffix: '', label: 'Ravivar Vichar Launched' },
-  { value: 10, suffix: 'K+', label: 'Digital Reach' },
-  { value: 100, suffix: '+', label: 'Issues Published' },
+  { value: 50, suffix: 'M+', label: 'Digital Reach' },
+  { value: 100, suffix: '+', label: 'Ravivar Digest Published' },
 ];
 
 const coreValues = [
@@ -284,28 +284,110 @@ export default function About() {
             />
             <div className="relative mt-16">
               <div className="absolute left-4 lg:left-1/2 top-0 bottom-0 w-px bg-gray-200 lg:-translate-x-px" />
-              <div className="space-y-12">
-                {[
-                  { year: '2010', title: 'Foundation', description: 'Ravivar Vichar was established with a vision to revive rural livelihoods through research and community action.' },
-                  { year: '2013', title: 'First SHG Network', description: 'Launched our first Self-Help Group network in 20 villages across Bhilwara district.' },
-                  { year: '2016', title: 'Entrepreneurship Program', description: 'Started the women entrepreneurship program, training 500+ rural women in business skills.' },
-                  { year: '2019', title: 'Research Wing', description: 'Established our research division to produce data-driven policy recommendations for rural development.' },
-                  { year: '2022', title: 'Digital Expansion', description: 'Launched digital literacy programs and expanded our reach to 500+ villages across Rajasthan.' },
-                  { year: '2025', title: 'National Impact', description: 'Recognized nationally for our community-driven development model and sustainable impact.' },
-                ].map((item, i) => (
-                  <div key={item.year} className={`relative flex flex-col lg:flex-row items-start gap-8 ${i % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
-                    <div className={`flex-1 ${i % 2 === 0 ? 'lg:text-right' : 'lg:text-left'}`}>
-                      <div className="card p-6 lg:p-8 inline-block max-w-lg">
-                        <span className="text-sm font-bold text-primary-500">{item.year}</span>
-                        <h3 className="text-xl font-bold font-heading text-ink-primary mt-1">{item.title}</h3>
-                        <p className="text-body text-ink-secondary mt-3">{item.description}</p>
-                      </div>
-                    </div>
-                    <div className="absolute left-4 lg:left-1/2 w-4 h-4 rounded-full bg-primary-500 border-4 border-white shadow -translate-x-1.5 lg:-translate-x-2 mt-2 z-10" />
-                    <div className="flex-1 hidden lg:block" />
-                  </div>
-                ))}
+              <div className="space-y-2">
+                {(() => {
+                  const milestoneMap = {
+                    '2010': { title: 'Foundation', description: 'Ravivar Vichar was established with a vision to revive rural livelihoods through research and community action.' },
+                    '2013': { title: 'First SHG Network', description: 'Associated with first Self-Help Group network in 20 villages across Bhilwara district.' },
+                    '2016': { title: 'Entrepreneurship Program', description: 'Started the women entrepreneurship program, training 500+ rural women in business skills.' },
+                    '2019': { title: 'Research Wing', description: 'Established our research division to produce data-driven policy recommendations for rural development.' },
+                    '2023': { title: 'Digital Expansion', description: 'Launched digital literacy programs and expanded our reach to 500+ villages across Central India.' },
+                    '2025': { title: 'National Impact', description: 'Recognized nationally for our community-driven development model and sustainable impact.' },
+                    '2026': { title: 'Strategic Brand Collaborations', description: 'Established partnerships with leading ethical and sustainable brands including Suta Bombay, expanding market access for women-led enterprises.' },
+                  };
+                  const years = [];
+                  for (let y = 2010; y <= 2026; y++) {
+                    const key = String(y);
+                    const m = milestoneMap[key];
+                    years.push({
+                      year: key,
+                      title: m?.title || null,
+                      description: m?.description || null,
+                      isMilestone: !!m,
+                    });
+                  }
+                  return years;
+                })().map((item, i, arr) => {
+                  /* Compute milestone-only index for alternating layout */
+                  let milestoneIndex = 0;
+                  for (let j = 0; j < i; j++) {
+                    if (arr[j].isMilestone) milestoneIndex++;
+                  }
+                  const isLeft = milestoneIndex % 2 === 0;
+
+                  if (item.isMilestone) {
+                    /* ── Milestone year: slide-in from side on scroll ── */
+                    return (
+                      <motion.div
+                        key={item.year}
+                        initial={{ opacity: 0, x: isLeft ? -30 : 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ margin: '-220px 0px -40px 0px' }}
+                        transition={{ duration: 0.5, delay: milestoneIndex * 0.1, ease: 'easeOut' }}
+                        className={`relative flex flex-col lg:flex-row items-start gap-4 lg:gap-6 ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
+                        <div className={`flex-1 ${isLeft ? 'lg:text-right' : 'lg:text-left'}`}>
+                          <div className="card p-3 lg:p-4 inline-block max-w-lg">
+                            <span className="text-xs font-bold text-primary-500">{item.year}</span>
+                            <h3 className="text-sm lg:text-base font-bold font-heading text-ink-primary mt-0.5">{item.title}</h3>
+                            <p className="text-xs lg:text-sm text-ink-secondary mt-1.5 leading-relaxed">{item.description}</p>
+                          </div>
+                        </div>
+                        <div className="absolute left-4 lg:left-1/2 w-4 h-4 rounded-full bg-primary-500 border-4 border-white shadow -translate-x-1.5 lg:-translate-x-2 mt-2 z-10" />
+                        <div className="flex-1 hidden lg:block" />
+                      </motion.div>
+                    );
+                  } else {
+                    /* ── Non-milestone year: fade-in dot on scroll ── */
+                    return (
+                      <motion.div
+                        key={item.year}
+                        initial={{ opacity: 0, scale: 0.6 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ margin: '-150px 0px -30px 0px' }}
+                        transition={{ duration: 0.35, delay: i * 0.03 }}
+                        className="relative flex items-center py-1.5">
+                        <div className="absolute left-4 lg:left-1/2 w-2.5 h-2.5 rounded-full bg-gray-300 border-2 border-white shadow-sm -translate-x-[5px] lg:-translate-x-[5px] z-10" />
+                        <div className="flex-1 pl-10 lg:pl-[calc(50%+1.5rem)]">
+                          <span className="text-sm text-gray-400 font-medium">{item.year}</span>
+                        </div>
+                      </motion.div>
+                    );
+                  }
+                })}
               </div>
+
+              {/* Timeline fade overlay */}
+              <div className="absolute left-4 lg:left-1/2 bottom-0 w-px h-32 bg-gradient-to-b from-gray-200 to-transparent -translate-x-px lg:-translate-x-px pointer-events-none z-0" />
+
+              {/* ── The journey continues ── */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ margin: '-220px 0px -40px 0px' }}
+                transition={{ duration: 0.5 }}
+                className="relative pt-10 pb-4"
+              >
+                {/* Pulsing beacon dot on the timeline */}
+                <div className="absolute left-4 lg:left-1/2 w-5 h-5 rounded-full bg-primary-400 border-[3px] border-primary-100 shadow-lg shadow-primary-300/40 -translate-x-[10px] lg:-translate-x-[10px] z-10">
+                  <div className="absolute inset-0 rounded-full bg-primary-400 animate-ping opacity-30" />
+                </div>
+                {/* Message */}
+                <div className="pl-14 lg:pl-[calc(50%+2rem)] pr-4">
+                  <div className="max-w-md">
+                    <span className="text-xs font-bold tracking-widest text-primary-500 uppercase">Ongoing</span>
+                    <p className="text-sm text-ink-secondary mt-2 leading-relaxed italic">
+                      Our work does not pause at a milestone. With every passing day, we continue to 
+                      empower more women, strengthen more communities, and move closer to our vision 
+                      of a truly equitable society.
+                    </p>
+                    <div className="flex items-center gap-1.5 mt-3 text-primary-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>

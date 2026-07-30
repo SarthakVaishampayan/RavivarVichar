@@ -14,7 +14,8 @@ import JoinInitiative from './pages/JoinInitiative';
 import Gallery from './pages/Gallery';
 import PartnerWithUs from './pages/PartnerWithUs';
 import WhatWeDoDetail from './pages/WhatWeDoDetail';
-import MediaMentions from './pages/MediaMentions';
+import Recognitions from './pages/Recognitions';
+import RecognitionDetail from './pages/RecognitionDetail';
 import FAQ from './pages/FAQ';
 
 function PageviewTracker() {
@@ -41,7 +42,8 @@ export default function App() {
       <Route path="/gallery" element={<Gallery />} />
       <Route path="/partner-with-us" element={<PartnerWithUs />} />
       <Route path="/what-we-do/:slug" element={<WhatWeDoDetail />} />
-      <Route path="/media-mentions" element={<MediaMentions />} />
+      <Route path="/recognitions" element={<Recognitions />} />
+      <Route path="/recognitions/:slug" element={<RecognitionDetail />} />
       <Route path="/faq" element={<FAQ />} />
     </Routes>
     </>

@@ -9,7 +9,7 @@ const GalleryImage = require('../models/GalleryImage');
 const FeatureRequest = require('../models/FeatureRequest');
 const JoinInitiative = require('../models/JoinInitiative');
 const PartnerApplication = require('../models/PartnerApplication');
-const MediaMention = require('../models/MediaMention');
+const Recognition = require('../models/Recognition');
 const ActivityLog = require('../models/ActivityLog');
 const PageView = require('../models/PageView');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
@@ -43,7 +43,7 @@ const getSummary = catchAsync(async (req, res) => {
     FeatureRequest.countDocuments(),
     JoinInitiative.countDocuments(),
     PartnerApplication.countDocuments(),
-    MediaMention.countDocuments(),
+    Recognition.countDocuments(),
     Article.countDocuments({ category: 'Research' }),
     Article.countDocuments({ category: 'Success Stories' }),
     Article.countDocuments({ category: 'Interview' }),
@@ -61,7 +61,7 @@ const getSummary = catchAsync(async (req, res) => {
     featureRequests: { label: 'Featured Requests', count: featureRequests, color: '#F59E0B' },
     joinInitiative: { label: 'Join Initiative', count: joinInitiative, color: '#10B981' },
     partnerApplications: { label: 'Partner Applications', count: partnerApplications, color: '#F4A43B' },
-    mediaMentions: { label: 'Media Mentions', count: mediaMentions, color: '#3B82F6' },
+    recognitions: { label: 'Recognitions', count: mediaMentions, color: '#3B82F6' },
     researchReports: { label: 'Research & Reports', count: researchReports, color: '#8B5CF6' },
     successStories: { label: 'Success Stories', count: successStories, color: '#10B981' },
     interviews: { label: 'Interviews', count: interviews, color: '#F59E0B' },

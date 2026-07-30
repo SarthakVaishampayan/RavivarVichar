@@ -99,12 +99,12 @@ export const RESOURCES = {
     apiPath: '/partner-applications',
     fields: ['name', 'organization', 'email', 'phoneNo', 'createdAt'],
   },
-  mediaMentions: {
-    label: 'Media Mentions',
+  recognitions: {
+    label: 'Recognitions',
     icon: Newspaper,
     color: 'text-blue-500',
     bgColor: 'bg-blue-50',
-    apiPath: '/media-mentions',
+    apiPath: '/recognitions',
     fields: ['title', 'source', 'date', 'url', 'updatedAt'],
   },
   researchReports: {
@@ -174,6 +174,6 @@ export const HOMEPAGE_SECTIONS = [
   { key: 'programs', label: 'What We Do' },
   { key: 'research', label: 'Success Stories' },
   { key: 'partners', label: 'Partners' },
-  { key: 'mediaMentions', label: 'Media Mentions' },
+  { key: 'recognitions', label: 'Recognitions' },
   { key: 'testimonials', label: 'Testimonials' },
 ];

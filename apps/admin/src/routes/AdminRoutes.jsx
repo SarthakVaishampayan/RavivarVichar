@@ -7,12 +7,12 @@ import {
   ArticleList, EventList, PartnerList,
   TestimonialList,
   NewsletterList, ContactList,
-  FeatureRequestList, JoinInitiativeList, MediaMentionList, PartnerApplicationList,
+  FeatureRequestList, JoinInitiativeList, RecognitionList, PartnerApplicationList,
   ResearchReportList, SuccessStoryList, InterviewList,
 } from '../pages/manage-content/ContentListPages';
 import {
   ArticleEditor, EventEditor, PartnerEditor,
-  TestimonialEditor, MediaMentionEditor,
+  TestimonialEditor, RecognitionEditor,
   ResearchReportEditor, SuccessStoryEditor, InterviewEditor,
 } from '../pages/manage-content/Editors';
 import Analytics from '../pages/Analytics';
@@ -64,10 +64,10 @@ export default function AdminRoutes() {
         <Route path="content/featureRequests" element={<FeatureRequestList />} />
         <Route path="content/joinInitiative" element={<JoinInitiativeList />} />
         <Route path="content/gallery" element={<GalleryManager />} />
-        <Route path="content/mediaMentions" element={<MediaMentionList />} />
+        <Route path="content/recognitions" element={<RecognitionList />} />
 
-        <Route path="content/mediaMentions/:id/edit" element={<MediaMentionEditor />} />
-        <Route path="content/mediaMentions/new" element={<MediaMentionEditor />} />
+        <Route path="content/recognitions/:id/edit" element={<RecognitionEditor />} />
+        <Route path="content/recognitions/new" element={<RecognitionEditor />} />
 
         <Route path="content/researchReports" element={<ResearchReportList />} />
         <Route path="content/researchReports/:id/edit" element={<ResearchReportEditor />} />

@@ -1,25 +1,26 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { ExternalLink, Newspaper, Calendar } from 'lucide-react';
+import { Newspaper, Calendar, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import Button from '../components/shared/Button';
 import api from '../lib/axios';
 
-export default function MediaMentions() {
+export default function Recognitions() {
   const [loaded, setLoaded] = useState(false);
-  const [mentions, setMentions] = useState([]);
+  const [recognitions, setRecognitions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const img = new Image();
-    img.src = '/mentions-hero.jpg';
+    img.src = '/featured-hero.jpg';
     img.onload = () => setLoaded(true);
   }, []);
 
   useEffect(() => {
-    api.get('/media-mentions', { params: { limit: 50, sort: '-date' } })
-      .then(({ data }) => setMentions(data.data || []))
+    api.get('/recognitions', { params: { limit: 50, sort: '-date' } })
+      .then(({ data }) => setRecognitions(data.data || []))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
@@ -36,9 +37,9 @@ export default function MediaMentions() {
   return (
     <>
       <Helmet>
-        <title>Media Mentions — Ravivar Vichar</title>
-        <meta name="description" content="See all media coverage and mentions of Ravivar Vichar's work in the news." />
-      <link rel="preload" as="image" href="/mentions-hero.jpg" />
+        <title>Recognitions — Ravivar Vichar</title>
+        <meta name="description" content="See the recognitions and validations Ravivar Vichar has received from impact makers and organisations." />
+      <link rel="preload" as="image" href="/featured-hero.jpg" />
       </Helmet>
 
       <PageLayout>
@@ -47,7 +48,7 @@ export default function MediaMentions() {
           {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
-  src="/mentions-hero.jpg"
+  src="/featured-hero.jpg"
   alt=""
   onLoad={() => setLoaded(true)}
   className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
@@ -59,29 +60,31 @@ export default function MediaMentions() {
           {/* Content */}
           <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
-              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">MEDIA MENTIONS</span>
+              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">RECOGNITIONS</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
-                Coverage & <span className="text-primary-500">Mentions</span>
+                Honoured by <span className="text-primary-500">Impact Makers</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
-                Coverage and mentions from media outlets featuring our work and impact.
+                Recognitions and validations from organisations and leaders who value our contribution to social change.
               </p>
             </div>
           </div>
         </section>
 
+        <section className="section-lg bg-surface-section">
+          <div className="container-site">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary-500 border-t-transparent" />
           </div>
-        ) : mentions.length === 0 ? (
+        ) : recognitions.length === 0 ? (
           <div className="text-center py-20">
             <Newspaper size={48} className="mx-auto text-gray-300 mb-4" />
-            <p className="text-ink-secondary">No media mentions yet.</p>
+            <p className="text-ink-secondary">No recognitions yet.</p>
           </div>
         ) : (
           <div className="space-y-20">
-            {mentions.map((item, i) => (
+            {recognitions.map((item, i) => (
               <motion.div
                 key={item._id}
                 className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center"
@@ -90,19 +93,19 @@ export default function MediaMentions() {
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.7 }}
               >
-                {/* Image */}
-                <div className={`${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+                {/* Image — reduced width by ~30% */}
+                <div className={`${i % 2 === 1 ? 'lg:order-2' : ''} max-lg:max-w-sm lg:max-w-[70%] mx-auto`}>
                   {item.imageUrl ? (
                     <div className="img-card overflow-hidden shadow-card">
                       <img
                         src={item.imageUrl}
                         alt={item.title}
                         loading="lazy"
-                        className="w-full h-80 object-cover"
+                        className="w-full h-56 object-cover"
                       />
                     </div>
                   ) : (
-                    <div className="flex items-center justify-center h-80 rounded-2xl bg-gray-100">
+                    <div className="flex items-center justify-center h-56 rounded-2xl bg-gray-100">
                       <Newspaper size={64} className="text-gray-300" />
                     </div>
                   )}
@@ -127,19 +130,17 @@ export default function MediaMentions() {
                     {item.title}
                   </h3>
                   {item.summary && (
-                    <p className="text-body text-ink-secondary leading-relaxed mb-6">
+                    <p className="text-body text-ink-secondary leading-relaxed mb-6 line-clamp-3">
                       {item.summary}
                     </p>
                   )}
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-primary-600 font-medium hover:text-primary-700 transition-colors"
+                  <Link
+                    to={`/recognitions/${item.slug || item._id}`}
+                    className="inline-flex items-center gap-2 text-primary-600 font-medium hover:text-primary-700 transition-colors group"
                   >
-                    Read Full Article
-                    <ExternalLink size={16} />
-                  </a>
+                    Read More
+                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
               </motion.div>
             ))}
@@ -151,6 +152,8 @@ export default function MediaMentions() {
             Back to Home
           </Button>
         </div>
+          </div>
+        </section>
       </PageLayout>
     </>
   );

@@ -24,8 +24,8 @@ router.use('/analytics', require('./analytics.routes'));
 // Gallery
 router.use('/gallery', require('./gallery.routes'));
 
-// Media Mentions
-router.use('/media-mentions', require('./mediaMention.routes'));
+// Recognitions
+router.use('/recognitions', require('./recognition.routes'));
 
 // Homepage builder
 router.use('/homepage', require('./homepage.routes'));

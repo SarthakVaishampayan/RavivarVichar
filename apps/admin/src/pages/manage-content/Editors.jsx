@@ -555,24 +555,29 @@ export function PartnerEditor() {
   );
 }
 
-// ─── MEDIA MENTION EDITOR ───
-export function MediaMentionEditor() {
+// ─── RECOGNITIONS EDITOR ───
+export function RecognitionEditor() {
   return (
     <EditorForm
-      resourceKey="mediaMentions"
-      resourceLabel="Media Mentions"
-      apiPath="/media-mentions"
+      resourceKey="recognitions"
+      resourceLabel="Recognitions"
+      apiPath="/recognitions"
       fields={({ formData, handleChange }) => (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
-            <Input label="Title" name="title" value={formData.title} onChange={handleChange} placeholder="Article or mention title" required />
+            <Input label="Title" name="title" value={formData.title} onChange={handleChange} placeholder="Recognition title" required />
             <Input label="Source" name="source" value={formData.source} onChange={handleChange} placeholder="e.g. The Times of India, Dainik Bhaskar" required />
-            <Input label="URL" name="url" value={formData.url} onChange={handleChange} placeholder="https://..." required />
-            <Input label="Summary" name="summary" value={formData.summary} onChange={handleChange} placeholder="Brief description of the mention" rows={3} />
+            <Input label="URL (Optional)" name="url" value={formData.url} onChange={handleChange} placeholder="https://..." />
+            <Input label="Summary" name="summary" value={formData.summary} onChange={handleChange} placeholder="Brief description of the recognition" rows={3} />
           </div>
           <div className="space-y-4">
             <Input label="Date" name="date" value={formData.date ? formData.date.slice(0, 10) : ''} onChange={handleChange} type="date" />
             <ImageUpload label="Main Image" value={formData.imageUrl} onChange={(url) => handleChange('imageUrl', url)} />
+            <MultiImageUpload
+              label="Additional Photos"
+              value={formData.gallery || []}
+              onChange={(urls) => handleChange('gallery', urls)}
+            />
           </div>
         </div>
       )}

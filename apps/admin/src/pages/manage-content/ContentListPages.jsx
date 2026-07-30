@@ -87,12 +87,12 @@ export function JoinInitiativeList() {
   );
 }
 
-export function MediaMentionList() {
+export function RecognitionList() {
   return (
     <ContentList
-      resourceKey="mediaMentions"
-      resourceConfig={RESOURCES.mediaMentions}
-      fetchFn={fetchAll('/media-mentions')}
+      resourceKey="recognitions"
+      resourceConfig={RESOURCES.recognitions}
+      fetchFn={fetchAll('/recognitions')}
     />
   );
 }

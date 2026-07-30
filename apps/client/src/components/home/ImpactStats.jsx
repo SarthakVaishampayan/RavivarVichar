@@ -85,7 +85,7 @@ export default function ImpactStats() {
           <span className="section-label">OUR STORIES</span>
           <h2 className="section-title">Creating an Impact</h2>
           <p className="section-desc">
-            Tangible outcomes from our programs and community initiatives across Central India.
+            Tangible outcomes of our digital presence across Central India.
           </p>
         </motion.div>
 

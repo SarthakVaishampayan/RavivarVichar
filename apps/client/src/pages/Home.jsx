@@ -7,7 +7,7 @@ import ImpactStats from '../components/home/ImpactStats';
 import WhatWeDo from '../components/home/ProgramsGrid';
 import SuccessStories from '../components/home/FeaturedResearch';
 import Partners from '../components/home/Partners';
-import MediaMentions from '../components/home/MediaMentions';
+import Recognitions from '../components/home/Recognitions';
 import Testimonials from '../components/home/Testimonials';
 import api from '../lib/axios';
 
@@ -17,7 +17,7 @@ const sectionComponents = {
   programs: WhatWeDo,
   research: SuccessStories,
   partners: Partners,
-  mediaMentions: MediaMentions,
+  recognitions: Recognitions,
   testimonials: Testimonials,
 };
 
@@ -27,7 +27,7 @@ const defaultSections = [
   { key: 'programs', order: 2, visible: true },
   { key: 'research', order: 3, visible: true },
   { key: 'partners', order: 4, visible: true },
-  { key: 'mediaMentions', order: 5, visible: true },
+  { key: 'recognitions', order: 5, visible: true },
   { key: 'testimonials', order: 6, visible: true },
 ];
 

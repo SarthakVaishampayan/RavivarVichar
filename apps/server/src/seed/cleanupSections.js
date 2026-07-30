@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 require('../config/env');
 const PageSection = require('../models/PageSection');
 
-const VALID_KEYS = ['hero', 'programs', 'research', 'partners', 'mediaMentions', 'testimonials'];
+const VALID_KEYS = ['hero', 'programs', 'research', 'partners', 'recognitions', 'testimonials'];
 
 async function cleanup() {
   try {
