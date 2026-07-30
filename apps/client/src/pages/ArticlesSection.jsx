@@ -10,14 +10,12 @@ const sectionConfig = {
   'articles': { label: 'Articles', title: 'All Articles', description: 'Thought-provoking pieces on rural development, community stories, and sector analysis.' },
   'research-reports': { label: 'Research & Reports', title: 'All Research & Reports', description: 'In-depth studies and policy recommendations grounded in field research across Rajasthan.' },
   'success-stories': { label: 'Success Stories', title: 'All Success Stories', description: 'Inspiring journeys of individuals and communities transforming their lives through our programs.' },
-  'interviews': { label: 'Interviews', title: 'All Interviews', description: 'Exclusive interviews with community leaders, experts, and changemakers in rural development.' },
 };
 
 const sectionCategoryMap = {
   'Articles': ['General', 'Case Study', 'Explainer', 'News', 'Opinion'],
   'Research & Reports': ['Research'],
   'Success Stories': ['Success Stories'],
-  'Interviews': ['Interview'],
 };
 
 const categoryColors = {
@@ -30,7 +28,7 @@ const categoryColors = {
   'Interview': 'bg-amber-50 text-amber-600',
 };
 
-export default function KnowledgeHubSection() {
+export default function ArticlesSection() {
   const [loaded, setLoaded] = useState(false);
   const { sectionId } = useParams();
   const [articles, setArticles] = useState([]);
@@ -64,8 +62,8 @@ export default function KnowledgeHubSection() {
       <PageLayout>
         <div className="container-content py-32 text-center">
           <h1 className="text-3xl font-heading font-bold text-ink-primary">Section Not Found</h1>
-          <p className="text-body text-ink-secondary mt-4">This knowledge hub section doesn't exist.</p>
-          <Button variant="primary" to="/knowledge-hub" className="mt-8">Back to Knowledge Hub</Button>
+          <p className="text-body text-ink-secondary mt-4">This section doesn't exist.</p>
+          <Button variant="primary" to="/articles" className="mt-8">Back to Articles</Button>
         </div>
       </PageLayout>
     );
@@ -75,8 +73,7 @@ export default function KnowledgeHubSection() {
   const filtered = articles.filter((a) => {
     if (config.label === 'Articles') {
       return !sectionCategoryMap['Research & Reports'].includes(a.category) &&
-             !sectionCategoryMap['Success Stories'].includes(a.category) &&
-             !sectionCategoryMap['Interviews'].includes(a.category);
+             !sectionCategoryMap['Success Stories'].includes(a.category);
     }
     return allowedCategories.includes(a.category);
   });
@@ -120,8 +117,8 @@ export default function KnowledgeHubSection() {
           {/* Content */}
           <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
-              <Link to="/knowledge-hub" className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors mb-8">
-                <ArrowLeft size={16} /> Back to Knowledge Hub
+              <Link to="/articles" className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors mb-8">
+                <ArrowLeft size={16} /> Back to Articles
               </Link>
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase block mb-5">{config.label.toUpperCase().replace(' & ', ' & ')}</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
@@ -147,7 +144,7 @@ export default function KnowledgeHubSection() {
                 {filtered.map((article) => (
                   <Link
                     key={article._id}
-                    to={`/knowledge-hub/${article.slug}`}
+                    to={`/articles/${article.slug}`}
                     className="card-hover overflow-hidden group"
                   >
                     <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">

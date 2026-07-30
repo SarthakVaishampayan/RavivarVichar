@@ -3,6 +3,7 @@ import EditorForm from './EditorForm';
 import RichTextEditor from '../../components/ui/RichTextEditor';
 import ImageUpload from '../../components/ui/ImageUpload';
 import MultiImageUpload from '../../components/ui/MultiImageUpload';
+import VideoUpload from '../../components/ui/VideoUpload';
 import SeoAnalyzer from '../../components/ui/SeoAnalyzer';
 import {
   ARTICLE_CATEGORIES, PARTNER_CATEGORIES,
@@ -371,14 +372,23 @@ export function ArticleEditor() {
                 </div>
               </div>
 
-              {/* Thumbnail / Gallery / Video (existing fields) */}
+              {/* Gallery */}
               <MultiImageUpload
                 label="Gallery"
                 value={formData.gallery || []}
                 onChange={(urls) => handleChange('gallery', urls)}
               />
+
+              {/* Direct video/audio upload (for podcasts/interviews) */}
+              <VideoUpload
+                label="Upload Video/Audio"
+                value={formData.videoUrl}
+                onChange={(url) => handleChange('videoUrl', url)}
+              />
+
+              {/* Or paste a YouTube/embed URL */}
               <Input
-                label="Video URL"
+                label="Or Paste Video URL"
                 name="videoUrl"
                 value={formData.videoUrl}
                 onChange={handleChange}
@@ -586,7 +596,7 @@ export function RecognitionEditor() {
 }
 
 // ─── HOMEPAGE RESEARCH CATEGORY EDITOR (Success Stories) ───
-function makeCategoryEditor(category, label, singularName, apiPath, resourceKey) {
+function makeCategoryEditor(category, label, singularName, apiPath, resourceKey, extraDefaults = {}) {
   return function CategoryEditor() {
     return (
       <EditorForm
@@ -594,7 +604,7 @@ function makeCategoryEditor(category, label, singularName, apiPath, resourceKey)
         resourceLabel={label}
         singularLabel={singularName}
         apiPath={apiPath}
-        defaultValues={{ category }}
+        defaultValues={{ category, ...extraDefaults }}
         fields={({ formData, handleChange, setField }) => (
           <>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -617,7 +627,8 @@ function makeCategoryEditor(category, label, singularName, apiPath, resourceKey)
                 <Select label="Status" name="status" value={formData.status} onChange={handleChange} options={['draft', 'published']} />
                 <ImageUpload label="Thumbnail" value={formData.thumbnail} onChange={(url) => handleChange('thumbnail', url)} />
                 <MultiImageUpload label="Gallery" value={formData.gallery} onChange={(urls) => handleChange('gallery', urls)} />
-                <Input label="Video URL" name="videoUrl" value={formData.videoUrl} onChange={handleChange} placeholder="https://youtube.com/watch?v=..." />
+                <VideoUpload label="Upload Video/Audio" value={formData.videoUrl} onChange={(url) => handleChange('videoUrl', url)} />
+                <Input label="Or Paste Video URL" name="videoUrl" value={formData.videoUrl} onChange={handleChange} placeholder="https://youtube.com/watch?v=..." />
               </div>
             </div>
           </>
@@ -630,6 +641,7 @@ function makeCategoryEditor(category, label, singularName, apiPath, resourceKey)
 export const ResearchReportEditor = makeCategoryEditor('Research', 'Research & Reports', 'Research Report', '/articles', 'researchReports');
 export const SuccessStoryEditor = makeCategoryEditor('Success Stories', 'Success Stories', 'Success Story', '/articles', 'successStories');
 export const InterviewEditor = makeCategoryEditor('Interview', 'Interviews', 'Interview', '/articles', 'interviews');
+export const PodcastEditor = makeCategoryEditor('Podcast', 'Podcasts', 'Podcast', '/articles', 'podcasts', { status: 'published' });
 
 // ─── TESTIMONIAL EDITOR ───
 export function TestimonialEditor() {

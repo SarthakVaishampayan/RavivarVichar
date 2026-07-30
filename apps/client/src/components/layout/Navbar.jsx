@@ -7,8 +7,8 @@ import Button from '../shared/Button';
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'About Us', path: '/about' },
-  { label: 'Knowledge Hub', path: '/knowledge-hub' },
-  { label: 'Events', path: '/events' },
+  { label: 'Articles', path: '/articles' },
+  { label: 'Interviews', path: '/interviews' },
   { label: 'Gallery', path: '/gallery' },
   { label: 'Contact Us', path: '/contact' },
 ];

@@ -9,7 +9,7 @@ const errorHandler = (err, req, res, next) => {
   if (err instanceof MulterError) {
     statusCode = 400;
     if (err.code === 'LIMIT_FILE_SIZE') {
-      message = 'File too large. Maximum size is 50MB.';
+      message = 'File too large. Maximum upload size is 50MB for images and 4GB for videos.';
     } else if (err.code === 'LIMIT_FILE_COUNT') {
       message = 'Too many files uploaded.';
     } else if (err.code === 'LIMIT_UNEXPECTED_FILE') {
@@ -17,6 +17,11 @@ const errorHandler = (err, req, res, next) => {
     } else {
       message = err.message;
     }
+  }
+
+  // File filter rejection (from multer fileFilter)
+  if (err.message && (err.message.includes('Only image') || err.message.includes('Only video') || err.message.includes('Cannot determine file type'))) {
+    statusCode = 400;
   }
 
   // Mongoose bad ObjectId

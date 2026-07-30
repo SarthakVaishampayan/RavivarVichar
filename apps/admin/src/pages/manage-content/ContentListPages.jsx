@@ -136,3 +136,13 @@ export function InterviewList() {
     />
   );
 }
+
+export function PodcastList() {
+  return (
+    <ContentList
+      resourceKey="podcasts"
+      resourceConfig={RESOURCES.podcasts}
+      fetchFn={fetchAll('/articles?category=Podcast')}
+    />
+  );
+}

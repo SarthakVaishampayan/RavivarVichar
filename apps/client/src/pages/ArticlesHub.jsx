@@ -4,13 +4,12 @@ import { Link, useLocation } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import api from '../lib/axios';
-import { Search, ArrowRight, Calendar, Tag, FileText, BarChart3, Star, Mic, Clock, Eye } from 'lucide-react';
+import { Search, ArrowRight, Calendar, Tag, FileText, BarChart3, Star, Clock, Eye } from 'lucide-react';
 
 const sections = [
   { id: 'articles', label: 'Articles', icon: FileText },
   { id: 'research-reports', label: 'Research & Reports', icon: BarChart3 },
   { id: 'success-stories', label: 'Success Stories', icon: Star },
-  { id: 'interviews', label: 'Interviews', icon: Mic },
 ];
 
 // Maps each section to the article categories it should show
@@ -18,7 +17,6 @@ const sectionCategoryMap = {
   'Articles': ['General', 'Case Study', 'Explainer', 'News', 'Opinion'],
   'Research & Reports': ['Research'],
   'Success Stories': ['Success Stories'],
-  'Interviews': ['Interview'],
 };
 
 const categoryColors = {
@@ -35,10 +33,9 @@ const sectionHeadings = {
   'Articles': { label: 'ARTICLES', title: 'Latest Articles & Insights', description: 'Thought-provoking pieces on rural development, community stories, and sector analysis.' },
   'Research & Reports': { label: 'RESEARCH & REPORTS', title: 'Data-Driven Research', description: 'In-depth studies and policy recommendations grounded in field research across Rajasthan.' },
   'Success Stories': { label: 'SUCCESS STORIES', title: 'Real Stories, Real Impact', description: 'Inspiring journeys of individuals and communities transforming their lives through our programs.' },
-  'Interviews': { label: 'INTERVIEWS', title: 'Conversations That Matter', description: 'Exclusive interviews with community leaders, experts, and changemakers in rural development.' },
 };
 
-export default function KnowledgeHub() {
+export default function ArticlesHub() {
   const [loaded, setLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [articles, setArticles] = useState([]);
@@ -92,8 +89,7 @@ export default function KnowledgeHub() {
     return articles.filter((a) => {
       const matchSection = sectionLabel === 'Articles'
         ? !sectionCategoryMap['Research & Reports'].includes(a.category) &&
-          !sectionCategoryMap['Success Stories'].includes(a.category) &&
-          !sectionCategoryMap['Interviews'].includes(a.category)
+          !sectionCategoryMap['Success Stories'].includes(a.category)
         : allowedCategories.includes(a.category);
       const matchSearch = !searchQuery || a.title.toLowerCase().includes(searchQuery.toLowerCase()) || (a.excerpt || '').toLowerCase().includes(searchQuery.toLowerCase());
       return matchSection && matchSearch;
@@ -117,9 +113,9 @@ export default function KnowledgeHub() {
   return (
     <>
       <Helmet>
-        <title>Knowledge Hub — Ravivar Vichar</title>
-        <meta name="description" content="Explore research, case studies, impact stories, and policy briefs from Ravivar Vichar's work in rural development." />
-      <link rel="preload" as="image" href="/knowledge-hero.jpg" />
+        <title>Articles — Ravivar Vichar</title>
+        <meta name="description" content="Explore articles, research, and impact stories from Ravivar Vichar's work in rural development." />
+      <link rel="preload" as="image" href="/articles-hero.jpg" />
       </Helmet>
 
       <PageLayout>
@@ -128,8 +124,8 @@ export default function KnowledgeHub() {
           {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
-  src="/knowledge-hero.jpg"
-  alt="Knowledge Hub"
+  src="/articles-hero.jpg"
+  alt="Articles"
   onLoad={() => setLoaded(true)}
   className={`absolute inset-0 w-full h-full object-cover object-[65%_center] transition-opacity duration-1000 ${
     loaded ? 'opacity-100' : 'opacity-0'
@@ -140,12 +136,12 @@ export default function KnowledgeHub() {
           {/* Content */}
           <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
-              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">KNOWLEDGE HUB</span>
+              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">ARTICLES</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
                 Insights & <span className="text-primary-500">Research</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
-                Explore our library of research, case studies, impact stories, and policy recommendations driving evidence-based rural development.
+                Explore our library of articles, research, impact stories, and policy recommendations driving evidence-based rural development.
               </p>
             </div>
           </div>
@@ -220,7 +216,7 @@ export default function KnowledgeHub() {
                         {filtered.slice(0, 3).map((article) => (
                           <Link
                             key={article._id}
-                            to={`/knowledge-hub/${article.slug}`}
+                            to={`/articles/${article.slug}`}
                             className="card-hover overflow-hidden group"
                           >
                             <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">
@@ -265,7 +261,7 @@ export default function KnowledgeHub() {
                       {filtered.length > 3 && (
                         <div className="text-center mt-10">
                           <Link
-                            to={`/knowledge-hub/section/${section.id}`}
+                            to={`/articles/section/${section.id}`}
                             className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500 hover:text-primary-600 transition-colors border border-primary-200 hover:border-primary-300 px-6 py-3 rounded-full"
                           >
                             More {section.label} <ArrowRight size={16} />

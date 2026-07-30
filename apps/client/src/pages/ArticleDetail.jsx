@@ -57,7 +57,7 @@ export default function ArticleDetail() {
         <div className="container-content py-32 text-center">
           <h1 className="text-3xl font-heading font-bold text-ink-primary">Article Not Found</h1>
           <p className="text-body text-ink-secondary mt-4">The article you're looking for doesn't exist.</p>
-          <Button variant="primary" to="/knowledge-hub" className="mt-8">Back to Knowledge Hub</Button>
+          <Button variant="primary" to="/articles" className="mt-8">Back to Articles</Button>
         </div>
       </PageLayout>
     );
@@ -90,8 +90,8 @@ export default function ArticleDetail() {
         <section className="bg-surface-white pt-24 pb-8 lg:pb-12">
           <div className="container-content">
             <div className="max-w-4xl mx-auto">
-              <Link to="/knowledge-hub" className="inline-flex items-center gap-2 text-sm font-medium text-ink-secondary hover:text-primary-500 transition-colors mb-8">
-                <ArrowLeft size={16} /> Back to Knowledge Hub
+              <Link to="/articles" className="inline-flex items-center gap-2 text-sm font-medium text-ink-secondary hover:text-primary-500 transition-colors mb-8">
+                <ArrowLeft size={16} /> Back to Articles
               </Link>
               <div className="flex flex-wrap items-center gap-3 mb-2">
                 <h1 className="text-3xl lg:text-4xl font-heading font-bold text-ink-primary leading-tight">
@@ -208,7 +208,7 @@ export default function ArticleDetail() {
               <h2 className="text-2xl font-heading font-bold text-ink-primary mb-10">Related Articles</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {relatedArticles.map((a) => (
-                  <Link key={a._id} to={`/knowledge-hub/${a.slug}`} className="card-hover p-6">
+                  <Link key={a._id} to={`/articles/${a.slug}`} className="card-hover p-6">
                     <span className="text-xs font-semibold text-primary-500">{a.category}</span>
                     <h3 className="text-lg font-bold font-heading text-ink-primary mt-2 group-hover:text-primary-500 transition-colors line-clamp-2">{a.title}</h3>
                     <span className="text-sm text-ink-secondary mt-2 block">{formattedDate}</span>

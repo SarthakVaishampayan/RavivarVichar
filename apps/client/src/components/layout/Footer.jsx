@@ -7,16 +7,19 @@ const footerLinks = {
   'Quick Links': [
     { label: 'Home', path: '/' },
     { label: 'About Us', path: '/about' },
-    { label: 'Knowledge Hub', path: '/knowledge-hub' },
-    { label: 'Events', path: '/events' },
+    { label: 'Articles', path: '/articles' },
+    { label: 'Interviews', path: '/interviews' },
     { label: 'Gallery', path: '/gallery' },
     { label: 'Contact Us', path: '/contact' },
   ],
-  'Knowledge Hub': [
-    { label: 'Articles', path: '/knowledge-hub#articles' },
-    { label: 'Research & Reports', path: '/knowledge-hub#research-reports' },
-    { label: 'Success Stories', path: '/knowledge-hub#success-stories' },
-    { label: 'Interviews', path: '/knowledge-hub#interviews' },
+  'Articles': [
+    { label: 'Articles', path: '/articles#articles' },
+    { label: 'Research & Reports', path: '/articles#research-reports' },
+    { label: 'Success Stories', path: '/articles#success-stories' },
+  ],
+  'Interviews': [
+    { label: 'Interviews', path: '/interviews#interviews' },
+    { label: 'Podcasts', path: '/interviews#podcasts' },
   ],
   'About Us': [
     { label: 'Our Story', path: '/about#our-story' },

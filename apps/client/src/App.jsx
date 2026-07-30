@@ -3,10 +3,10 @@ import ScrollToTop from './components/layout/ScrollToTop';
 import usePageviewTracking from './hooks/usePageviewTracking';
 import Home from './pages/Home';
 import About from './pages/About';
-import KnowledgeHub from './pages/KnowledgeHub';
-import KnowledgeHubSection from './pages/KnowledgeHubSection';
+import ArticlesHub from './pages/ArticlesHub';
+import ArticlesSection from './pages/ArticlesSection';
 import ArticleDetail from './pages/ArticleDetail';
-import Events from './pages/Events';
+import Interviews from './pages/Interviews';
 import Contact from './pages/Contact';
 import Media from './pages/Media';
 import GetFeatured from './pages/GetFeatured';
@@ -31,10 +31,10 @@ export default function App() {
       <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
-      <Route path="/knowledge-hub" element={<KnowledgeHub />} />
-      <Route path="/knowledge-hub/section/:sectionId" element={<KnowledgeHubSection />} />
-      <Route path="/knowledge-hub/:slug" element={<ArticleDetail />} />
-      <Route path="/events" element={<Events />} />
+      <Route path="/articles" element={<ArticlesHub />} />
+      <Route path="/articles/section/:sectionId" element={<ArticlesSection />} />
+      <Route path="/articles/:slug" element={<ArticleDetail />} />
+      <Route path="/interviews" element={<Interviews />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/media" element={<Media />} />
       <Route path="/get-featured" element={<GetFeatured />} />

@@ -8,12 +8,12 @@ import {
   TestimonialList,
   NewsletterList, ContactList,
   FeatureRequestList, JoinInitiativeList, RecognitionList, PartnerApplicationList,
-  ResearchReportList, SuccessStoryList, InterviewList,
+  ResearchReportList, SuccessStoryList, InterviewList, PodcastList,
 } from '../pages/manage-content/ContentListPages';
 import {
   ArticleEditor, EventEditor, PartnerEditor,
   TestimonialEditor, RecognitionEditor,
-  ResearchReportEditor, SuccessStoryEditor, InterviewEditor,
+  ResearchReportEditor, SuccessStoryEditor, InterviewEditor, PodcastEditor,
 } from '../pages/manage-content/Editors';
 import Analytics from '../pages/Analytics';
 import Traffic from '../pages/Traffic';
@@ -80,6 +80,10 @@ export default function AdminRoutes() {
         <Route path="content/interviews" element={<InterviewList />} />
         <Route path="content/interviews/:id/edit" element={<InterviewEditor />} />
         <Route path="content/interviews/new" element={<InterviewEditor />} />
+
+        <Route path="content/podcasts" element={<PodcastList />} />
+        <Route path="content/podcasts/:id/edit" element={<PodcastEditor />} />
+        <Route path="content/podcasts/new" element={<PodcastEditor />} />
 
         <Route path="content/partnerApplications" element={<PartnerApplicationList />} />
 

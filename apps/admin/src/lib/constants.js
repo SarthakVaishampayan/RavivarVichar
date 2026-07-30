@@ -132,6 +132,14 @@ export const RESOURCES = {
     apiPath: '/articles',
     fields: ['title', 'status', 'updatedAt'],
   },
+  podcasts: {
+    label: 'Podcasts',
+    icon: FileText,
+    color: 'text-orange-500',
+    bgColor: 'bg-orange-50',
+    apiPath: '/articles',
+    fields: ['title', 'status', 'updatedAt'],
+  },
 };
 
 export const NAV_ITEMS = [
@@ -163,6 +171,7 @@ export const ARTICLE_CATEGORIES = [
   'News',
   'Opinion',
   'Success Stories',
+  'Podcast',
 ];
 
 export const PARTNER_CATEGORIES = ['government', 'corporate', 'ngo', 'educational'];

@@ -28,8 +28,8 @@ export default function Recognitions() {
       <div className="container-site">
         <SectionHeading
           label="Recognitions"
-          title="Recognised by Impact Makers"
-          description="Honours and validations from organisations and leaders who recognise our contribution to social impact."
+          title="As Seen With"
+          description="Recognitions Ravivar Vichar has received from impact makers."
         />
 
         {recognitions.length > 0 ? (

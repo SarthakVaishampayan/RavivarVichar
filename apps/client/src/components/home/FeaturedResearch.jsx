@@ -81,7 +81,7 @@ export default function FeaturedResearch() {
             </div>
 
             <div className="text-center mt-16">
-              <Button variant="primary" to="/knowledge-hub/section/success-stories" arrow>
+              <Button variant="primary" to="/articles/section/success-stories" arrow>
                 View More Stories
               </Button>
             </div>
