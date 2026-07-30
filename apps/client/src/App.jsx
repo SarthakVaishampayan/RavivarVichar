@@ -10,6 +10,7 @@ import Interviews from './pages/Interviews';
 import Contact from './pages/Contact';
 import Media from './pages/Media';
 import GetFeatured from './pages/GetFeatured';
+import Events from './pages/Events';
 import JoinInitiative from './pages/JoinInitiative';
 import Gallery from './pages/Gallery';
 import PartnerWithUs from './pages/PartnerWithUs';
@@ -44,6 +45,7 @@ export default function App() {
       <Route path="/what-we-do/:slug" element={<WhatWeDoDetail />} />
       <Route path="/recognitions" element={<Recognitions />} />
       <Route path="/recognitions/:slug" element={<RecognitionDetail />} />
+      <Route path="/events" element={<Events />} />
       <Route path="/faq" element={<FAQ />} />
     </Routes>
     </>

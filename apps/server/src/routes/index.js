@@ -30,6 +30,9 @@ router.use('/recognitions', require('./recognition.routes'));
 // Homepage builder
 router.use('/homepage', require('./homepage.routes'));
 
+// Search
+router.use('/search', require('./search.routes'));
+
 // Health check
 router.get('/health', (req, res) => {
   res.json({ success: true, message: 'RavivarVichar API is running', timestamp: new Date().toISOString() });

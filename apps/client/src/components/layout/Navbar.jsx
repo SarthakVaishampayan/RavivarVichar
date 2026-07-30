@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { clsx } from 'clsx';
-import Button from '../shared/Button';
+import SearchBar from './SearchBar';
 
 const navItems = [
   { label: 'Home', path: '/' },
@@ -24,9 +24,9 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-[90px] bg-white shadow-nav">
       <div className="container-site h-full flex items-center">
-        {/* Logo */}
+        {/* Logo - increased by 25% */}
         <Link to="/" className="flex items-center shrink-0">
-          <img src="/logo-hindi.png" alt="रविवार" className="h-11 w-auto" />
+          <img src="/logo-hindi.png" alt="रविवार" className="h-[55px] w-auto" />
         </Link>
 
         {/* Desktop Navigation - centered */}
@@ -45,11 +45,9 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Desktop CTA */}
+        {/* Desktop Search */}
         <div className="hidden lg:block shrink-0">
-          <Button variant="primary" to="/get-featured" arrow>
-            Get Featured
-          </Button>
+          <SearchBar />
         </div>
 
         {/* Mobile Hamburger */}
@@ -79,9 +77,7 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="pt-4 border-t border-gray-100">
-              <Button variant="primary" to="/get-featured" arrow className="w-full justify-center">
-                Get Featured
-              </Button>
+              <SearchBar />
             </div>
           </nav>
         </div>
