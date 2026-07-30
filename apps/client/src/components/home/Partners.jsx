@@ -21,7 +21,7 @@ export default function Partners() {
   if (loading) return null;
 
   return (
-    <section className="section-lg bg-surface-secondary">
+    <section className="section-lg bg-surface-secondary section-separator">
       <div className="container-site">
         <SectionHeading
           label="Our Partners"

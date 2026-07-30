@@ -23,7 +23,7 @@ export default function FeaturedResearch() {
   if (loading) return null;
 
   return (
-    <section className="section-lg bg-surface-section">
+    <section className="section-lg bg-surface-section section-separator">
       <div className="container-site">
         <SectionHeading
           label="Success Stories"

@@ -28,7 +28,7 @@ export default function Testimonials() {
   const t = testimonials.length > 0 ? testimonials[current] : null;
 
   return (
-    <section className="section-lg bg-surface-white relative overflow-hidden">
+    <section className="section-lg bg-surface-white section-separator relative overflow-hidden">
       {/* Decorative quote marks */}
       <div className="absolute top-20 right-20 opacity-[0.03] pointer-events-none">
         <Quote size={200} />

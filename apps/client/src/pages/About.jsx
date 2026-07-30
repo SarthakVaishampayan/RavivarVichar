@@ -221,7 +221,7 @@ export default function About() {
         <RavivarModel />
 
         {/* Goals & Objectives */}
-        <section id="our-goals" className="section-md bg-surface-section">
+        <section id="our-goals" className="section-md bg-surface-section section-separator">
           <div className="container-content">
             <SectionHeading
               label="GOALS & OBJECTIVES"

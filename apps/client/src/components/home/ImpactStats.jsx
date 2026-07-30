@@ -67,7 +67,7 @@ function CountUp({ end, duration = 2000, suffix = '' }) {
 
 export default function ImpactStats() {
   return (
-    <section className="section-lg bg-surface-white relative overflow-hidden">
+    <section className="section-lg bg-surface-white section-separator relative overflow-hidden">
       {/* Subtle background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-1/3 h-px bg-gradient-to-r from-transparent via-primary-200 to-transparent" />

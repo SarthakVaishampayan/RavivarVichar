@@ -434,7 +434,7 @@ export default function WhatWeDoDetail() {
 
         {/* ── Our Goal ── */}
         {content.goal && (
-          <section className="section-md bg-surface-white relative overflow-hidden">
+          <section className="section-md bg-surface-white section-separator relative overflow-hidden">
             <div className="container-content">
               <SectionHeading
                 label="OUR GOAL"

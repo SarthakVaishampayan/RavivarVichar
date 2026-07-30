@@ -41,8 +41,8 @@ export default {
         },
         surface: {
           white: '#FFFFFF',
-          secondary: '#FAF9F7',
-          section: '#F8F8F6',
+          secondary: '#ECE6DC',
+          section: '#DCD0C2',
         },
         ink: {
           primary: '#222222',

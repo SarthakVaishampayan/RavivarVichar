@@ -195,7 +195,7 @@ export default function ArticlesHub() {
               <section
                 key={section.id}
                 id={section.id}
-                className="section-md bg-surface-white scroll-mt-[110px]"
+                className="section-md bg-surface-white section-separator scroll-mt-[110px]"
               >
                 <div className="container-content">
                   <SectionHeading

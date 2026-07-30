@@ -65,7 +65,9 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-surface-secondary border-t border-gray-100">
+    <footer className="bg-surface-secondary border-t border-gray-300 shadow-[0_-4px_12px_rgba(0,0,0,0.04)]">
+      {/* Top accent bar */}
+      <div className="h-1 w-full bg-gradient-to-r from-primary-400 via-primary-500 to-primary-400" />
       <div className="container-site py-20">
         <div className="grid grid-cols-1 lg:grid-cols-6 gap-12 lg:gap-8">
           {/* Newsletter + Social Column */}
