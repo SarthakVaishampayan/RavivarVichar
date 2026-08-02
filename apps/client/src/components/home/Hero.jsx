@@ -17,7 +17,7 @@ export default function Hero() {
       <Helmet>
         <link rel="preload" as="image" href="/hero-image.jpg" />
       </Helmet>
-      <section className="relative mt-[90px] min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[15vh]">
+      <section className="relative mt-[90px] min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[15vh]">
       {/* Full-screen background image fills section (starts below navbar) */}
       <div className="absolute inset-0 bg-[#101010]">
         <img
@@ -38,7 +38,7 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="w-full pb-24 relative z-10 max-lg:px-6 pl-[5vw]">
+      <div className="w-full pb-24 md:pb-0 lg:pb-24 relative z-10 max-lg:px-6 pl-[5vw]">
         <div className="max-w-[580px]">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

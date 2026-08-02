@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import FloatingDots from '../components/shared/FloatingDots';
 import Button from '../components/shared/Button';
-import { Heart, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf } from 'lucide-react';
+import { Heart, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf, X } from 'lucide-react';
 import RavivarModel from '../components/shared/RavivarModel';
 import TeamMemberModal from '../components/shared/TeamMemberModal';
 
@@ -96,10 +96,117 @@ function AnimatedCounter({ value, suffix = '', duration = 2000 }) {
   return <span ref={ref} className="tabular-nums">{display}{suffix}</span>;
 }
 
+/* ── Preview overlay for compact tile cards (Goals & Core Values) ── */
+const backdropVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
+
+const tileModalVariants = {
+  hidden: { opacity: 0, scale: 0.92, y: 30 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { type: 'spring', damping: 28, stiffness: 300, mass: 0.8 },
+  },
+  exit: { opacity: 0, scale: 0.95, y: 20, transition: { duration: 0.2 } },
+};
+
+function TilePreviewModal({ tile, onClose }) {
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === 'Escape') onClose();
+    },
+    [onClose]
+  );
+
+  useEffect(() => {
+    if (!tile) return;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [tile, handleKeyDown]);
+
+  return (
+    <AnimatePresence>
+      {tile && (
+        <motion.div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+        >
+          {/* Backdrop */}
+          <motion.div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            variants={backdropVariants}
+            onClick={onClose}
+          />
+
+          {/* Modal Card */}
+          <motion.div
+            key="tile-preview-modal"
+            className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl"
+            variants={tileModalVariants}
+            role="dialog"
+            aria-modal="true"
+            aria-label={tile.title}
+          >
+            {/* Close button */}
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-md hover:bg-white hover:shadow-lg transition-all duration-200 group"
+              aria-label="Close"
+            >
+              <X size={16} className="text-gray-500 group-hover:text-gray-800 transition-colors" />
+            </button>
+
+            {/* ─── Content ─── */}
+            <div className="p-6 lg:p-8">
+              {/* Section badge */}
+              {tile.section && (
+                <span className="inline-block mb-4 px-3.5 py-1.5 rounded-full text-xs font-semibold text-primary-600 bg-primary-50 border border-primary-100/60">
+                  {tile.section}
+                </span>
+              )}
+
+              {/* Icon + Title */}
+              <div className="flex items-start gap-4">
+                {tile.icon && (
+                  <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
+                    <tile.icon size={24} />
+                  </div>
+                )}
+                <h2 className="text-2xl lg:text-3xl font-bold font-heading text-ink-primary">
+                  {tile.title}
+                </h2>
+              </div>
+
+              {/* Divider */}
+              <div className="my-5 h-px bg-gradient-to-r from-gray-200 to-transparent" />
+
+              {/* Description */}
+              <p className="text-body text-ink-secondary leading-relaxed">{tile.description}</p>
+
+              {/* Decorative bottom accent */}
+              <div className="mt-6 h-1 w-20 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400" />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function About() {
   const [loaded, setLoaded] = useState(false);
   const [failedImages, setFailedImages] = useState({});
   const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedTile, setSelectedTile] = useState(null);
   const location = useLocation();
 
   const handleImageError = (name) => {
@@ -134,7 +241,7 @@ export default function About() {
 
       <PageLayout>
         {/* Hero */}
-        <section id="our-story" className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[20vh]">
+        <section id="our-story" className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[20vh]">
           {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
@@ -229,17 +336,35 @@ export default function About() {
               description="Our roadmap to creating lasting impact for women everywhere."
             />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
-              {goals.map((item) => {
+              {goals.map((item, i) => {
                 const Icon = item.icon;
                 return (
-                  <div key={item.title} className="card-hover p-6 lg:p-8">
-                    <div className="flex flex-col items-start gap-4">
-                      <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
+                  <div
+                    key={item.title}
+                    className={`card-hover p-6 lg:p-8 cursor-pointer select-none group${i === goals.length - 1 ? ' md:col-span-2 md:max-w-[calc((100%-1.5rem)/2)] md:mx-auto lg:col-span-1 lg:max-w-none' : ''}`}
+                    onClick={() => setSelectedTile({ ...item, section: 'Goals & Objectives' })}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelectedTile({ ...item, section: 'Goals & Objectives' });
+                      }
+                    }}
+                    aria-label={`View details of ${item.title}`}
+                  >
+                    <div className="flex items-start gap-4 md:flex-col">
+                      <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
                         <Icon size={24} />
                       </div>
-                      <div>
-                        <h3 className="text-lg font-bold font-heading text-ink-primary">{item.title}</h3>
-                        <p className="text-sm text-ink-secondary mt-2 leading-relaxed">{item.description}</p>
+                      <div className="w-full min-w-0">
+                        <h3 className="text-lg font-bold font-heading text-ink-primary flex flex-wrap items-center gap-2">
+                          {item.title}
+                          <span className="md:hidden inline-flex items-center text-[11px] font-semibold text-primary-600 bg-primary-50 border border-primary-100/60 px-2.5 py-0.5 rounded-full">
+                            View
+                          </span>
+                        </h3>
+                        <p className="hidden md:block text-sm text-ink-secondary mt-2 leading-relaxed">{item.description}</p>
                       </div>
                     </div>
                   </div>
@@ -258,15 +383,35 @@ export default function About() {
               description="The principles that guide every partnership, program, and story we share."
             />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mt-16">
-              {coreValues.map((item) => {
+              {coreValues.map((item, i) => {
                 const Icon = item.icon;
                 return (
-                  <div key={item.title} className="card-hover p-6 lg:p-8 text-center group">
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 mb-4 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
-                      <Icon size={22} />
+                  <div
+                    key={item.title}
+                    className={`card-hover p-6 lg:p-8 text-center group cursor-pointer select-none${i === coreValues.length - 1 ? ' md:col-span-2 md:max-w-[calc((100%-1.5rem)/2)] md:mx-auto lg:col-span-1 lg:max-w-none' : ''}`}
+                    onClick={() => setSelectedTile({ ...item, section: 'Core Values' })}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelectedTile({ ...item, section: 'Core Values' });
+                      }
+                    }}
+                    aria-label={`View details of ${item.title}`}
+                  >
+                    <div className="flex items-start gap-4 md:flex-col md:items-center">
+                      <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 mb-0 md:mb-4 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
+                        <Icon size={22} />
+                      </div>
+                      <h3 className="text-base font-bold font-heading text-ink-primary mb-2 group-hover:text-primary-500 transition-colors duration-300 flex items-center gap-2 flex-wrap md:justify-center">
+                        {item.title}
+                        <span className="md:hidden inline-flex items-center text-[11px] font-semibold text-primary-600 bg-primary-50 border border-primary-100/60 px-2.5 py-0.5 rounded-full">
+                          View
+                        </span>
+                      </h3>
                     </div>
-                    <h3 className="text-base font-bold font-heading text-ink-primary mb-2 group-hover:text-primary-500 transition-colors duration-300">{item.title}</h3>
-                    <p className="text-sm text-ink-secondary leading-relaxed">{item.description}</p>
+                    <p className="hidden md:block text-sm text-ink-secondary leading-relaxed">{item.description}</p>
                   </div>
                 );
               })}
@@ -283,7 +428,7 @@ export default function About() {
               description="From a small initiative to a recognized force in rural development — our journey of growth and impact."
             />
             <div className="relative mt-16">
-              <div className="absolute left-4 lg:left-1/2 top-0 bottom-0 w-px bg-gray-200 lg:-translate-x-px" />
+              <div className="absolute left-4 min-[550px]:left-1/2 top-0 bottom-0 w-px bg-gray-200 min-[550px]:-translate-x-px" />
               <div className="space-y-2">
                 {(() => {
                   const milestoneMap = {
@@ -324,16 +469,16 @@ export default function About() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ margin: '-220px 0px -40px 0px' }}
                         transition={{ duration: 0.5, delay: milestoneIndex * 0.1, ease: 'easeOut' }}
-                        className={`relative flex flex-col lg:flex-row items-start gap-4 lg:gap-6 ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
-                        <div className={`flex-1 ${isLeft ? 'lg:text-right' : 'lg:text-left'}`}>
-                          <div className="card p-3 lg:p-4 inline-block max-w-lg">
+                        className={`relative flex flex-col min-[550px]:flex-row items-start gap-4 min-[550px]:gap-6 ${isLeft ? 'min-[550px]:flex-row' : 'min-[550px]:flex-row-reverse'}`}>
+                        <div className={`flex-1 ${isLeft ? 'min-[550px]:text-right' : 'min-[550px]:text-left'}`}>
+                          <div className="card p-3 min-[550px]:p-4 inline-block max-w-lg">
                             <span className="text-xs font-bold text-primary-500">{item.year}</span>
-                            <h3 className="text-sm lg:text-base font-bold font-heading text-ink-primary mt-0.5">{item.title}</h3>
-                            <p className="text-xs lg:text-sm text-ink-secondary mt-1.5 leading-relaxed">{item.description}</p>
+                            <h3 className="text-sm min-[550px]:text-base font-bold font-heading text-ink-primary mt-0.5">{item.title}</h3>
+                            <p className="text-xs min-[550px]:text-sm text-ink-secondary mt-1.5 leading-relaxed">{item.description}</p>
                           </div>
                         </div>
-                        <div className="absolute left-4 lg:left-1/2 w-4 h-4 rounded-full bg-primary-500 border-4 border-white shadow -translate-x-1.5 lg:-translate-x-2 mt-2 z-10" />
-                        <div className="flex-1 hidden lg:block" />
+                        <div className="absolute left-4 min-[550px]:left-1/2 w-4 h-4 rounded-full bg-primary-500 border-4 border-white shadow -translate-x-1.5 min-[550px]:-translate-x-2 mt-2 z-10" />
+                        <div className="flex-1 hidden min-[550px]:block" />
                       </motion.div>
                     );
                   } else {
@@ -346,8 +491,8 @@ export default function About() {
                         viewport={{ margin: '-150px 0px -30px 0px' }}
                         transition={{ duration: 0.35, delay: i * 0.03 }}
                         className="relative flex items-center py-1.5">
-                        <div className="absolute left-4 lg:left-1/2 w-2.5 h-2.5 rounded-full bg-gray-300 border-2 border-white shadow-sm -translate-x-[5px] lg:-translate-x-[5px] z-10" />
-                        <div className="flex-1 pl-10 lg:pl-[calc(50%+1.5rem)]">
+                        <div className="absolute left-4 min-[550px]:left-1/2 w-2.5 h-2.5 rounded-full bg-gray-300 border-2 border-white shadow-sm -translate-x-[5px] min-[550px]:-translate-x-[5px] z-10" />
+                        <div className="flex-1 pl-10 min-[550px]:pl-[calc(50%+1.5rem)]">
                           <span className="text-sm text-gray-400 font-medium">{item.year}</span>
                         </div>
                       </motion.div>
@@ -357,7 +502,7 @@ export default function About() {
               </div>
 
               {/* Timeline fade overlay */}
-              <div className="absolute left-4 lg:left-1/2 bottom-0 w-px h-32 bg-gradient-to-b from-gray-200 to-transparent -translate-x-px lg:-translate-x-px pointer-events-none z-0" />
+              <div className="absolute left-4 min-[550px]:left-1/2 bottom-0 w-px h-32 bg-gradient-to-b from-gray-200 to-transparent -translate-x-px min-[550px]:-translate-x-px pointer-events-none z-0" />
 
               {/* ── The journey continues ── */}
               <motion.div
@@ -368,11 +513,11 @@ export default function About() {
                 className="relative pt-10 pb-4"
               >
                 {/* Pulsing beacon dot on the timeline */}
-                <div className="absolute left-4 lg:left-1/2 w-5 h-5 rounded-full bg-primary-400 border-[3px] border-primary-100 shadow-lg shadow-primary-300/40 -translate-x-[10px] lg:-translate-x-[10px] z-10">
+                <div className="absolute left-4 min-[550px]:left-1/2 w-5 h-5 rounded-full bg-primary-400 border-[3px] border-primary-100 shadow-lg shadow-primary-300/40 -translate-x-[10px] min-[550px]:-translate-x-[10px] z-10">
                   <div className="absolute inset-0 rounded-full bg-primary-400 animate-ping opacity-30" />
                 </div>
                 {/* Message */}
-                <div className="pl-14 lg:pl-[calc(50%+2rem)] pr-4">
+                <div className="pl-14 min-[550px]:pl-[calc(50%+2rem)] pr-4">
                   <div className="max-w-md">
                     <span className="text-xs font-bold tracking-widest text-primary-500 uppercase">Ongoing</span>
                     <p className="text-sm text-ink-secondary mt-2 leading-relaxed italic">
@@ -404,14 +549,32 @@ export default function About() {
               {initiatives.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <div key={item.title} className="card p-6 lg:p-8 h-full">
+                  <div
+                    key={item.title}
+                    className="card p-6 lg:p-8 h-full cursor-pointer select-none group"
+                    onClick={() => setSelectedTile({ ...item, section: 'Key Initiatives' })}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelectedTile({ ...item, section: 'Key Initiatives' });
+                      }
+                    }}
+                    aria-label={`View details of ${item.title}`}
+                  >
                     <div className="flex items-start gap-5 h-full">
-                      <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
+                      <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
                         <Icon size={24} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-bold font-heading text-ink-primary mb-1.5">{item.title}</h3>
-                        <p className="text-sm text-ink-secondary leading-relaxed">{item.description}</p>
+                        <h3 className="text-lg font-bold font-heading text-ink-primary mb-1.5 flex flex-wrap items-center gap-2">
+                          {item.title}
+                          <span className="md:hidden inline-flex items-center text-[11px] font-semibold text-primary-600 bg-primary-50 border border-primary-100/60 px-2.5 py-0.5 rounded-full">
+                            View
+                          </span>
+                        </h3>
+                        <p className="hidden md:block text-sm text-ink-secondary leading-relaxed">{item.description}</p>
                       </div>
                     </div>
                   </div>
@@ -477,7 +640,7 @@ export default function About() {
               description="Passionate individuals committed to driving change in rural communities."
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-16">
+            <div className="grid grid-cols-1 min-[550px]:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-16">
               {[
                 {
                   name: 'Mr. Rohan Sharma',
@@ -611,6 +774,12 @@ export default function About() {
           <TeamMemberModal
             member={selectedMember}
             onClose={() => setSelectedMember(null)}
+          />
+
+          {/* Tile Preview Modal (Goals & Core Values) */}
+          <TilePreviewModal
+            tile={selectedTile}
+            onClose={() => setSelectedTile(null)}
           />
         </section>
 

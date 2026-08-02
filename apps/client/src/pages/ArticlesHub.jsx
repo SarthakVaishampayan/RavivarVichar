@@ -120,7 +120,7 @@ export default function ArticlesHub() {
 
       <PageLayout>
         {/* Hero */}
-        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[35vh]">
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[35vh]">
           {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
@@ -162,7 +162,7 @@ export default function ArticlesHub() {
                 />
               </div>
             </div>
-            <div className="max-lg:overflow-x-auto max-lg:flex-nowrap max-lg:justify-start max-lg:pb-2 flex flex-wrap items-center justify-center gap-3 mt-6">
+            <div className="max-sm:overflow-x-auto max-sm:flex-nowrap max-sm:justify-start max-sm:pb-2 flex flex-wrap items-center justify-center gap-3 mt-6">
               {sections.map((section) => (                  <button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}

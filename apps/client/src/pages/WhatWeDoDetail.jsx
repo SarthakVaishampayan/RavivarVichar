@@ -358,7 +358,7 @@ export default function WhatWeDoDetail() {
 
       <PageLayout>
         {/* ── Hero ── */}
-        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[15vh]">
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[15vh]">
           <div className="absolute inset-0 bg-gray-900">
             <img
   src="/whatwedo-hero.jpg"

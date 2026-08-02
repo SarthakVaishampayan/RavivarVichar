@@ -148,7 +148,7 @@ export default function FAQ() {
 
       <PageLayout>
         {/* Hero */}
-        <section className="relative min-h-[60vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[30vh]">
+        <section className="relative min-h-[60vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[30vh]">
           <div className="absolute inset-0 bg-gray-900">
             <img
               src="/contact-hero.jpg"

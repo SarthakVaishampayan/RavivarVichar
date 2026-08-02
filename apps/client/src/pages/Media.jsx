@@ -53,7 +53,7 @@ export default function Media() {
 
       <PageLayout>
         {/* Hero */}
-        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[15vh]">
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[15vh]">
           {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
@@ -105,7 +105,7 @@ export default function Media() {
             <div className="container-content">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {galleryItems.map((item, i) => (
-                  <div key={i} className="group relative overflow-hidden rounded-card cursor-pointer">
+                  <div key={i} className={`group relative overflow-hidden rounded-card cursor-pointer${i === galleryItems.length - 1 ? ' md:col-span-2 md:max-w-[calc((100%-1.5rem)/2)] md:mx-auto lg:col-span-1 lg:max-w-none' : ''}`}>
                     <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">
                       <Image size={40} className="text-gray-300" />
                     </div>

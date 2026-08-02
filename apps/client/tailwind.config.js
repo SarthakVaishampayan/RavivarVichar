@@ -8,6 +8,7 @@ export default {
       'lg': '1150px',
       'xl': '1536px',
       '2xl': '1536px',
+      'nav': '1250px',
     },
     extend: {
       colors: {

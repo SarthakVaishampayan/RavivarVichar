@@ -99,9 +99,9 @@ export default function ImpactStats({ bgClass = 'bg-surface-white' }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
                 transition={{ duration: 0.5, delay: i * 0.12 }}
-                className="group"
+                className={`group${i === stats.length - 1 ? ' col-span-2 lg:col-span-1' : ''}`}
               >
-                <div className="card-hover p-6 lg:p-8 text-center relative overflow-hidden">
+                <div className={`card-hover p-6 lg:p-8 text-center relative overflow-hidden${i === stats.length - 1 ? ' max-w-[calc((100%-1.25rem)/2)] mx-auto lg:max-w-none' : ''}`}>
                   {/* Top accent line */}
                   <div className={`absolute top-0 left-0 right-0 h-1 ${stat.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 

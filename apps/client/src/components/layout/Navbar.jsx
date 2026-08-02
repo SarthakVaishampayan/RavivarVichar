@@ -23,14 +23,25 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-[90px] bg-white shadow-nav">
-      <div className="container-site h-full flex items-center">
-        {/* Logo - increased by 25% */}
-        <Link to="/" className="flex items-center shrink-0">
-          <img src="/logo-hindi.png" alt="रविवार" className="h-[55px] w-auto" />
-        </Link>
+      <div className="container-site h-full grid grid-cols-1 nav:grid-cols-[1fr_auto_1fr] items-center">
+        {/* Left: Logo (+ hamburger on mobile) */}
+        <div className="flex items-center justify-between nav:justify-start gap-4">
+          <Link to="/" className="flex items-center shrink-0">
+            <img src="/logo-hindi.png" alt="रविवार" className="h-[55px] w-auto" />
+          </Link>
 
-        {/* Desktop Navigation - centered */}
-        <nav className="hidden lg:flex items-center justify-center flex-1 gap-8">
+          {/* Mobile Hamburger */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="nav:hidden rounded-lg p-3 text-ink-secondary hover:bg-gray-100"
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Center: Desktop Navigation (truly centered via 3-column grid) */}
+        <nav className="hidden nav:flex items-center justify-center gap-8">
           {navItems.map((item) => (
             <Link
               key={item.path}
@@ -45,24 +56,15 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Desktop Search */}
-        <div className="hidden lg:block shrink-0">
+        {/* Right: Desktop Search */}
+        <div className="hidden nav:flex justify-end shrink-0">
           <SearchBar />
         </div>
-
-        {/* Mobile Hamburger */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden ml-auto rounded-lg p-3 text-ink-secondary hover:bg-gray-100"
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu (trimmed links) */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 top-[90px] bg-white z-40 animate-fade-in">
+        <div className="nav:hidden fixed inset-0 top-[90px] bg-white z-40 animate-fade-in">
           <nav className="container-site py-8 flex flex-col gap-6">
             {navItems.map((item) => (
               <Link

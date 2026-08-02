@@ -80,15 +80,15 @@ export default function Footer() {
       {/* Top accent bar */}
       <div className="h-1 w-full bg-gradient-to-r from-primary-400 via-primary-500 to-primary-400" />
       <div className="container-site pt-12 pb-2">
-        <div className="grid grid-cols-1 lg:grid-cols-6 gap-10 lg:gap-6">
+        <div className="grid grid-cols-1 min-[550px]:grid-cols-2 lg:grid-cols-6 gap-10 lg:gap-6">
           {/* Newsletter + Social Column */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 max-lg:text-center">
             <h3 className="text-[21px] font-heading font-bold text-ink-primary mb-4">
               Stay Connected
             </h3>
 
             {/* Social Icons — on their own line below the heading */}
-            <div className="flex items-center gap-2 mb-5">
+            <div className="flex items-center max-lg:justify-center gap-2 mb-5">
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
@@ -111,7 +111,7 @@ export default function Footer() {
               Subscribe to our newsletter for updates on programs, research, and impact stories.
             </p>
 
-            <form onSubmit={handleNewsletter} className="max-lg:flex-col flex gap-3 max-w-sm">
+            <form onSubmit={handleNewsletter} className="max-lg:flex-col max-lg:mx-auto flex gap-3 max-w-sm">
               <input
                 type="email"
                 value={email}
@@ -133,7 +133,7 @@ export default function Footer() {
                 Designed &amp; Developed by{' '}
                 <span className="font-semibold text-ink-primary">Sarthak Vaishampayan</span>
               </p>
-              <div className="flex items-center gap-2.5 mt-3">
+              <div className="flex items-center max-lg:justify-center gap-2.5 mt-3">
                 {developerLinks.map((social) => {
                   const Icon = social.icon;
                   return (
@@ -156,7 +156,15 @@ export default function Footer() {
 
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([heading, links]) => (
-            <div key={heading} className={linkColumnMargins[heading] || ''}>
+            <div
+              key={heading}
+              className={[
+                linkColumnMargins[heading] || '',
+                // Keep only Quick Links visible below 1150px; hide the rest
+                heading !== 'Quick Links' ? 'max-lg:hidden' : '',
+                'max-lg:text-center',
+              ].join(' ').trim()}
+            >
               <h4 className="text-sm font-semibold text-ink-primary uppercase tracking-wider mb-4">
                 {heading}
               </h4>

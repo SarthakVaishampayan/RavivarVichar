@@ -57,7 +57,7 @@ export default function Contact() {
 
       <PageLayout>
         {/* Hero */}
-        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-start overflow-hidden max-lg:pt-[12vh] pt-[35vh]">
+        <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[35vh]">
           {/* Background image */}
           <div className="absolute inset-0 bg-gray-900">
             <img
@@ -95,6 +95,22 @@ export default function Contact() {
                 <h3 className="text-lg font-heading font-bold text-ink-primary mb-6">Get in Touch</h3>
                 {contactInfo.map((item) => {
                   const Icon = item.icon;
+                  const alternate = contactInfo.find((i) => i.label === 'Alternate');
+                  // 'Alternate' shows as its own row on desktop, but is merged into
+                  // the Phone row (same line) below 1150px.
+                  if (item.label === 'Alternate') {
+                    return (
+                      <div key={item.label} className="hidden lg:flex items-start gap-4">
+                        <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
+                          <Icon size={22} />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-ink-primary uppercase tracking-wider">{item.label}</h4>
+                          <p className="text-body text-ink-secondary mt-1">{item.value}</p>
+                        </div>
+                      </div>
+                    );
+                  }
                   return (
                     <div key={item.label} className="flex items-start gap-4">
                       <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
@@ -102,7 +118,16 @@ export default function Contact() {
                       </div>
                       <div>
                         <h4 className="text-sm font-semibold text-ink-primary uppercase tracking-wider">{item.label}</h4>
-                        <p className="text-body text-ink-secondary mt-1">{item.value}</p>
+                        <p className="text-body text-ink-secondary mt-1">
+                          {item.value}
+                          {item.label === 'Phone' && alternate && (
+                            <span className="ml-2 lg:hidden">
+                              <span className="text-gray-300">|</span>{' '}
+                              <span className="uppercase text-xs font-semibold text-ink-primary tracking-wider">Alternate:</span>{' '}
+                              {alternate.value}
+                            </span>
+                          )}
+                        </p>
                       </div>
                     </div>
                   );
