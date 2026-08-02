@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Quote, User } from 'lucide-react';
 import SectionHeading from '../shared/SectionHeading';
 import api from '../../lib/axios';
 
-export default function Testimonials() {
+export default function Testimonials({ bgClass = 'bg-surface-white' }) {
   const [testimonials, setTestimonials] = useState([]);
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -28,7 +28,7 @@ export default function Testimonials() {
   const t = testimonials.length > 0 ? testimonials[current] : null;
 
   return (
-    <section className="section-lg bg-surface-white section-separator relative overflow-hidden">
+    <section className={`section-lg ${bgClass} section-separator relative overflow-hidden`}>
       {/* Decorative quote marks */}
       <div className="absolute top-20 right-20 opacity-[0.03] pointer-events-none">
         <Quote size={200} />

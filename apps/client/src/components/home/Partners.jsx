@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import SectionHeading from '../shared/SectionHeading';
 import api from '../../lib/axios';
 
-export default function Partners() {
+export default function Partners({ bgClass = 'bg-surface-white' }) {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +21,7 @@ export default function Partners() {
   if (loading) return null;
 
   return (
-    <section className="section-lg bg-surface-secondary section-separator">
+    <section className={`section-lg ${bgClass} section-separator`}>
       <div className="container-site">
         <SectionHeading
           label="Our Partners"

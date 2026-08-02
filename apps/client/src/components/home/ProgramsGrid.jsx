@@ -34,9 +34,9 @@ const whatWeDoItems = [
   },
 ];
 
-export default function ProgramsGrid() {
+export default function ProgramsGrid({ bgClass = 'bg-surface-white' }) {
   return (
-    <section className="section-lg bg-surface-white section-separator">
+    <section className={`section-lg ${bgClass} section-separator`}>
       <div className="container-site">
         <SectionHeading
           label="What We Do"

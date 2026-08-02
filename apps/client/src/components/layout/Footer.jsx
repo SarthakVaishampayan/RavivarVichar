@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, ArrowRight, Check, Loader2 } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, Globe, ArrowRight, Check, Loader2 } from 'lucide-react';
 import api from '../../lib/axios';
 
 const footerLinks = {
@@ -24,11 +24,9 @@ const footerLinks = {
   'About Us': [
     { label: 'Our Story', path: '/about#our-story' },
     { label: 'Our Vision', path: '/about#our-vision' },
-    { label: 'Our Values', path: '/about#our-values' },
     { label: 'Our Mission', path: '/about#our-mission' },
     { label: 'Our Goals', path: '/about#our-goals' },
     { label: 'Our Journey', path: '/about#our-journey' },
-    { label: 'Our Team', path: '/about#our-team' },
     { label: 'Our History', path: '/about#our-history' },
   ],
 };
@@ -40,6 +38,19 @@ const socialLinks = [
   { icon: Linkedin, href: 'https://www.linkedin.com/company/94272369', label: 'LinkedIn' },
   { icon: Youtube, href: 'https://www.youtube.com/@ravivarvichar', label: 'YouTube' },
 ];
+
+const developerLinks = [
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/sarthakvaishampayan/', label: 'LinkedIn' },
+  { icon: Globe, href: 'https://sarthakvaishampayan.vercel.app/', label: 'Portfolio' },
+  { icon: Instagram, href: 'https://www.instagram.com/_sxrthxkk_/', label: 'Instagram' },
+];
+
+// Right-shift percentages for the link columns (desktop only)
+const linkColumnMargins = {
+  'Quick Links': 'lg:ml-[25%]',
+  'Articles': 'lg:ml-[25%]',
+  'Interviews': 'lg:ml-[15%]',
+};
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -68,34 +79,16 @@ export default function Footer() {
     <footer className="bg-surface-secondary border-t border-gray-300 shadow-[0_-4px_12px_rgba(0,0,0,0.04)]">
       {/* Top accent bar */}
       <div className="h-1 w-full bg-gradient-to-r from-primary-400 via-primary-500 to-primary-400" />
-      <div className="container-site py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-6 gap-12 lg:gap-8">
+      <div className="container-site pt-12 pb-2">
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-10 lg:gap-6">
           {/* Newsletter + Social Column */}
           <div className="lg:col-span-2">
-            <h3 className="text-card font-heading font-bold text-ink-primary mb-3">
+            <h3 className="text-[21px] font-heading font-bold text-ink-primary mb-4">
               Stay Connected
             </h3>
-            <p className="text-body text-ink-secondary mb-6">
-              Subscribe to our newsletter for updates on programs, research, and impact stories.
-            </p>
-            <form onSubmit={handleNewsletter} className="max-lg:flex-col flex gap-3 max-w-sm">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="input-field flex-1"
-                required
-              />
-              <button type="submit" disabled={loading || subscribed} className="btn-primary shrink-0">
-                {loading ? <Loader2 size={18} className="animate-spin" /> : subscribed ? <Check size={18} /> : <><span>Subscribe</span> <ArrowRight size={18} /></>}
-              </button>
-            </form>
-            {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
-            {subscribed && <p className="text-xs text-green-600 mt-2">Thank you for subscribing!</p>}
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-3 mt-8">
+            {/* Social Icons — on their own line below the heading */}
+            <div className="flex items-center gap-2 mb-5">
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
@@ -105,22 +98,69 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="flex max-lg:h-11 max-lg:w-11 h-10 w-10 items-center justify-center rounded-full bg-white border border-gray-200 text-ink-secondary hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-300"
+                    title={social.label}
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-white border border-gray-200 text-ink-secondary hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-300"
                   >
-                    <Icon size={16} />
+                    <Icon size={15} />
                   </a>
                 );
               })}
+            </div>
+
+            <p className="text-[14px] leading-relaxed text-ink-secondary mb-4">
+              Subscribe to our newsletter for updates on programs, research, and impact stories.
+            </p>
+
+            <form onSubmit={handleNewsletter} className="max-lg:flex-col flex gap-3 max-w-sm">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="input-field flex-1 !text-[14px]"
+                required
+              />
+              <button type="submit" disabled={loading || subscribed} className="btn-primary shrink-0 !text-[11px]">
+                {loading ? <Loader2 size={18} className="animate-spin" /> : subscribed ? <Check size={18} /> : <><span>Subscribe</span> <ArrowRight size={18} /></>}
+              </button>
+            </form>
+            {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
+            {subscribed && <p className="text-xs text-green-600 mt-2">Thank you for subscribing!</p>}
+
+            {/* Designed & Developed credit */}
+            <div className="mt-6 pt-5 border-t border-gray-200">
+              <p className="text-sm text-ink-secondary">
+                Designed &amp; Developed by{' '}
+                <span className="font-semibold text-ink-primary">Sarthak Vaishampayan</span>
+              </p>
+              <div className="flex items-center gap-2.5 mt-3">
+                {developerLinks.map((social) => {
+                  const Icon = social.icon;
+                  return (
+                    <a
+                      key={social.label}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label}
+                      title={social.label}
+                      className="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-gray-200 text-ink-secondary hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-300"
+                    >
+                      <Icon size={14} />
+                    </a>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([heading, links]) => (
-            <div key={heading}>
-              <h4 className="text-sm font-semibold text-ink-primary uppercase tracking-wider mb-5">
+            <div key={heading} className={linkColumnMargins[heading] || ''}>
+              <h4 className="text-sm font-semibold text-ink-primary uppercase tracking-wider mb-4">
                 {heading}
               </h4>
-              <ul className="space-y-3.5">
+              <ul className="space-y-2.5">
                 {links.map((link) => (
                   <li key={link.label}>
                     <Link
@@ -139,9 +179,11 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-200">
-        <div className="container-site py-6 text-center">
-          <p className="text-sm text-ink-secondary">
-            © {new Date().getFullYear()} Ravivar Vichar. All rights reserved.
+        <div className="container-site pt-1 pb-4 text-center">
+          <p className="text-sm text-ink-primary">
+            <span className="inline-block bg-secondary-100 text-ink-primary font-medium px-4 py-1 rounded-md shadow-sm">
+              © {new Date().getFullYear()} Ravivar Vichar. All rights reserved.
+            </span>
           </p>
         </div>
       </div>

@@ -5,7 +5,7 @@ import SectionHeading from '../shared/SectionHeading';
 import Button from '../shared/Button';
 import api from '../../lib/axios';
 
-export default function FeaturedResearch() {
+export default function FeaturedResearch({ bgClass = 'bg-surface-white' }) {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +23,7 @@ export default function FeaturedResearch() {
   if (loading) return null;
 
   return (
-    <section className="section-lg bg-surface-section section-separator">
+    <section className={`section-lg ${bgClass} section-separator`}>
       <div className="container-site">
         <SectionHeading
           label="Success Stories"

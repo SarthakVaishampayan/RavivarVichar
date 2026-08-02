@@ -81,12 +81,25 @@ export default function Home() {
       <Navbar />
 
       <main>
-        {sections
-          .filter((s) => s.visible && sectionComponents[s.key])
-          .map((s) => {
-            const Component = sectionComponents[s.key];
-            return <Component key={s.key} />;
-          })}
+        {(() => {
+          // Automatically alternate backgrounds (white ↔ colored) for visible
+          // sections, regardless of which sections are hidden in the builder.
+          // The hero keeps its own dark full-screen image.
+          let bandIndex = -1;
+          return sections
+            .filter((s) => s.visible && sectionComponents[s.key])
+            .map((s) => {
+              const Component = sectionComponents[s.key];
+              if (s.key !== 'hero') bandIndex += 1;
+              const bgClass =
+                s.key === 'hero'
+                  ? undefined
+                  : bandIndex % 2 === 0
+                    ? 'bg-surface-white'
+                    : 'bg-surface-section';
+              return <Component key={s.key} bgClass={bgClass} />;
+            });
+        })()}
       </main>
 
       <Footer />

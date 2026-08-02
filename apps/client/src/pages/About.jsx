@@ -221,7 +221,7 @@ export default function About() {
         <RavivarModel />
 
         {/* Goals & Objectives */}
-        <section id="our-goals" className="section-md bg-surface-section section-separator">
+        <section id="our-goals" className="section-md bg-surface-white section-separator">
           <div className="container-content">
             <SectionHeading
               label="GOALS & OBJECTIVES"
@@ -250,7 +250,7 @@ export default function About() {
         </section>
 
         {/* Core Values */}
-        <section id="our-values" className="section-md bg-surface-white">
+        <section id="our-values" className="section-md bg-surface-section">
           <div className="container-content">
             <SectionHeading
               label="OUR CORE VALUES"
@@ -275,7 +275,7 @@ export default function About() {
         </section>
 
         {/* Our Journey */}
-        <section id="our-journey" className="section-md bg-surface-section">
+        <section id="our-journey" className="section-md bg-surface-white">
           <div className="container-content">
             <SectionHeading
               label="OUR JOURNEY"
@@ -393,7 +393,7 @@ export default function About() {
         </section>
 
         {/* Key Initiatives */}
-        <section className="section-md bg-surface-white">
+        <section className="section-md bg-surface-section">
           <div className="container-content">
             <SectionHeading
               label="KEY INITIATIVES"
@@ -422,7 +422,7 @@ export default function About() {
         </section>
 
         {/* Our History */}
-        <section id="our-history" className="section-md bg-surface-section">
+        <section id="our-history" className="section-md bg-surface-white">
           <div className="container-content">
             <SectionHeading
               label="OUR HISTORY"
