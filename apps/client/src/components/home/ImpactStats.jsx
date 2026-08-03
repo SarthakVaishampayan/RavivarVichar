@@ -59,7 +59,7 @@ function CountUp({ end, duration = 2000, suffix = '' }) {
   }, [isInView, end, duration]);
 
   return (
-    <span ref={ref} className="tabular-nums">
+    <span ref={ref} className="tabular-nums font-numeric font-bold">
       {count.toLocaleString('en-IN')}{suffix}
     </span>
   );

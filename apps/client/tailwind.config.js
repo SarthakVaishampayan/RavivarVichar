@@ -53,6 +53,7 @@ export default {
       fontFamily: {
         heading: ['Playfair Display', 'serif'],
         body: ['Inter', 'sans-serif'],
+        numeric: ['DM Sans', 'sans-serif'],
       },
       fontSize: {
         hero: ['64px', { lineHeight: '1.1', fontWeight: '700' }],

@@ -317,7 +317,7 @@ function AnimatedCounter({ value, prefix = '', suffix = '', duration = 2000 }) {
   }, [isInView, value, duration]);
 
   return (
-    <span ref={ref} className="tabular-nums">
+    <span ref={ref} className="tabular-nums font-numeric font-bold">
       {prefix}{count.toLocaleString('en-IN')}{suffix}
     </span>
   );

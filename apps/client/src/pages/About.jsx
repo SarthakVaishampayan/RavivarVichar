@@ -93,7 +93,7 @@ function AnimatedCounter({ value, suffix = '', duration = 2000 }) {
     ? count
     : count.toLocaleString('en-IN');
 
-  return <span ref={ref} className="tabular-nums">{display}{suffix}</span>;
+  return <span ref={ref} className="tabular-nums font-numeric font-bold">{display}{suffix}</span>;
 }
 
 /* ── Preview overlay for compact tile cards (Goals & Core Values) ── */
