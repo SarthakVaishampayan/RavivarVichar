@@ -640,14 +640,14 @@ export default function About() {
               description="Passionate individuals committed to driving change in rural communities."
             />
 
-            <div className="grid grid-cols-1 min-[550px]:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-16">
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-6 max-w-[464px] min-[768px]:max-w-[704px] lg:max-w-none mx-auto mt-16">
               {[
                 {
                   name: 'Mr. Rohan Sharma',
                   role: 'Chief Executive Officer',
                   bio: 'Technology leader, storyteller, and social impact entrepreneur. As CEO of Ravivar Vichar, he leads a platform dedicated to empowering SHGs and advancing women\'s financial independence through innovation and media.',
                   fullBio: 'Rohan Sharma is a technology leader, storyteller, and social impact entrepreneur committed to creating meaningful change through innovation and media.' + '\n\n' + 'As the CEO of Ravivar Vichar, he leads a digital media and print platform dedicated to empowering Self-Help Groups (SHGs) and advancing women\'s financial independence. Under his leadership, Ravivar Vichar connects grassroots communities with institutions, promoting financial literacy, inclusion, and sustainable livelihoods.' + '\n\n' + 'Rohan began his career at TCS before working with Accenture and Oracle Corporation, building expertise in technology, strategy, and digital transformation. Alongside his corporate journey, he has written for podcasts, films, and web series, creating stories inspired by India\'s cultural and social ethos.',
-                  image: '/images/team/rohan.jpeg',
+                  image: '/images/team/rohan1.jpeg',
                 },
                 {
                   name: 'Mr. Satyam Khandelwal',
@@ -705,10 +705,10 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.5, delay: i * 0.1, ease: 'easeOut' }}
-                  className="group relative overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-500 delay-200 hover:-translate-y-1.5 hover:scale-[1.02]"
+                  className="group relative w-[224px] overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-500 delay-200 hover:-translate-y-1.5 hover:scale-[1.02]"
                 >
-                  {/* ── Image (60% of card) ── */}
-                  <div className="relative h-56 lg:h-64 overflow-hidden">
+                  {/* ── Image (square 224×224) ── */}
+                  <div className="relative h-56 overflow-hidden">
                     {failedImages[member.name] ? (
                       <div className="w-full h-full bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center">
                         <Users size={44} className="text-primary-400" />
@@ -728,7 +728,7 @@ export default function About() {
                   </div>
 
                   {/* ── Content ── */}
-                  <div className="relative p-5 lg:p-6 flex flex-col">
+                  <div className="relative p-5 lg:p-6 flex flex-col items-center text-center">
                     {/* Name */}
                     <h3 className="text-lg font-bold font-heading text-ink-primary">
                       {member.name}

@@ -57,7 +57,7 @@ export default function Navbar() {
         </nav>
 
         {/* Right: Desktop Search */}
-        <div className="hidden nav:flex justify-end shrink-0">
+        <div className="hidden nav:flex justify-end shrink-0 translate-x-[20%]">
           <SearchBar />
         </div>
       </div>
