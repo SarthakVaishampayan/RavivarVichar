@@ -155,7 +155,7 @@ server {
     }
 
     # ─── Preview bypass cookie endpoint ───
-    # Visit http://yourdomain.com/_rv_preview once to get the cookie
+    # Visit https://ravivarvichar.in/_rv_preview once to get the cookie
     # Protected by the same Basic Auth htpasswd file (so public can't sneak in)
     location = /_rv_preview {
         auth_basic "Preview Access";
@@ -193,6 +193,82 @@ server {
         alias /var/www/RavivarVichar/apps/server/uploads/;
     }
 }
+
+# HTTPS server block — REQUIRED for Cloudflare Full/strict SSL.
+# Cloudflare always connects to the origin over 443, so maintenance mode
+# must keep serving the origin cert or the site shows a 522 error.
+# (The sed password substitution below applies to BOTH blocks.)
+server {
+    listen 443 ssl http2;
+    server_name _;
+
+    # Cloudflare Origin Certificate (installed during production setup)
+    ssl_certificate /etc/nginx/ssl/ravivarvichar-origin.crt;
+    ssl_certificate_key /etc/nginx/ssl/ravivarvichar-origin.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    # ─── Root URL: Cookie-based bypass (mirror of the port 80 block) ───
+    location / {
+        # Query param shortcut: ?rv=PASSWORD → sets cookie then redirects to /
+        if ($arg_rv = "__RV_PASSWORD__") {
+            add_header Set-Cookie "rv_preview=__RV_PASSWORD__; Path=/; Max-Age=7200";
+            return 302 /;
+        }
+
+        # No bypass cookie? → serve maintenance page (internal, not visible in URL)
+        if ($cookie_rv_preview != "__RV_PASSWORD__") {
+            rewrite ^ /_maintenance.html last;
+        }
+
+        # Has cookie → serve the client SPA normally
+        root /var/www/RavivarVichar/apps/client/dist;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Internal maintenance page (not directly accessible)
+    location = /_maintenance.html {
+        internal;
+        root /var/www;
+        try_files /maintenance.html =404;
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+    }
+
+    # ─── Preview bypass cookie endpoint ───
+    location = /_rv_preview {
+        auth_basic "Preview Access";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+
+        add_header Set-Cookie "rv_preview=__RV_PASSWORD__; Path=/; Max-Age=7200";
+        add_header Content-Type text/plain;
+        return 200 "Preview access granted. Navigate to / to browse the site.\n";
+    }
+
+    # ─── Admin — NOT in maintenance (already JWT-protected by the app) ───
+    location /admin {
+        alias /var/www/RavivarVichar/apps/admin/dist;
+        index index.html;
+        try_files $uri $uri/ /admin/index.html;
+    }
+
+    # ─── API — NOT auth-protected (admin JS needs to call it freely) ───
+    location /api/ {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # ─── Uploads — NOT auth-protected (served to authenticated admin)
+    location /uploads/ {
+        alias /var/www/RavivarVichar/apps/server/uploads/;
+    }
+}
 NGINX
 
   # Substitute the actual password into the config
@@ -201,6 +277,16 @@ NGINX
   sed -i "s|__RV_PASSWORD__|$ESCAPED_PASSWORD|g" "$MAINTENANCE_CONFIG"
 fi
 pass "Maintenance config created"
+
+# ─── Step 3.5: Verify origin cert exists (required by the HTTPS block) ───
+# Fail BEFORE touching nginx symlinks, otherwise nginx -t fails with the
+# normal config already disabled and the site goes down.
+# (Skipped in dry-run so --dry-run stays a safe preview on any machine.)
+if [ "$DRY_RUN" = false ] && { [ ! -f /etc/nginx/ssl/ravivarvichar-origin.crt ] || [ ! -f /etc/nginx/ssl/ravivarvichar-origin.key ]; }; then
+  fail "Origin certificate missing at /etc/nginx/ssl/ — run Phase 6 of PRODUCTION_DEPLOY_GUIDE.md before enabling maintenance"
+  exit 1
+fi
+pass "Origin certificate present"
 
 # ─── Step 4: Switch Nginx to maintenance config ───
 info "Step 4: Switching Nginx to maintenance mode..."
@@ -225,12 +311,12 @@ echo "  What happens now:"
 echo "  ┌─────────────────────────────────────────┬───────────────────────────────────────────────────────────────┐"
 echo "  │ URL                                      │ What happens                                                  │"
 echo "  ├─────────────────────────────────────────┼───────────────────────────────────────────────────────────────┤"
-echo "  │ http://142.93.213.69/                    │ Public → maintenance page (no dialog, clean page)             │"
-echo "  │ http://142.93.213.69/_rv_preview         │ Login dialog → enter admin / standbymode → gets cookie        │"
-echo "  │ Then http://142.93.213.69/               │ Cookie active → client site loads! Browse freely for 2 hours  │"
-echo "  │ http://142.93.213.69/?rv=standbymode     │ One-step shortcut → sets cookie + redirects to /              │"
-echo "  │ http://142.93.213.69/admin               │ Admin login works (no extra auth)                             │"
-echo "  │ curl http://142.93.213.69/api/v1/...     │ API returns real JSON data                                    │"
+echo "  │ https://ravivarvichar.in/                  │ Public → maintenance page (no dialog, clean page)             │"
+echo "  │ https://ravivarvichar.in/_rv_preview      │ Login dialog → enter admin / standbymode → gets cookie        │"
+echo "  │ Then https://ravivarvichar.in/            │ Cookie active → client site loads! Browse freely for 2 hours  │"
+echo "  │ https://ravivarvichar.in/?rv=standbymode  │ One-step shortcut → sets cookie + redirects to /              │"
+echo "  │ https://ravivarvichar.in/admin            │ Admin login works (no extra auth)                             │"
+echo "  │ curl https://ravivarvichar.in/api/v1/...  │ API returns real JSON data                                    │"
 echo "  └─────────────────────────────────────────┴───────────────────────────────────────────────────────────────┘"
 echo ""
 echo "  Workflow:"
