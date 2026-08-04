@@ -25,6 +25,12 @@ const protect = async (req, res, next) => {
       return sendError(res, 'User not found', 401);
     }
 
+    // Token rotation: reject tokens issued before the user's token version
+    // (password changes / resets bump the version and revoke all old tokens)
+    if (decoded.v !== user.tokenVersion) {
+      return sendError(res, 'Session revoked, please log in again', 401);
+    }
+
     req.user = user;
     next();
   } catch (error) {

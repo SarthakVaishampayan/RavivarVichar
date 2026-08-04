@@ -23,14 +23,16 @@ const storage = multer.diskStorage({
 });
 
 const imageFilter = (req, file, cb) => {
+  // NOTE: SVG is intentionally excluded — SVGs can contain embedded scripts
+  // and would be served from /uploads on the same origin (stored XSS risk).
   const allowedTypes = [
     'image/jpeg', 'image/png', 'image/gif', 'image/webp',
-    'image/bmp', 'image/tiff', 'image/svg+xml',
+    'image/bmp', 'image/tiff',
   ];
-  if (allowedTypes.includes(file.mimetype) || file.mimetype.startsWith('image/')) {
+  if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Only image files are allowed (JPEG, PNG, GIF, WebP, etc.)'), false);
+    cb(new Error('Only image files are allowed (JPEG, PNG, GIF, WebP, BMP, TIFF). SVG is not supported.'), false);
   }
 };
 
@@ -67,15 +69,15 @@ const videoFilter = (req, file, cb) => {
   }
 };
 
-// Image upload: 50MB limit, images only
+// Image upload: 10MB limit, images only
 const uploadImages = multer({
   storage,
   fileFilter: imageFilter,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
 });
 
-// Video upload: 4GB limit for large video files
-const UPLOAD_VIDEO_LIMIT = 4 * 1024 * 1024 * 1024; // 4GB
+// Video upload: 500MB limit (prevents disk-fill on the server)
+const UPLOAD_VIDEO_LIMIT = 500 * 1024 * 1024; // 500MB
 
 const uploadVideo = multer({
   storage,

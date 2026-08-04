@@ -16,6 +16,7 @@ import {
   Image,
   Newspaper,
   Activity,
+  KeyRound,
 } from 'lucide-react';
 
 export const RESOURCES = {
@@ -159,6 +160,7 @@ export const NAV_ITEMS = [
   { label: 'Homepage Builder', icon: Layout, path: '/homepage' },
   { label: 'SEO', icon: Search, path: '/seo' },
   { label: 'Users', icon: UserCog, path: '/users' },
+  { label: 'Change Password', icon: KeyRound, path: '/change-password' },
   { label: 'Settings', icon: Settings, path: '/settings' },
 ];
 

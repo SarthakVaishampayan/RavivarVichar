@@ -97,20 +97,28 @@ NODE_ENV=production
 MONGO_URI=mongodb://localhost:27017/ravivarvichar
 JWT_ACCESS_SECRET=your-64-char-random-hex-here
 JWT_REFRESH_SECRET=your-64-char-random-hex-here
+IP_HASH_SALT=your-32-char-random-salt-here
 CLIENT_URL=https://yourdomain.com
 ADMIN_URL=https://admin.yourdomain.com
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
+RESEND_API_KEY=re_your_resend_api_key
+RESEND_FROM=Ravivar Vichar <onboarding@resend.dev>
 ENVEOF
 ```
 
-Generate strong secrets:
+> ⚠️ **Production requirement:** the server refuses to start (`env.js`) if
+> `IP_HASH_SALT` is missing or JWT secrets are shorter than 32 characters.
+> Generate them all with:
+
 ```bash
-ACCESS=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
-REFRESH=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
-sed -i "s/JWT_ACCESS_SECRET=.*/JWT_ACCESS_SECRET=$ACCESS/" apps/server/.env
-sed -i "s/JWT_REFRESH_SECRET=.*/JWT_REFRESH_SECRET=$REFRESH/" apps/server/.env
+ACCESS=$(node -e "console.log(require('crypto').randomBytes(48).toString('base64'))")
+REFRESH=$(node -e "console.log(require('crypto').randomBytes(48).toString('base64'))")
+SALT=$(node -e "console.log(require('crypto').randomBytes(32).toString('base64'))")
+sed -i "s|JWT_ACCESS_SECRET=.*|JWT_ACCESS_SECRET=$ACCESS|" apps/server/.env
+sed -i "s|JWT_REFRESH_SECRET=.*|JWT_REFRESH_SECRET=$REFRESH|" apps/server/.env
+sed -i "s|IP_HASH_SALT=.*|IP_HASH_SALT=$SALT|" apps/server/.env
 ```
 
 Create uploads directory:
@@ -154,6 +162,10 @@ NODE_OPTIONS="--max-old-space-size=512" npm run build -w apps/admin
 
 ### Step 3 — Seed Initial Data (Optional)
 
+> ⚠️ **Only run this on a FRESH droplet.** It wipes 7 collections (users,
+> articles, partners, events, testimonials, newsletters, contact messages)
+> before inserting starter data. Never run it against a database with real content.
+
 ```bash
 npm run seed -w apps/server
 ```
@@ -161,6 +173,9 @@ npm run seed -w apps/server
 Default admin credentials (from seed):
 - **Email**: admin@ravivarvichar.org
 - **Password**: Admin@123
+
+> 🔐 After first login, change this immediately in **Admin → Settings → Change Password**
+> (it logs out all other sessions instantly).
 
 ### Step 4 — Start Server with PM2
 
@@ -217,6 +232,11 @@ server {
     location /uploads/ {
         alias /var/www/RavivarVichar/apps/server/uploads/;
     }
+
+    # ─── Security Headers (helmet only covers /api — add for the HTML pages) ───
+    add_header X-Content-Type-Options nosniff always;
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
 }
 ```
 

@@ -23,6 +23,9 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
+// Load server .env so the environment check reflects the real config
+require('dotenv').config({ path: path.resolve(__dirname, '../apps/server/.env') });
+
 // ─── Node version check ───
 const nodeMajor = Number(process.version.slice(1).split('.')[0]);
 if (nodeMajor < 18) {
@@ -253,6 +256,64 @@ const fetchJson = async (url, options = {}) => {
   checkEnv('MONGO_URI', process.env.MONGO_URI);
   checkEnv('JWT_ACCESS_SECRET', process.env.JWT_ACCESS_SECRET);
   checkEnv('JWT_REFRESH_SECRET', process.env.JWT_REFRESH_SECRET);
+  checkEnv('CLIENT_URL', process.env.CLIENT_URL);
+  checkEnv('ADMIN_URL', process.env.ADMIN_URL);
+  checkEnv('CLOUDINARY_CLOUD_NAME', process.env.CLOUDINARY_CLOUD_NAME);
+  checkEnv('IP_HASH_SALT', process.env.IP_HASH_SALT);
+  checkEnv('RESEND_API_KEY', process.env.RESEND_API_KEY);
+
+  // ─── Production: fail if required security vars are missing ───
+  if (process.env.NODE_ENV === 'production') {
+    if (!process.env.IP_HASH_SALT || process.env.IP_HASH_SALT.length < 16) {
+      testFail('Security: IP_HASH_SALT', 'required in production (min 16 chars) — set a long random string');
+    }
+    if (process.env.RESEND_API_KEY) {
+      testPass('Security: RESEND_API_KEY', 'set (password reset emails enabled)');
+    } else {
+      testWarn('Security: RESEND_API_KEY', 'not set — password reset emails will log the reset link instead of sending');
+    }
+  }
+
+  // ─── Security: reject weak/placeholder JWT secrets ───
+  const IS_PROD = process.env.NODE_ENV === 'production';
+  const KNOWN_WEAK = [
+    'dev-access-secret-replace-in-prod',
+    'dev-refresh-secret-replace-in-prod',
+    'your-access-secret-change-in-production',
+    'your-refresh-secret-change-in-production',
+    'secret',
+  ];
+  for (const name of ['JWT_ACCESS_SECRET', 'JWT_REFRESH_SECRET']) {
+    const val = process.env[name] || '';
+    if (KNOWN_WEAK.includes(val)) {
+      if (IS_PROD) {
+        testFail(`Security: ${name}`, 'uses a known placeholder — set a strong random value');
+      } else {
+        testWarn(`Security: ${name}`, 'uses a placeholder (fine for dev) — set a strong random value before production');
+      }
+    } else if (val.length > 0 && val.length < 32 && IS_PROD) {
+      testFail(`Security: ${name}`, 'shorter than 32 chars in production — use `openssl rand -base64 48`');
+    } else if (val.length > 0 && val.length < 32) {
+      testWarn(`Security: ${name}`, 'shorter than 32 chars — use `openssl rand -base64 48`');
+    }
+  }
+
+  // ─── Security: security-header check on the running server ───
+  header('7. Security Headers');
+  try {
+    const resp = await fetch(`${SERVER_URL}/api/v1/health`, { signal: AbortSignal.timeout(5000) });
+    const headers = resp.headers;
+    if (headers.get('x-content-type-options') === 'nosniff') testPass('X-Content-Type-Options', 'nosniff');
+    else testFail('X-Content-Type-Options', 'missing — is helmet enabled?');
+    if (headers.get('x-frame-options')) testPass('X-Frame-Options', headers.get('x-frame-options'));
+    else testWarn('X-Frame-Options', 'missing (helmet CSP frameAncestors may be used instead)');
+    if (headers.get('content-security-policy')) testPass('Content-Security-Policy', 'present');
+    else testWarn('Content-Security-Policy', 'missing');
+    if (headers.get('strict-transport-security')) testPass('Strict-Transport-Security', 'present');
+    else testWarn('Strict-Transport-Security', 'missing (HSTS only applies over HTTPS)');
+  } catch (err) {
+    testWarn('Security headers', `could not be checked: ${err.message}`);
+  }
 
   // ─── Summary ───
   header('Results');

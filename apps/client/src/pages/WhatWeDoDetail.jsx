@@ -254,6 +254,7 @@ const contentMap = {
     impact: [
       { value: 500, suffix: '+', label: 'Women Trained in Leadership' },
       { value: 100, suffix: '+', label: 'Women in Leadership Roles' },
+      { value: 400, suffix: '+', label: 'Women in STEM' },
     ],
     goal: 'To equip women with the knowledge, skills, confidence, and networks needed to lead and create change.',
     goalVision:

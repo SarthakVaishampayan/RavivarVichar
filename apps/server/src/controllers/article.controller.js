@@ -1,4 +1,5 @@
 const Article = require('../models/Article');
+const sanitizeHtml = require('sanitize-html');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
 const catchAsync = require('../utils/catchAsync');
 const paginate = require('../utils/paginate');
@@ -10,6 +11,46 @@ const logActivity = async (action, resource, resourceId, user, details) => {
   await ActivityLog.create({ action, resource, resourceId, user: user?._id, details });
 };
 
+// ─── HTML sanitization (prevents stored XSS) ───
+const sanitizeArticleHtml = (html = '') =>
+  sanitizeHtml(html, {
+    allowedTags: [
+      ...sanitizeHtml.defaults.allowedTags,
+      'h1', 'h2', 'h3', 'h4', 'h5', 'img', 'iframe', 'figure', 'figcaption', 'span',
+      'table', 'thead', 'tbody', 'tr', 'th', 'td', 'pre', 'video', 'source', 'br',
+    ],
+    allowedAttributes: {
+      a: ['href', 'target', 'rel'],
+      img: ['src', 'alt', 'title', 'width', 'height'],
+      iframe: ['src', 'title', 'width', 'height', 'allow', 'allowfullscreen', 'frameborder'],
+      video: ['src', 'controls', 'poster', 'width', 'height'],
+      source: ['src', 'type'],
+      th: ['colspan', 'rowspan'],
+      td: ['colspan', 'rowspan'],
+      '*': ['class', 'style'],
+    },
+    allowedSchemes: ['http', 'https', 'mailto'],
+    allowedSchemesByTag: { img: ['http', 'https'] },
+    allowProtocolRelative: false,
+    // Strip script/object/embed anything executable
+    disallowedTagsMode: 'discard',
+    // Only allow embeds from known video platforms — arbitrary iframes are a phishing/XSS vector
+    transformTags: {
+      iframe: (tagName, attribs) => {
+        const src = attribs.src || '';
+        const ok =
+          /^(https?:)?\/\/(www\.)?(youtube\.com|youtu\.be|youtube-nocookie\.com|player\.vimeo\.com)\//.test(src) ||
+          /^(https?:)?\/\/www\.youtube\.com\/embed\//.test(src);
+        if (ok) {
+          return { tagName, attribs: { src, title: attribs.title || '', width: attribs.width || '', height: attribs.height || '', allowfullscreen: '' } };
+        }
+        return {};
+      },
+    },
+  });
+
+const sanitizePlainText = (text = '') => sanitizeHtml(text, { allowedTags: [], allowedAttributes: {} });
+
 // GET /api/v1/articles?page=&limit=&sort=&search=&status=&category=&featured=
 const getAll = catchAsync(async (req, res) => {
   const { status, category, featured } = req.query;
@@ -18,7 +59,7 @@ const getAll = catchAsync(async (req, res) => {
   if (category) filter.category = category;
   if (featured) filter.featured = featured === 'true';
   // Public: only published. Authenticated admin: all statuses
-  if (!isAuthenticated(req)) filter.status = 'published';
+  if (!(await isAuthenticated(req))) filter.status = 'published';
 
   const result = await paginate(Article, filter, {
     page: req.query.page,
@@ -54,6 +95,10 @@ const create = catchAsync(async (req, res) => {
   if (data.title && !data.slug) {
     data.slug = generateSlug(data.title);
   }
+  // Sanitize rich-text fields before they reach the database
+  if (data.content) data.content = sanitizeArticleHtml(data.content);
+  if (data.excerpt) data.excerpt = sanitizePlainText(data.excerpt);
+  if (data.title) data.title = sanitizePlainText(data.title);
   const article = await Article.create(data);
   await logActivity('create', 'Article', article._id, req.user, `Created article: ${article.title}`);
   sendSuccess(res, article, 'Article created', 201);
@@ -65,6 +110,10 @@ const update = catchAsync(async (req, res) => {
   if (data.title) {
     data.slug = generateSlug(data.title);
   }
+  // Sanitize rich-text fields before they reach the database
+  if (data.content) data.content = sanitizeArticleHtml(data.content);
+  if (data.excerpt) data.excerpt = sanitizePlainText(data.excerpt);
+  if (data.title) data.title = sanitizePlainText(data.title);
   const article = await Article.findByIdAndUpdate(req.params.id, data, { new: true, runValidators: true });
   if (!article) return sendError(res, 'Article not found', 404);
   await logActivity('update', 'Article', article._id, req.user, `Updated article: ${article.title}`);

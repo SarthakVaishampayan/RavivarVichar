@@ -23,6 +23,9 @@ import GalleryManager from '../pages/manage-content/GalleryManager';
 import SubmissionDetail from '../pages/manage-content/SubmissionDetail';
 import Users from '../pages/Users';
 import Settings from '../pages/Settings';
+import ChangePassword from '../pages/ChangePassword';
+import ForgotPassword from '../pages/ForgotPassword';
+import ResetPassword from '../pages/ResetPassword';
 
 export default function AdminRoutes() {
   return (
@@ -97,8 +100,13 @@ export default function AdminRoutes() {
         <Route path="seo" element={<SEO />} />
         <Route path="homepage" element={<HomepageBuilder />} />
         <Route path="users" element={<Users />} />
+        <Route path="change-password" element={<ChangePassword />} />
         <Route path="settings" element={<Settings />} />
       </Route>
+
+      {/* Public auth pages (outside the protected layout) */}
+      <Route path="forgot-password" element={<ForgotPassword />} />
+      <Route path="reset-password" element={<ResetPassword />} />
 
       {/* Catch-all redirect */}
       <Route path="*" element={<Navigate to="/" replace />} />

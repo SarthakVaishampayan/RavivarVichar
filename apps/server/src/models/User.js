@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema(
     },
     password: { type: String, required: [true, 'Password is required'], minlength: 6, select: false },
     role: { type: String, default: 'admin', enum: ['admin'] },
+    // Incremented on password change / reset to invalidate all previously issued tokens
+    tokenVersion: { type: Number, default: 0 },
+    passwordResetToken: { type: String, select: false },
+    passwordResetExpires: { type: Date, select: false },
   },
   { timestamps: true }
 );

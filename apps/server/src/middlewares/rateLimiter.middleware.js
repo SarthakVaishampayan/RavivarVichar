@@ -24,4 +24,18 @@ const pageviewLimiter = rateLimit({
   keyGenerator: (req) => req.ip,
 });
 
-module.exports = { authLimiter, pageviewLimiter };
+// Limiter for public form submissions (contact, newsletter, partner applications, etc.)
+// Prevents bots from spamming the database / flooding inboxes
+const publicFormLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 20, // 20 submissions per IP per window
+  message: {
+    success: false,
+    message: 'Too many submissions, please try again later',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => req.ip,
+});
+
+module.exports = { authLimiter, pageviewLimiter, publicFormLimiter };

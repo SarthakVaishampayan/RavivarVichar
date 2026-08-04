@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const env = require('./config/env');
@@ -8,6 +9,30 @@ const errorHandler = require('./middlewares/error.middleware');
 const routes = require('./routes');
 
 const app = express();
+
+// Trust the first proxy hop (nginx) so req.ip / rate limiting see real client IPs
+app.set('trust proxy', 1);
+
+// Security headers
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
+        imgSrc: ["'self'", 'data:', 'https:', 'blob:'],
+        mediaSrc: ["'self'", 'https:', 'data:', 'blob:'],
+        frameSrc: ["'self'", 'https://www.youtube.com', 'https://www.youtube-nocookie.com', 'https://player.vimeo.com'],
+        connectSrc: ["'self'", 'https://api.resend.com', 'https://res.cloudinary.com'],
+        objectSrc: ["'none'"],
+        frameAncestors: ["'self'"],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+  })
+);
 
 // CORS
 app.use(

@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { submit, getAll, getOne, updateStatus, deleteOne } = require('../controllers/joinInitiative.controller');
 const { protect } = require('../middlewares/auth.middleware');
+const { publicFormLimiter } = require('../middlewares/rateLimiter.middleware');
 
-router.post('/', submit);
+router.post('/', publicFormLimiter, submit);
 router.get('/', protect, getAll);
 router.get('/:id', protect, getOne);
 router.put('/:id/status', protect, updateStatus);

@@ -4,6 +4,7 @@ import { useAuthStore } from '../store/authStore';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Login() {
   const [email, setEmail] = useState('admin@ravivarvichar.org');
@@ -102,9 +103,12 @@ export default function Login() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-xs text-gray-400">
-            Demo credentials are pre-filled. Click "Sign in" to continue.
-          </p>
+          <div className="mt-6 text-center space-y-2">
+            <Link to="/forgot-password" className="text-xs text-primary-600 hover:text-primary-700 font-medium">
+              Forgot password?
+            </Link>
+            <p className="text-xs text-gray-400">Authorized personnel only.</p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,10 @@
 const crypto = require('crypto');
+const env = require('../config/env');
 const Article = require('../models/Article');
+
+// Boot-stable salt for IP hashing. Set IP_HASH_SALT in production for
+// consistency across restarts; otherwise a random salt is generated once at boot.
+const IP_SALT = env.IP_HASH_SALT || crypto.randomBytes(32).toString('hex');
 const Partner = require('../models/Partner');
 const Event = require('../models/Event');
 const Testimonial = require('../models/Testimonial');
@@ -105,10 +110,8 @@ const recordPageview = catchAsync(async (req, res) => {
   }
 
   // Hash the IP for privacy (never store raw IP)
-  const ipHash = crypto
-    .createHash('sha256')
-    .update(req.ip + (process.env.IP_HASH_SALT || 'ravivarvichar-salt'))
-    .digest('hex');
+  // HMAC-SHA256 with the boot-stable salt — same visitor, same hash, raw IP never stored.
+  const ipHash = crypto.createHmac('sha256', IP_SALT).update(req.ip).digest('hex');
 
   await PageView.create({
     path,

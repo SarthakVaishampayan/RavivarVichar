@@ -12,6 +12,20 @@ const registerSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(6, 'Current password must be at least 6 characters'),
+  newPassword: z.string().min(8, 'New password must be at least 8 characters'),
+});
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Invalid email format'),
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(20, 'Invalid reset token'),
+  newPassword: z.string().min(8, 'New password must be at least 8 characters'),
+});
+
 // Article schemas
 const articleSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters').max(200),
@@ -36,5 +50,8 @@ const articleSchema = z.object({
 module.exports = {
   loginSchema,
   registerSchema,
+  changePasswordSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
   articleSchema,
 };
