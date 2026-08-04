@@ -14,7 +14,7 @@ ssh root@<your-droplet-ip>
 
 🚀 Step 3 — Deploy
 
-// bash cd /var/www/RavivarVichar
+cd /var/www/RavivarVichar
 MAINTENANCE_PASS=secret bash scripts/maintenance-on.sh   # enable
 bash scripts/deploy.sh                                     # deploy
 bash scripts/maintenance-off.sh                            # take site live
