@@ -58,12 +58,7 @@ const contentMap = {
         },
       ],
     },
-    impact: [
-      { value: 1200, suffix: '+', label: 'Women Entrepreneurs Supported' },
-      { value: 500, suffix: '+', label: 'Businesses Launched' },
-      { value: 2, prefix: '\u20b9', suffix: 'Cr+', label: 'Funding Facilitated' },
-      { value: 85, suffix: '%', label: 'Business Sustainability Rate' },
-    ],
+    impact: [],
     goal: 'To help more women move from earning a livelihood to building sustainable enterprises.',
     goalVision:
       'We believe every woman has the potential to build a sustainable enterprise. Our mission is to remove barriers, create opportunities, and provide the support systems women need to thrive as entrepreneurs and community leaders.',
@@ -127,10 +122,9 @@ const contentMap = {
       ],
     },
     impact: [
-      { value: 300, suffix: '+', label: 'SHGs Strengthened' },
-      { value: 5000, suffix: '+', label: 'Women SHG Members' },
-      { value: 150, prefix: '\u20b9', suffix: 'L+', label: 'Group Savings' },
-      { value: 90, suffix: '%', label: 'Loan Repayment Rate' },
+      { value: 250, suffix: '+', label: 'SHGs Strengthened' },
+      { value: 1500, suffix: '+', label: 'Women SHG Members' },
+      { value: 100, suffix: '+', label: 'SHG Brand Integration' },
     ],
     goal: 'To help Self Help Groups evolve from savings and credit collectives into stronger, sustainable, and market-connected community enterprises.',
     goalVision:
@@ -194,12 +188,7 @@ const contentMap = {
         },
       ],
     },
-    impact: [
-      { value: 8000, suffix: '+', label: 'Women Trained in Financial Literacy' },
-      { value: 70, suffix: '%', label: 'Digital Payment Adoption' },
-      { value: 200, suffix: '+', label: 'Bank Linkages Established' },
-      { value: 40, suffix: '%', label: 'Increase in Household Savings' },
-    ],
+    impact: [],
     goal: 'To help women make informed financial decisions, build independent incomes, and participate more confidently in the formal economy.',
     goalVision:
       'We believe financial literacy is the foundation of economic independence. Our mission is to make financial knowledge accessible, practical, and actionable for every woman \u2014 enabling her to take control of her financial future.',
@@ -263,10 +252,8 @@ const contentMap = {
       ],
     },
     impact: [
-      { value: 2500, suffix: '+', label: 'Women Trained in Leadership' },
-      { value: 400, suffix: '+', label: 'Community Leaders Identified' },
-      { value: 150, suffix: '+', label: 'Youth Skill Workshops' },
-      { value: 60, suffix: '%', label: 'Women in Leadership Roles' },
+      { value: 500, suffix: '+', label: 'Women Trained in Leadership' },
+      { value: 100, suffix: '+', label: 'Women in Leadership Roles' },
     ],
     goal: 'To equip women with the knowledge, skills, confidence, and networks needed to lead and create change.',
     goalVision:
@@ -479,6 +466,7 @@ export default function WhatWeDoDetail() {
         )}
 
         {/* ── Impact ── */}
+        {content.impact && content.impact.length > 0 && (
         <section className="section-md bg-surface-section">
           <div className="container-content">
             <SectionHeading
@@ -486,7 +474,7 @@ export default function WhatWeDoDetail() {
               title="Our Impact Numbers"
               description=""
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12 ${content.impact.length === 2 ? 'lg:grid-cols-2 max-w-3xl mx-auto' : content.impact.length === 3 ? 'lg:grid-cols-3 max-w-5xl mx-auto' : 'lg:grid-cols-4'}`}>
               {content.impact.map((item) => (
                 <div
                   key={item.label || item}
@@ -512,6 +500,7 @@ export default function WhatWeDoDetail() {
             </div>
           </div>
         </section>
+        )}
 
         {/* ── CTA ── */}
         <section className="section-md bg-primary-500 relative overflow-hidden text-center">

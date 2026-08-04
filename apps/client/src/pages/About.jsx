@@ -353,16 +353,13 @@ export default function About() {
                     }}
                     aria-label={`View details of ${item.title}`}
                   >
-                    <div className="flex items-start gap-4 md:flex-col">
+                    <div className="flex items-start gap-4 max-md:items-center md:flex-col">
                       <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
                         <Icon size={24} />
                       </div>
                       <div className="w-full min-w-0">
-                        <h3 className="text-lg font-bold font-heading text-ink-primary flex flex-wrap items-center gap-2">
+                        <h3 className="text-lg max-md:text-[20.7px] font-bold font-heading text-ink-primary flex flex-wrap items-center gap-2">
                           {item.title}
-                          <span className="md:hidden inline-flex items-center text-[11px] font-semibold text-primary-600 bg-primary-50 border border-primary-100/60 px-2.5 py-0.5 rounded-full">
-                            View
-                          </span>
                         </h3>
                         <p className="hidden md:block text-sm text-ink-secondary mt-2 leading-relaxed">{item.description}</p>
                       </div>
@@ -400,15 +397,12 @@ export default function About() {
                     }}
                     aria-label={`View details of ${item.title}`}
                   >
-                    <div className="flex items-start gap-4 md:flex-col md:items-center">
+                    <div className="flex items-start gap-4 max-md:items-center md:flex-col md:items-center">
                       <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 mb-0 md:mb-4 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
                         <Icon size={22} />
                       </div>
-                      <h3 className="text-base font-bold font-heading text-ink-primary mb-2 group-hover:text-primary-500 transition-colors duration-300 flex items-center gap-2 flex-wrap md:justify-center">
+                      <h3 className="text-base max-md:text-[18.4px] font-bold font-heading text-ink-primary mb-2 group-hover:text-primary-500 transition-colors duration-300 flex items-center gap-2 flex-wrap md:justify-center">
                         {item.title}
-                        <span className="md:hidden inline-flex items-center text-[11px] font-semibold text-primary-600 bg-primary-50 border border-primary-100/60 px-2.5 py-0.5 rounded-full">
-                          View
-                        </span>
                       </h3>
                     </div>
                     <p className="hidden md:block text-sm text-ink-secondary leading-relaxed">{item.description}</p>
@@ -563,16 +557,13 @@ export default function About() {
                     }}
                     aria-label={`View details of ${item.title}`}
                   >
-                    <div className="flex items-start gap-5 h-full">
+                    <div className="flex items-start gap-5 max-md:items-center h-full">
                       <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500 group-hover:bg-primary-500 group-hover:text-white transition-all duration-300">
                         <Icon size={24} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-bold font-heading text-ink-primary mb-1.5 flex flex-wrap items-center gap-2">
+                        <h3 className="text-lg max-md:text-[20.7px] font-bold font-heading text-ink-primary mb-1.5 flex flex-wrap items-center gap-2">
                           {item.title}
-                          <span className="md:hidden inline-flex items-center text-[11px] font-semibold text-primary-600 bg-primary-50 border border-primary-100/60 px-2.5 py-0.5 rounded-full">
-                            View
-                          </span>
                         </h3>
                         <p className="hidden md:block text-sm text-ink-secondary leading-relaxed">{item.description}</p>
                       </div>
@@ -705,10 +696,10 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.5, delay: i * 0.1, ease: 'easeOut' }}
-                  className="group relative w-[224px] overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-500 delay-200 hover:-translate-y-1.5 hover:scale-[1.02]"
+                  className="group relative w-[224px] md:hover:w-[292px] overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-2xl hover:ring-1 hover:ring-primary-200/60 transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-[1.03] hover:z-10"
                 >
                   {/* ── Image (square 224×224) ── */}
-                  <div className="relative h-56 overflow-hidden">
+                  <div className="relative aspect-square overflow-hidden">
                     {failedImages[member.name] ? (
                       <div className="w-full h-full bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center">
                         <Users size={44} className="text-primary-400" />
@@ -717,7 +708,7 @@ export default function About() {
                       <img
                         src={member.image}
                         alt={member.name}
-                        className="w-full h-full object-cover transition-all duration-700 delay-200 ease-out group-hover:scale-110 group-hover:rotate-[1deg]"
+                        className="w-full h-full object-cover"
                         loading="lazy"
                         onError={() => handleImageError(member.name)}
                       />
@@ -730,24 +721,18 @@ export default function About() {
                   {/* ── Content ── */}
                   <div className="relative p-5 lg:p-6 flex flex-col items-center text-center">
                     {/* Name */}
-                    <h3 className="text-lg font-bold font-heading text-ink-primary">
+                    <h3 className="text-lg font-bold font-heading text-ink-primary group-hover:text-primary-600 transition-colors duration-300">
                       {member.name}
                     </h3>
 
                     {/* Glass role badge */}
-                    <span className="inline-block mt-2 px-3 py-1 rounded-full text-[11px] font-semibold text-primary-600 bg-primary-50/80 border border-primary-100/50 shadow-sm">
+                    <span className="inline-flex items-center gap-1.5 mt-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-600">
+                      <span className="h-px w-4 bg-gradient-to-r from-primary-400 to-secondary-400" />
                       {member.role}
                     </span>
 
-                    {/* Bio — 2-3 intro lines, hidden by default, reveals on hover */}
-                    <div className="overflow-hidden transition-all duration-500 delay-200 ease-out max-h-0 group-hover:max-h-24 opacity-0 group-hover:opacity-100 mt-0 group-hover:mt-3">
-                      <p className="text-sm text-ink-secondary leading-relaxed line-clamp-3">
-                        {member.bio}
-                      </p>
-                    </div>
-
-                    {/* Read More button — hidden by default, reveals on hover below bio */}
-                    <div className="overflow-hidden transition-all duration-500 delay-200 ease-out max-h-0 group-hover:max-h-12 opacity-0 group-hover:opacity-100 mt-0 group-hover:mt-3">
+                    {/* Read More — revealed on hover, opens full profile in modal */}
+                    <div className="overflow-hidden transition-all duration-500 delay-200 ease-out max-h-0 group-hover:max-h-12 group-focus-within:max-h-12 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 mt-0 group-hover:mt-4 group-focus-within:mt-4">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -764,7 +749,7 @@ export default function About() {
                   </div>
 
                   {/* Bottom hover accent bar */}
-                  <div className="absolute bottom-0 left-4 right-4 h-0.5 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-200 origin-left" />
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-400 to-secondary-400 opacity-30 group-hover:opacity-100 transition-opacity duration-500 delay-200" />
                 </motion.div>
               ))}
             </div>
