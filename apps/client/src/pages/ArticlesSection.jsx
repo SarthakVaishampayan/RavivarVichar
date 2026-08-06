@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import Button from '../components/shared/Button';
 import api from '../lib/axios';
-import { ArrowLeft, ArrowRight, Calendar, Tag, Clock, Eye } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Calendar, Tag, Clock, Eye, Star } from 'lucide-react';
 
 const sectionConfig = {
   'articles': { label: 'Articles', title: 'All Articles', description: 'Thought-provoking pieces on rural development, community stories, and sector analysis.' },
@@ -13,7 +13,7 @@ const sectionConfig = {
 };
 
 const sectionCategoryMap = {
-  'Articles': ['General', 'Case Study', 'Explainer', 'News', 'Opinion'],
+  'Articles': ['General', 'Case Study', 'Explainer', 'News', 'Opinion', 'Impact Story', 'Policy Brief'],
   'Research & Reports': ['Research'],
   'Success Stories': ['Success Stories'],
 };
@@ -70,13 +70,12 @@ export default function ArticlesSection() {
   }
 
   const allowedCategories = sectionCategoryMap[config.label];
-  const filtered = articles.filter((a) => {
-    if (config.label === 'Articles') {
-      return !sectionCategoryMap['Research & Reports'].includes(a.category) &&
-             !sectionCategoryMap['Success Stories'].includes(a.category);
-    }
-    return allowedCategories.includes(a.category);
-  });
+  const sectionArticles = articles.filter((a) =>
+    // Positive allowlist: each section only shows its own categories
+    allowedCategories.includes(a.category)
+  );
+  // Featured articles float to the top
+  const filtered = [...sectionArticles.filter((a) => a.featured), ...sectionArticles.filter((a) => !a.featured)];
 
   const getReadingTime = (content) => {
     if (!content) return 1;
@@ -147,11 +146,16 @@ export default function ArticlesSection() {
                     to={`/articles/${article.slug}`}
                     className="card-hover overflow-hidden group"
                   >
-                    <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">
+                    <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">
                       {article.thumbnail ? (
                         <img src={article.thumbnail} alt={article.title} loading="lazy" className="w-full h-full object-cover" />
                       ) : (
                         <Tag size={28} className="text-primary-400" />
+                      )}
+                      {article.featured && (
+                        <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-primary-500 text-white text-[11px] font-semibold px-3 py-1 shadow-soft">
+                          <Star size={12} /> Featured
+                        </span>
                       )}
                     </div>
                     <div className="p-6">

@@ -19,6 +19,8 @@ const globalSearch = catchAsync(async (req, res) => {
   const [articles, recognitions, gallery, events] = await Promise.all([
     Article.find({
       status: 'published',
+      // Respect the per-article "Exclude from search engines" setting
+      'seo.excludeFromSearch': { $ne: true },
       $or: [
         { title: regex },
         { excerpt: regex },

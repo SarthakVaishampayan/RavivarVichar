@@ -27,24 +27,41 @@ const resetPasswordSchema = z.object({
 });
 
 // Article schemas
+// NOTE: keep in sync with apps/server/src/models/Article.js — every field the
+// editor saves must be listed here, because Zod strips unknown keys on POST.
 const articleSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters').max(200),
   slug: z.string().optional(),
   category: z.string().optional(),
+  additionalCategories: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
   thumbnail: z.string().optional(),
   gallery: z.array(z.string()).optional(),
   videoUrl: z.string().optional(),
   content: z.string().optional(),
   excerpt: z.string().optional(),
+  bannerDescription: z.string().optional(),
+  focusKeyphrase: z.string().optional(),
+  credit: z.string().optional(),
+  authorName: z.string().optional(),
   status: z.enum(['draft', 'published']).optional(),
+  publishedAt: z.string().optional(),
   featured: z.boolean().optional(),
   pinned: z.boolean().optional(),
   seo: z.object({
     metaTitle: z.string().optional(),
     metaDescription: z.string().optional(),
     ogImage: z.string().optional(),
+    ogTitle: z.string().optional(),
+    ogDescription: z.string().optional(),
+    twitterTitle: z.string().optional(),
+    twitterDescription: z.string().optional(),
+    twitterImage: z.string().optional(),
     keywords: z.array(z.string()).optional(),
+    metaNewsKeywords: z.array(z.string()).optional(),
+    canonicalUrl: z.string().optional(),
+    schemaType: z.string().optional(),
+    excludeFromSearch: z.boolean().optional(),
   }).optional(),
 });
 module.exports = {

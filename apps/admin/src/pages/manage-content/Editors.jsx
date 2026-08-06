@@ -323,6 +323,15 @@ export function ArticleEditor() {
                     placeholder="Select Tags"
                   />
 
+                  {/* Author Name — shown as the author on the public article page */}
+                  <Input
+                    label="Author Name"
+                    name="authorName"
+                    value={formData.authorName}
+                    onChange={handleChange}
+                    placeholder="e.g. Riya Sharma"
+                  />
+
                   {/* Credits */}
                   <Input
                     label="Credits"
@@ -624,6 +633,20 @@ function makeCategoryEditor(category, label, singularName, apiPath, resourceKey,
                   <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">Category</p>
                   <p className="text-sm font-semibold text-gray-800 mt-1">{category}</p>
                 </div>
+                <Input
+                  label="Author Name"
+                  name="authorName"
+                  value={formData.authorName}
+                  onChange={handleChange}
+                  placeholder="e.g. Riya Sharma"
+                />
+                <Input
+                  label="Credits"
+                  name="credit"
+                  value={formData.credit}
+                  onChange={handleChange}
+                  placeholder="Photo/author credits"
+                />
                 <Select label="Status" name="status" value={formData.status} onChange={handleChange} options={['draft', 'published']} />
                 <ImageUpload label="Thumbnail" value={formData.thumbnail} onChange={(url) => handleChange('thumbnail', url)} />
                 <MultiImageUpload label="Gallery" value={formData.gallery} onChange={(urls) => handleChange('gallery', urls)} />

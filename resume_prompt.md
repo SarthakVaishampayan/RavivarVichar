@@ -1,210 +1,232 @@
-# Resume Prompt — RavivarVichar CMS
+# 🚀 RavivarVichar Production Launch — Resume Prompt
 
-> **Instructions to Codebuff**: Read this file first to restore full project context. After reading, the user will tell you which phase to begin.
+> **Session resume point:** Phase 6 in progress — creating the Cloudflare Origin Certificate.
+> Paste this file's contents into a new session to continue exactly where we left off.
 
 ---
 
-## Project Overview
+## 📌 The Goal
 
-Building a **full-stack CMS platform** for **RavivarVichar** — an NGO/research organization focused on rural women's entrepreneurship and financial inclusion in Rajasthan, India.
+Deploy RavivarVichar to production at **`https://ravivarvichar.in`** on a new DigitalOcean droplet, fronted by **Cloudflare** (new account), with a Cloudflare **Origin Certificate** (15-year, free). The domain is registered at **GoDaddy**.
 
-### Architecture
+**Critical facts:**
+- **New droplet IP:** `159.65.153.153` (Ubuntu 24.04, $6/mo = 1 vCPU / 1 GB RAM / 25 GB SSD — same size as old staging, works fine, swap is MANDATORY)
+- **Old droplet IP (still live):** `142.93.213.69` — keep running until Phase 8
+- **GitHub repo:** `https://github.com/SarthakVaishampayan/RavivarVichar.git` (public, remote name `RavivarVichar`)
+- **Cloudflare:** NEW account `Ravivardigest01@gmail.com` — the domain was previously on SOMEONE ELSE's Cloudflare account (nameservers `sasha` + `rene.ns.cloudflare.com`). We are migrating it to the new account.
+- **Repo prep work (already committed & pushed as "final" `eb5b8b3f`):** `scripts/maintenance-on.sh` made SSL-aware (443 block + origin cert check, old IP refs removed) and `PRODUCTION_DEPLOY_GUIDE.md` created (full step-by-step guide).
+
+**The master plan (nothing goes live until Phase 8):**
 ```
-ravivarVichar/                     ← Monorepo (npm workspaces)
-├── apps/
-│   ├── client/                    ← Public website (React 18 + Vite + Tailwind)
-│   ├── admin/                     ← Admin dashboard (React 18 + Vite + Tailwind)
-│   └── server/                    ← Express API
-├── packages/
-│   └── shared/                    ← Shared Zod validation schemas
-├── scripts/
-│   ├── deploy.sh                  ← Deploy with auto-rollback
-│   ├── sanity-check.js            ← Pre-commit verification
-│   ├── maintenance-on.sh          ← Enable maintenance mode
-│   └── maintenance-off.sh         ← Disable maintenance mode
-├── DEPLOYMENT_GUIDE.md            ← Deployment guide (merged from 3 old files)
-├── DEPLOYMENT_REFERENCE.md        ← Schema/API reference (actively maintained)
-├── OriginalDeploymentGuide.md     ← Lessons learned for final production deploy
-├── ROADMAP.md                     ← Consolidated roadmap (merged from 4 old files)
-├── resume_prompt.md               ← ← This file
-├── package.json                   ← Root workspace config
-└── .env.example
+PHASE 1-4   Server setup + deploy on droplet → tested via http://159.65.153.153 ✅ DONE
+PHASE 5     Cloudflare DNS in NEW account (not live yet)                 ✅ DONE
+PHASE 6     Origin Certificate generation                                 ⏳ IN PROGRESS
+PHASE 7     Install cert + HTTPS on nginx, hosts-file test                ⬜ REMAINING
+PHASE 8     GO LIVE: switch nameservers at GoDaddy to kipp/laila          ⬜ REMAINING
+PHASE 9     Post-launch: admin password, Resend email, backups, UFW       ⬜ REMAINING
 ```
 
-### Key Decisions Made (from user discussion)
-1. **Single admin role** — not 4 roles. Auth check is simply `isAdmin: true/false`. No role.middleware.js.
-2. **SEO is high priority** — semantic HTML, react-helmet-async, Open Graph, JSON-LD, sitemap, clean URLs.
-3. **Admin content flow**: Login → Dashboard → Sidebar "Manage Content" → ContentHub (pick type) → DataTable list → Editor form → Publish → Public site auto-updates.
-4. **Analytics Dashboard**: Content count cards, pie chart (content distribution), bar chart (monthly posts), recent activity feed.
-5. **JavaScript only** — no TypeScript.
-6. **Local MongoDB** — not Atlas for development.
-7. **No hardcoded data** — All homepage sections must fetch from API and return null/hide when no data.
-8. **Status system for submissions**: `under-consideration` / `approved` / `posted` / `denied`. Deny does NOT delete.
-9. **Admin idle timeout**: Page reloads instead of redirecting to `/login` (avoids blank page when SPA is at subpath).
+---
 
-### Design Tokens (current)
-```css
---color-primary: #F5A623;       /* warm orange */
---color-secondary: #6AA84F;     /* soft sage green */
---color-accent-blue: #5DADE2;
---color-accent-red: #D96C6C;
---color-surface-secondary: #FAF9F7;
---color-surface-section: #F8F8F6;
---color-ink-primary: #222222;
---color-ink-secondary: #6E6E6E;
---font-heading: 'Playfair Display', serif;
---font-body: 'Inter', sans-serif;
+## ✅ What's DONE
+
+### Repo prep (committed & pushed, commit `eb5b8b3f` "final")
+- `scripts/maintenance-on.sh`: now listens on **443 with the origin cert** (required for Cloudflare Full/strict), fails fast if cert missing (skipped in `--dry-run`), old IP `142.93.213.69` refs replaced with `ravivarvichar.in`
+- `PRODUCTION_DEPLOY_GUIDE.md`: full production guide (droplet → server → Cloudflare → origin cert → go-live)
+- Code-reviewed; validation `bash -n` passes
+
+### Phase 1 — Droplet ✅
+- Created `ravivarvichar-production` in DigitalOcean, region **BLR1**, Ubuntu 24.04 LTS, **$6/mo** (1 GB RAM — user prefers this over the guide's recommended $12; it matches the old working setup)
+- **Authentication: Password** (user's preference; old password `ravivar2026Vichar` was shared in chat → user said password will be changed before production)
+
+### Phase 2 — Server dependencies ✅
+- Node `v20.20.2`, npm `10.8.2`, MongoDB `7.0.39`, nginx `1.24.0`, PM2 `7.0.3`, apache2-utils installed
+- **Swap: 2047 MB active** (`/swapfile`, in fstab) — CRITICAL on 1 GB RAM for builds
+- mongod started + enabled
+- Had a hiccup: `sshd_config` debconf prompt during apt upgrade was interrupted with ^C; fixed by `dpkg --configure -a` and choosing "keep the local version currently installed". Reboot recommended but server worked fine.
+
+### Phase 3 — App deployed ✅
+- Cloned to `/var/www/RavivarVichar`
+- `.env` created at `apps/server/.env` with generated secrets (JWT access/refresh 48-byte base64, `IP_HASH_SALT` 32-byte; `CLIENT_URL=https://ravivarvichar.in`, `ADMIN_URL=https://admin.ravivarvichar.in`; Cloudinary empty → local uploads; Resend empty)
+- DB seeded (fresh): `npm run seed -w apps/server`
+- `bash scripts/deploy.sh` → SUCCESS: client + admin built, PM2 `ravivarvichar-api` online & healthy
+- PM2 startup (systemd) configured, `pm2 save` done
+- Health: `{"success":true,"message":"RavivarVichar API is running",...}`
+
+### Phase 4 — Nginx HTTP ✅
+- Config `/etc/nginx/sites-available/ravivarvichar` (v1, HTTP-only): serves client SPA at `/`, admin at `/admin` (alias), proxies `/api/` → localhost:5000, `/uploads/` alias, `client_max_body_size 50m`
+- Enabled, `nginx -t` OK, restarted
+- Verified: `curl http://localhost/api/v1/health` returns success JSON
+- Site renders at `http://159.65.153.153` ✅ (user confirmed "website loaded")
+
+### Phase 5 — Cloudflare DNS (NEW account) ✅
+- Added `ravivarvichar.in` to new Cloudflare account (Free plan) — domain was previously on someone else's CF account
+- DNS records cleaned up — **final 7 records**:
+  | Type | Name | Value | Proxy |
+  |---|---|---|---|
+  | A | `@` | `159.65.153.153` | 🟠 Proxied |
+  | A | `www` | `159.65.153.153` | 🟠 Proxied |
+  | A | `admin` | `159.65.153.153` | 🟠 Proxied |
+  | MX | `@` | `smtp.google.com` | DNS only (Google Workspace — DO NOT DELETE) |
+  | TXT | `default._domainkey` | DKIM string (keep!) | DNS only |
+  | TXT | `@` | `google-site-verification=fQsW...` | DNS only |
+  | TXT | `@` | `google-site-verification=9ooA...` | DNS only |
+  - Deleted: old A/AAAA proxy records, `_acme-challenge` TXT ×4, `_cf-custom-hostname`
+- SSL mode set to **Full (strict)** (verify this was saved!)
+- **New nameservers (for Phase 8): `kipp.ns.cloudflare.com` + `laila.ns.cloudflare.com`**
+- Zone is **"Pending nameserver update"** — expected; old site still live at ravivarvichar.in
+- ⛔ **GoDaddy nameservers NOT changed yet — that's Phase 8**
+
+---
+
+## ⏳ CURRENT STEP — Phase 6: Origin Certificate (IN PROGRESS)
+
+### What happened
+- In Cloudflare → SSL/TLS → **Origin Server** → Create Certificate
+- Filled: Cloudflare generates key (RSA 2048), hostnames `*.ravivarvichar.in`, `ravivarvichar.in`, `www.ravivarvichar.in`, `admin.ravivarvichar.in`, validity **15 years**
+- ❌ **ERROR on Create:** *"Failed to validate requested hostname `*.ravivarvichar.in`: This zone is either not part of your account, or you do not have access to it."*
+
+### The fix (in order)
+1. **Remove the wildcard `*.ravivarvichar.in`** (click its `×`) — keep only:
+   ```
+   ravivarvichar.in
+   www.ravivarvichar.in
+   admin.ravivarvichar.in
+   ```
+   → The 3 explicit hostnames fully cover what we need; wildcard was just convenience.
+2. Click **Create** again.
+3. If still fails: **wait 15–30 min** (Cloudflare backend syncs new zones) and retry.
+4. Sanity: logged into the NEW account `Ravivardigest01@gmail.com`, zone `ravivarvichar.in` visible under it.
+
+### When the cert generates — you get TWO blocks:
+1. `-----BEGIN CERTIFICATE-----` block → save as `origin-cert.txt` (or paste into `nano /etc/nginx/ssl/ravivarvichar-origin.crt` on the droplet)
+2. `-----BEGIN PRIVATE KEY-----` block → `nano /etc/nginx/ssl/ravivarvichar-origin.key`
+- 🔒 Private key is shown only once — copy it before closing the page.
+
+### Then install on droplet (Phase 6 Part 2):
+```bash
+mkdir -p /etc/nginx/ssl
+nano /etc/nginx/ssl/ravivarvichar-origin.crt   # paste CERTIFICATE block
+nano /etc/nginx/ssl/ravivarvichar-origin.key   # paste PRIVATE KEY block
+chmod 644 /etc/nginx/ssl/ravivarvichar-origin.crt
+chmod 600 /etc/nginx/ssl/ravivarvichar-origin.key
+openssl x509 -in /etc/nginx/ssl/ravivarvichar-origin.crt -noout -dates -subject
 ```
-
-Border radius system: pill = 999px, card = 28px, image = 24px, input = 18px. Shadows: soft/card/hover/nav. Container: max 1280px, content 1180px. Font sizes: hero 64px, section 46px, card 26px, body 18px, nav 14px.
-
-### API Conventions
-- Base URL: `/api/v1`
-- List endpoints: `?page=&limit=&sort=&search=&status=&category=`
-- Response shape: `{ success: boolean, data: any, message?: string, meta?: { page, total } }`
-- All write routes require admin JWT auth
-- Public GET routes require no auth
-
-### Content Models (16 Collections)
-User, Article, Event, ContactMessage, Newsletter, GalleryImage, Partner, PartnerApplication, Testimonial, FeatureRequest, JoinInitiative, MediaMention, PageSection, PageView, ActivityLog, SeoMeta
-
-*Note: Several models from the original plan (Program, Project, Report, Entrepreneur, SHG, Mentor, Donation, Membership, MediaItem) were removed from server code as part of earlier cleanup.*
-
-### Tech Stack
-- **Frontend (client)**: React 18 + Vite + Tailwind CSS 3 + React Router v6 + Framer Motion + clsx + react-helmet-async + lucide-react
-- **Frontend (admin)**: React 18 + Vite + Tailwind CSS 3 + Zustand + TanStack Table + TipTap + Recharts + React Hook Form + Zod + dnd-kit + axios
-- **Backend**: Express + Mongoose + JWT + bcrypt + Multer + Cloudinary
-- **Shared package**: Zod validation schemas used by both server & client forms
-- **Planned**: Resend/Nodemailer (email), Razorpay/Stripe (payments), Vercel (deploy), Render (server), MongoDB Atlas (DB)
+✅ Done when: dates ~15 years apart, subject contains `ravivarvichar.in`.
 
 ---
 
-## Current Status
+## ⬜ REMAINING — Phases 7–9
 
-| Phase | Status |
-|-------|--------|
-| 1 — Foundation | ✅ Complete |
-| 2 — Core CMS APIs | ✅ Complete |
-| 3 — Admin Dashboard | ✅ Complete |
-| 4 — Public Website | ✅ Complete |
-| 4b — Mobile Responsive Polish | ✅ Complete |
-| 5 — Integrations | ⏳ Not started |
-| 6 — Polish & Deploy | ⏳ Not started |
+### Phase 7 — Nginx HTTPS + pre-launch testing (still NOT live)
+- Replace nginx config with **v2** (from `PRODUCTION_DEPLOY_GUIDE.md` section 9.1): HTTP→HTTPS 301 redirect server + 443 ssl server with origin cert, `server_name ravivarvichar.in www.ravivarvichar.in admin.ravivarvichar.in`, Cloudflare `set_real_ip_from` ranges + `real_ip_header CF-Connecting-IP`
+- `nginx -t && systemctl restart nginx`
+- Test via `curl --resolve ravivarvichar.in:443:159.65.153.153 https://ravivarvichar.in/api/v1/health`
+- Hosts-file override on Windows (`C:\Windows\System32\drivers\etc\hosts`):
+  ```
+  159.65.153.153 ravivarvichar.in
+  159.65.153.153 www.ravivarvichar.in
+  159.65.153.153 admin.ravivarvichar.in
+  ```
+  → `ipconfig /flushdns`, incognito window
+- Test: `https://ravivarvichar.in` (site + valid padlock), `/admin` login works (first time — needs HTTPS for secure cookie), health JSON
+- Optional: test maintenance `MAINTENANCE_PASS=secret bash scripts/maintenance-on.sh` + off
+- Remove hosts lines after
 
-### Staging Server Deployed
-- **IP:** DigitalOcean droplet (current testing/staging server)
-- **Deployment method:** `bash scripts/deploy.sh` with auto-rollback
-- **Maintenance mode:** Cookie-based bypass via `_rv_preview` endpoint
-- **Notable issues encountered:** `package-lock.json` tracking conflict, platform mismatch between Windows/Linux
-- **Status:** Server is live and running with latest code
+### Phase 8 — GO LIVE (only when user is ready)
+- At **GoDaddy**: Domains → ravivarvichar.in → Nameservers → replace current (`sasha` + `rene.ns.cloudflare.com`) with **`kipp.ns.cloudflare.com` + `laila.ns.cloudflare.com`**
+- ⚠️ Check **DNSSEC is OFF** at GoDaddy first (Cloudflare warned about this)
+- Propagation: `nslookup -type=NS ravivarvichar.in` (Windows) → zone flips Pending → **Active**
+- Verify in normal browser: `https://ravivarvichar.in` new site + padlock, `/admin` login, health JSON
 
-### Breakpoint Change
-- `lg` breakpoint changed from 1024px → **1150px** in `apps/client/tailwind.config.js`
-- Below 1150px = mobile/tablet view (iPad Pro included)
-- Above 1150px = desktop view
-
-### File Consolidation (July 13, 2026)
-- Old files DELETED (7): `deployment.md`, `DEPLOYMENT_CHECKLIST.md`, `instructions.md`, `phase.md`, `RavivarVichar_CMS_Implementation_Plan.md`, `futurePlan.md`, `ToBeDone.md`
-- New files CREATED (3): `DEPLOYMENT_GUIDE.md`, `ROADMAP.md`, `OriginalDeploymentGuide.md`
-- Kept: `DEPLOYMENT_REFERENCE.md` (updated), `resume_prompt.md` (this file)
-- See `ROADMAP.md` for full project status and execution priority
-- See `DEPLOYMENT_GUIDE.md` for deployment instructions
-- See `OriginalDeploymentGuide.md` for lessons learned (final production deploy prep)
-
-### Deploy Script Updated
-- `scripts/deploy.sh` — Quick Commands section updated with Deploy Workflow (5-step) and Maintenance Helpers sections
-
-### AI Workflow Commands
-- **"Run sanity check"** — Compares current code against `DEPLOYMENT_REFERENCE.md` Sections 1-8, runs builds, reports PASS/FAIL
-- **"Update deployment reference"** — Only after successful push. Buffy captures current state into `DEPLOYMENT_REFERENCE.md` with version/date/metadata
-- **"Pull up deployment procedure"** — Shows the deploy workflow from `DEPLOYMENT_GUIDE.md`
+### Phase 9 — Post-launch
+1. **Change admin password** immediately (`admin@ravivarvichar.org` / `Admin@123` → Settings → Change Password) — user also plans to change droplet root password ("changed before production only")
+2. UFW firewall: `ufw allow 22,80,443 && ufw enable` (optionally restrict 80/443 to Cloudflare IPs)
+3. **Resend** for password-reset emails: create account, add TXT + DKIM records in Cloudflare DNS, set `RESEND_API_KEY` in `apps/server/.env`, `pm2 restart ravivarvichar-api`
+4. **Backups cron**: mongodump + uploads rsync (see guide section 11.3)
+5. Verify email (Google Workspace MX intact in new zone)
+6. Old droplet: keep a few days, then shutdown (snapshot first)
+7. Tell Buffy **"Update deployment reference"** → update `DEPLOYMENT_REFERENCE.md`
 
 ---
 
-### Last Session — Summary of All Changes
+## 🔑 Key credentials/locations
+| Item | Value |
+|---|---|
+| Droplet IP | `159.65.153.153` |
+| Server path | `/var/www/RavivarVichar` |
+| PM2 process | `ravivarvichar-api` (port 5000) |
+| SSH | `ssh root@159.65.153.153` (password auth; user prefers password) |
+| Origin cert paths | `/etc/nginx/ssl/ravivarvichar-origin.crt` + `.key` |
+| New CF nameservers | `kipp.ns.cloudflare.com` + `laila.ns.cloudflare.com` |
+| Old CF nameservers (to replace) | `sasha.ns.cloudflare.com` + `rene.ns.cloudflare.com` |
+| Seed admin | `admin@ravivarvichar.org` / `Admin@123` (CHANGE in Phase 9) |
 
-#### Bug Fixes
-1. **Server crash fix** — `contact.routes.js` was missing `updateStatus` in the destructured import from the controller. Caused `ReferenceError` on startup.
-2. **Duplicate `module.exports`** — 4 route files (joinInitiative, featureRequest, newsletter, partnerApplication) had duplicate `module.exports = router;` lines. Cleaned up.
-3. **Admin idle timeout redirect** — Changed `window.location.href = '/login'` → `window.location.reload()` in axios interceptor. Old code navigated to main site's `/login` (blank page) instead of admin SPA's internal `/login` when deployed at subpath.
-4. **Upload middleware fix** — Removed invalid `image/jpg` MIME type, added `image/bmp`, `image/tiff`, `image/svg+xml`, and `startsWith('image/')` fallback to accept ALL image formats.
-5. **Multer error handling** — Added MulterError handling to `error.middleware.js` with clear messages (LIMIT_FILE_SIZE, LIMIT_FILE_COUNT, LIMIT_UNEXPECTED_FILE).
+## 📄 Reference docs (in repo)
+- `PRODUCTION_DEPLOY_GUIDE.md` — the master guide (Phases 0–9, troubleshooting table)
+- `DEPLOYMENT_GUIDE.md` — daily ops / troubleshooting
+- `OriginalDeploymentGuide.md` — lessons learned (swap, base path, node_modules mismatch)
 
-#### Status System Overhaul (All 5 Submission Types)
-- **Before**: `pending` / `reviewed` / `denied` (deny auto-deleted)
-- **After**: `under-consideration` / `approved` / `posted` / `denied` (deny just sets status, no delete)
-- Updated all 5 models: ContactMessage, Newsletter, FeatureRequest, JoinInitiative, PartnerApplication
-- Updated all 5 controllers — `updateStatus` validates against new enum
-- Updated SubmissionDetail.jsx — 4 colored buttons: Approved (green), Under Consideration (yellow), Posted (blue), Deny (red)
+## 🎯 Next action when resuming
+1. Try Phase 6 origin cert creation **without** the wildcard `*.ravivarvichar.in` (or wait 15–30 min if needed)
+2. Install cert on droplet (commands above)
+3. Verify with `openssl x509 ...` → then Phase 7 (HTTPS nginx config)
 
-#### Admin Panel Improvements
-- **Review button** — Submission resources now show a labeled "Review" button (Search icon) instead of pencil icon
-- **Status column** — Added colored StatusBadge in ContentList for submission resources
-- **StatusBadge colors** — Added color styles for `under-consideration` (yellow), `approved` (green), `posted` (blue), `denied` (red)
-- **"Add Medi" fix** — Changed media label from `'Media'` to `'Media Items'` so add button shows "Add Media Item"
-- **New sidebar sections** — Added 3 dedicated management sections:
-  - **Research & Reports** (filters articles by category "Research")
-  - **Success Stories** (filters articles by category "Success Stories")
-  - **Interviews** (filters articles by category "Interview")
-  - Each has its own list page, editor (category pre-set), and sidebar entry
-  - EditorForm now supports `defaultValues` and `singularLabel` props
-  - ContentList now supports `singularLabel` field for proper singular names
 
-#### Hardcoded Data Removed
-All 4 homepage components now fetch from APIs and return `null` when no data:
-- **MediaMentions.jsx** — Removed 3 hardcoded fallback entries. Fetches from `/media-mentions` API.
-- **FeaturedResearch.jsx** — Removed 3 hardcoded "Success Stories". Fetches from `/articles?category=Success Stories`.
-- **Partners.jsx** — Removed 6 hardcoded partners. Fetches from `/partners?status=active`. Shows logos or auto-generates initials.
-- **Testimonials.jsx** — Removed 3 hardcoded testimonials. Fetches from `/testimonials`. Handles `image`/`photo`, `quote`/`content`, `role`/`designation`.
 
-#### Database Cleanup
-- **PageSection cleanup** — Deleted 9 old ghost documents (`mission`, `articles`, `stats`, `projects`, `videos`, `events`, `membership`, `donate`, `newsletter`) from before the enum was narrowed
-- **Fixed `programs.visible=false`** — Was causing "What We Do" section to be hidden on homepage
-- Created `apps/server/src/seed/cleanupSections.js` (one-time migration script, can be removed)
 
-#### Knowledge Hub Screens Issues
-- The 4 Knowledge Hub sections (Articles, Research & Reports, Success Stories, Interviews) are all articles with different category values
-- Admin sidebar now shows dedicated entries for each with pre-set category
-- Category is shown as a read-only badge in the editor form
 
----
 
-## Next Steps / Remaining Work
 
-### Immediate Items
-1. **ProgramsGrid.jsx** — Still has hardcoded "What We Do" content. Needs to be dynamic.
-2. **About.jsx** — Still has hardcoded stats, timeline, team, values. Needs to be dynamic.
-3. **Hero.jsx** — Has hardcoded images. May need to be configurable.
-4. **Deployment** — Server already deployed on staging droplet. For final production, see `OriginalDeploymentGuide.md`.
-5. **See `ROADMAP.md` Future Features section** for local storage migration plan, seed data population, etc.
-6. **Seed data** — `npm run seed` is outdated. New models (MediaMention, GalleryImage, FeatureRequest, JoinInitiative, PartnerApplication) aren't seeded.
 
-### Infrastructure / CI
-- PM2 process manager setup for production
-- Nginx/Caddy reverse proxy config for client, admin, API
-- SSL cert via Let's Encrypt
-- MongoDB connection to Atlas (currently local)
-- Environment vars for production
-
-### Phase 5 — Integrations (Not Started)
-- Newsletter signup + email (Resend/Nodemailer)
-- Donations (Razorpay/Stripe)
-- Membership management
-- Contact form backend
-- Pageview analytics tracking
-
-### Known Issues
-- EditorForm title uses `pluralLabel.slice(0, -1)` fallback — edge cases like "Media" → "Medi" still exist for some resources
-- ContentHub shows "0 items" for the 3 new sections (researchReports, successStories, interviews) because analytics doesn't count by category
-- ProgramsGrid.jsx still has hardcoded data (not yet rewritten)
-
----
-
-## Resuming Work
-
-When the user says "continue", first check:
-1. Is the dev server running? If not, start it.
-2. Which issue do they want to work on next?
-3. Read the full conversation summary in this file for context.
-
-See `ROADMAP.md` for the complete project roadmap and execution priority.
+What YOU do — step by step
+STEP 1 — GoDaddy: check DNSSEC is OFF (5 min)
+- Go to GoDaddy → your domain → DNS → look for DNSSEC
+- If it says "not set up" → good, move on. If it's ON → turn it OFF (Cloudflare will warn you about this if it's on).
+STEP 2 — Cloudflare: set SSL to "Flexible" (2 min) ⚠️ IMPORTANT
+- Cloudflare dashboard → your domain → SSL/TLS → Overview
+- Change the mode from Full (strict) to Flexible
+- Why: if you don't do this, the website will show an error to everyone as soon as you switch. Flexible = safe during the switch.
+STEP 3 — GoDaddy: change nameservers (5 min) 🟢 THIS IS THE "GO LIVE" MOMENT
+- GoDaddy → your domain → Nameservers → "I'll use my own nameservers"
+- Type:  kipp.ns.cloudflare.com  and  laila.ns.cloudflare.com  → Save
+⚠️ Honest warning: the second this saves, your NEW website goes live for everyone — with the sample/test data in it (not the old site's content). That's normal for this migration; the old site will stop showing. So only do this when you're ready for that.
+STEP 4 — Wait (5–30 min)
+- Open your terminal and run:  nslookup -type=NS ravivarvichar.in 
+- When you see  kipp  and  laila  in the answer → you're done waiting.
+- In Cloudflare, your domain should now say "Active" instead of "Pending".
+STEP 5 — Create the certificate (5 min) ✅ will work now
+- Cloudflare → SSL/TLS → Origin Server → Create Certificate
+- Hostnames:  ravivarvichar.in ,  www.ravivarvichar.in ,  admin.ravivarvichar.in  (no wildcard)
+- Validity: 15 years → Create
+- You get 2 blocks of text:
+- CERTIFICATE block → copy it
+- PRIVATE KEY block → copy it ⚠️ It's shown only once! Save it in a notepad file immediately.
+STEP 6 — Put it on your server (10 min)
+- SSH into your server ( ssh root@159.65.153.153 )
+- Run these, one by one (it will open a text editor to paste the blocks):
+// bash
+mkdir -p /etc/nginx/ssl
+nano /etc/nginx/ssl/ravivarvichar-origin.crt   # paste the CERTIFICATE block, save (Ctrl+O, Enter, Ctrl+X)
+nano /etc/nginx/ssl/ravivarvichar-origin.key   # paste the PRIVATE KEY block, save
+chmod 644 /etc/nginx/ssl/ravivarvichar-origin.crt
+chmod 600 /etc/nginx/ssl/ravivarvichar-origin.key
+- Then replace the nginx config with the v2 version — it's written out in full in your file  PRODUCTION_DEPLOY_GUIDE.md , section 9.1. Paste it into:
+// bash
+nano /etc/nginx/sites-available/ravivarvichar
+- Then restart:
+// bash
+nginx -t && systemctl restart nginx
+STEP 7 — Flip SSL back to "Full (strict)" (2 min)
+- Cloudflare → SSL/TLS → Overview → change Flexible back to Full (strict)
+STEP 8 — Check everything (5 min)
+- Open  https://ravivarvichar.in  → site loads with a padlock ✅
+-  https://ravivarvichar.in/admin  → login page loads, log in with  admin@ravivarvichar.org  /  Admin@123  ✅
+- Open  https://ravivarvichar.in/api/v1/health  in browser → shows  {"success":true,...}  ✅
+STEP 9 — After that (security, do soon)
+1. Change the admin password (Admin panel → Settings → Change Password)
+2. Turn on the firewall (I'll give you the command when you get here)
+3. Set up email (Resend) + backups
+────────────────────────────────────────────────────────────────────────────────
+The short version: GoDaddy (check DNSSEC) → Cloudflare (set Flexible) → GoDaddy (change nameservers) → wait → Cloudflare (create cert) → server (paste cert + config) → Cloudflare (set Full strict) → test.
+Tell me when you've done Step 1 & 2, and I'll guide you through the rest one step at a time. Want me to also update your resume_prompt.md with this new order so we don't lose it?

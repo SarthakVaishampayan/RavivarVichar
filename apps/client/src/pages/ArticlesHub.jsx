@@ -14,7 +14,7 @@ const sections = [
 
 // Maps each section to the article categories it should show
 const sectionCategoryMap = {
-  'Articles': ['General', 'Case Study', 'Explainer', 'News', 'Opinion'],
+  'Articles': ['General', 'Case Study', 'Explainer', 'News', 'Opinion', 'Impact Story', 'Policy Brief'],
   'Research & Reports': ['Research'],
   'Success Stories': ['Success Stories'],
 };
@@ -86,14 +86,14 @@ export default function ArticlesHub() {
 
   const getFilteredArticles = (sectionLabel) => {
     const allowedCategories = sectionCategoryMap[sectionLabel];
-    return articles.filter((a) => {
-      const matchSection = sectionLabel === 'Articles'
-        ? !sectionCategoryMap['Research & Reports'].includes(a.category) &&
-          !sectionCategoryMap['Success Stories'].includes(a.category)
-        : allowedCategories.includes(a.category);
+    const filtered = articles.filter((a) => {
+      // Positive allowlist: each section only shows its own categories
+      const matchSection = allowedCategories.includes(a.category);
       const matchSearch = !searchQuery || a.title.toLowerCase().includes(searchQuery.toLowerCase()) || (a.excerpt || '').toLowerCase().includes(searchQuery.toLowerCase());
       return matchSection && matchSearch;
     });
+    // Featured articles float to the top of their section
+    return [...filtered.filter((a) => a.featured), ...filtered.filter((a) => !a.featured)];
   };
 
   const getReadingTime = (content) => {
@@ -219,11 +219,16 @@ export default function ArticlesHub() {
                             to={`/articles/${article.slug}`}
                             className="card-hover overflow-hidden group"
                           >
-                            <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">
+                            <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">
                               {article.thumbnail ? (
                                 <img src={article.thumbnail} alt={article.title} loading="lazy" className="w-full h-full object-cover" />
                               ) : (
                                 <Tag size={28} className="text-primary-400" />
+                              )}
+                              {article.featured && (
+                                <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-primary-500 text-white text-[11px] font-semibold px-3 py-1 shadow-soft">
+                                  <Star size={12} /> Featured
+                                </span>
                               )}
                             </div>
                             <div className="p-6">

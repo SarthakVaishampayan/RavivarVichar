@@ -3,8 +3,45 @@ import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import Button from '../components/shared/Button';
-import { ArrowLeft, Calendar, User, Linkedin, Twitter, Facebook } from 'lucide-react';
+import { ArrowLeft, Calendar, User, Camera, Linkedin, Twitter, Facebook } from 'lucide-react';
 import api from '../lib/axios';
+
+// Categories that belong to the "Articles" group (all other categories are their own group)
+const ARTICLE_GROUP = ['General', 'Case Study', 'Explainer', 'News', 'Opinion', 'Impact Story', 'Policy Brief'];
+
+const getCategoryGroup = (category) => {
+  if (ARTICLE_GROUP.includes(category)) return ARTICLE_GROUP;
+  return category ? [category] : ARTICLE_GROUP;
+};
+
+// ─── Media helpers: direct video/audio files vs embeddable (YouTube/Vimeo) URLs ───
+const MEDIA_FILE_EXT = /\.(mp4|webm|ogg|mov|avi|mkv|mpeg|mpg|3gp|wmv|mp3|wav|m4a|flac|aac)(\?|#|$)/i;
+const AUDIO_FILE_EXT = /\.(mp3|wav|m4a|flac|aac)(\?|#|$)/i;
+
+// Social scrapers (Facebook, WhatsApp, Twitter) reject relative image URLs —
+// turn /uploads/... into absolute URLs using the current origin.
+const toAbsoluteUrl = (url) => {
+  if (!url || !url.startsWith('/')) return url;
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  return `${origin}${url}`;
+};
+
+const isMediaFile = (url) =>
+  !!url && (MEDIA_FILE_EXT.test(url) || url.includes('/uploads/') || url.includes('cloudinary'));
+
+const isAudioFile = (url) => !!url && AUDIO_FILE_EXT.test(url);
+
+const getEmbedUrl = (url) => {
+  if (!url) return url;
+  if (url.includes('watch?v=')) return url.replace('watch?v=', 'embed/');
+  if (url.includes('youtu.be/')) return url.replace('youtu.be/', 'youtube.com/embed/');
+  if (url.includes('youtube.com/embed/')) return url;
+  if (url.includes('vimeo.com/')) {
+    const id = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    if (id) return `https://player.vimeo.com/video/${id[1]}`;
+  }
+  return url;
+};
 
 export default function ArticleDetail() {
   const { slug } = useParams();
@@ -17,9 +54,11 @@ export default function ArticleDetail() {
       try {
         const { data } = await api.get(`/articles/slug/${slug}`);
         setArticle(data.data);
-        // Fetch related articles
-        const { data: related } = await api.get('/articles', { params: { status: 'published', limit: 4 } });
-        setRelatedArticles((related.data || []).filter((a) => a.slug !== slug).slice(0, 3));
+        // Fetch related articles from the SAME category group only
+        // (e.g. a podcast only relates to other podcasts, an article only to articles)
+        const group = getCategoryGroup(data.data?.category);
+        const { data: related } = await api.get('/articles', { params: { status: 'published', limit: 20 } });
+        setRelatedArticles((related.data || []).filter((a) => a.slug !== slug && group.includes(a.category)).slice(0, 3));
       } catch (err) {
         console.error('Failed to fetch article:', err);
       } finally {
@@ -63,12 +102,36 @@ export default function ArticleDetail() {
     );
   }
 
-  const authorName = article.author?.name || 'Ravivar Vichar Team';
+  // Prefer the manually-entered Author Name, then Credits, then the account that created it
+  const authorName = article.authorName || article.credit || article.author?.name || 'Ravivar Vichar Team';
   const formattedDate = article.publishedAt || article.createdAt
     ? new Date(article.publishedAt || article.createdAt).toLocaleDateString('en-IN', {
         day: 'numeric', month: 'long', year: 'numeric'
       })
     : '';
+
+  // ─── SEO values ───
+  const seo = article.seo || {};
+  const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const canonicalUrl = seo.canonicalUrl || pageUrl;
+  const plainContent = (article.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const metaDescription = (seo.metaDescription || article.excerpt || plainContent).slice(0, 160);
+  const ogImage = toAbsoluteUrl(seo.ogImage || article.thumbnail || '');
+  const twitterImage = toAbsoluteUrl(seo.twitterImage || ogImage);
+  const schemaType = seo.schemaType || 'NewsArticle';
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': schemaType,
+    headline: article.title,
+    description: metaDescription,
+    ...(ogImage ? { image: [ogImage] } : {}),
+    datePublished: article.publishedAt || article.createdAt || undefined,
+    ...(article.updatedAt ? { dateModified: article.updatedAt } : {}),
+    author: { '@type': 'Person', name: authorName },
+    publisher: { '@type': 'Organization', name: 'Ravivar Vichar' },
+    mainEntityOfPage: canonicalUrl,
+  };
 
   return (
     <>
@@ -81,8 +144,28 @@ export default function ArticleDetail() {
       </div>
 
       <Helmet>
-        <title>{article.title} — Ravivar Vichar</title>
-        <meta name="description" content={(article.excerpt || article.content || '').replace(/<[^>]*>/g, '').slice(0, 160)} />
+        <title>{seo.metaTitle || article.title} — Ravivar Vichar</title>
+        <meta name="description" content={metaDescription} />
+        {seo.canonicalUrl && <link rel="canonical" href={seo.canonicalUrl} />}
+        {seo.excludeFromSearch && <meta name="robots" content="noindex, nofollow" />}
+        {seo.keywords?.length > 0 && <meta name="keywords" content={seo.keywords.join(', ')} />}
+        {seo.metaNewsKeywords?.length > 0 && <meta name="news_keywords" content={seo.metaNewsKeywords.join(', ')} />}
+
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={seo.ogTitle || article.title} />
+        <meta property="og:description" content={seo.ogDescription || metaDescription} />
+        {ogImage && <meta property="og:image" content={ogImage} />}
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:site_name" content="Ravivar Vichar" />
+
+        <meta name="twitter:card" content={twitterImage ? 'summary_large_image' : 'summary'} />
+        <meta name="twitter:title" content={seo.twitterTitle || seo.ogTitle || article.title} />
+        <meta name="twitter:description" content={seo.twitterDescription || seo.ogDescription || metaDescription} />
+        {twitterImage && <meta name="twitter:image" content={twitterImage} />}
+
+        <script type="application/ld+json">
+          {JSON.stringify(jsonLd)}
+        </script>
       </Helmet>
 
       <PageLayout>
@@ -101,13 +184,38 @@ export default function ArticleDetail() {
                   {article.category}
                 </span>
               </div>
+              {article.additionalCategories?.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {article.additionalCategories.map((cat, i) => (
+                    <span key={i} className="inline-block text-xs font-medium px-3 py-1.5 rounded-full bg-surface-section text-ink-secondary border border-gray-100">
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+              )}
               <div className="flex flex-wrap items-center gap-5 mt-4 text-sm text-ink-secondary">
                 <span className="flex items-center gap-1.5"><User size={16} /> {authorName}</span>
                 <span className="flex items-center gap-1.5"><Calendar size={16} /> {formattedDate}</span>
+                {article.credit && (
+                  <span className="flex items-center gap-1.5"><Camera size={16} /> {article.credit}</span>
+                )}
               </div>
             </div>
           </div>
         </section>
+
+        {/* Banner Description */}
+        {article.bannerDescription && (
+          <section className="bg-surface-section py-8">
+            <div className="container-content">
+              <div className="max-w-4xl mx-auto">
+                <p className="text-lg text-ink-secondary italic leading-relaxed border-l-4 border-primary-500 pl-5">
+                  {article.bannerDescription}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="bg-surface-white pb-8">
           <div className="container-content">
@@ -127,22 +235,33 @@ export default function ArticleDetail() {
 
             {article.videoUrl && (
               <div className="max-w-4xl mx-auto mt-8">
-                <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
-                  <iframe
-                    src={article.videoUrl.includes('watch?v=')
-                      ? article.videoUrl.replace('watch?v=', 'embed/')
-                      : article.videoUrl.includes('youtu.be/')
-                        ? article.videoUrl.replace('youtu.be/', 'youtube.com/embed/')
-                        : article.videoUrl.includes('youtube.com/embed/')
-                          ? article.videoUrl
-                          : article.videoUrl
-                    }
-                    title={article.title}
-                    className="w-full h-full"
-                    allowFullScreen
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  />
-                </div>
+                {isMediaFile(article.videoUrl) ? (
+                  isAudioFile(article.videoUrl) ? (
+                    <div className="rounded-xl overflow-hidden shadow-lg bg-gray-900 p-6">
+                      <audio src={article.videoUrl} controls className="w-full" />
+                    </div>
+                  ) : (
+                    <div className="rounded-xl overflow-hidden shadow-lg bg-gray-900">
+                      <video
+                        src={article.videoUrl}
+                        controls
+                        preload="metadata"
+                        className="w-full max-h-[500px]"
+                        playsInline
+                      />
+                    </div>
+                  )
+                ) : (
+                  <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
+                    <iframe
+                      src={getEmbedUrl(article.videoUrl)}
+                      title={article.title}
+                      className="w-full h-full"
+                      allowFullScreen
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    />
+                  </div>
+                )}
               </div>
             )}
 

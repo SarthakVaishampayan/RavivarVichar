@@ -7,12 +7,16 @@ const fetchAll = (apiPath) => async () => {
   return data.data;
 };
 
+// Categories shown under the generic "Articles" list — everything else
+// (Research, Success Stories, Interview, Podcast) has its own dedicated list.
+const ARTICLE_LIST_CATEGORIES = 'General,Case Study,Explainer,News,Opinion,Impact Story,Policy Brief';
+
 export function ArticleList() {
   return (
     <ContentList
       resourceKey="articles"
       resourceConfig={RESOURCES.articles}
-      fetchFn={fetchAll('/articles')}
+      fetchFn={fetchAll(`/articles?category=${encodeURIComponent(ARTICLE_LIST_CATEGORIES)}`)}
     />
   );
 }

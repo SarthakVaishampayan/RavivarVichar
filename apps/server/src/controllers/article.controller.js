@@ -52,11 +52,16 @@ const sanitizeArticleHtml = (html = '') =>
 const sanitizePlainText = (text = '') => sanitizeHtml(text, { allowedTags: [], allowedAttributes: {} });
 
 // GET /api/v1/articles?page=&limit=&sort=&search=&status=&category=&featured=
+// category supports comma-separated values, e.g. ?category=General,News,Opinion
 const getAll = catchAsync(async (req, res) => {
   const { status, category, featured } = req.query;
   const filter = {};
   if (status) filter.status = status;
-  if (category) filter.category = category;
+  if (category) {
+    const categories = category.split(',').map((c) => c.trim()).filter(Boolean);
+    if (categories.length === 1) filter.category = categories[0];
+    else if (categories.length > 1) filter.category = { $in: categories };
+  }
   if (featured) filter.featured = featured === 'true';
   // Public: only published. Authenticated admin: all statuses
   if (!(await isAuthenticated(req))) filter.status = 'published';

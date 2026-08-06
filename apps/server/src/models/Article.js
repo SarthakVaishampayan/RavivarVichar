@@ -8,6 +8,7 @@ const articleSchema = new mongoose.Schema(
     additionalCategories: [{ type: String }],
     tags: [{ type: String }],
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    authorName: { type: String },
     credit: { type: String },
     thumbnail: { type: String },
     gallery: [{ type: String }],

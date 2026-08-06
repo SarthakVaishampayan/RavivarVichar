@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import api from '../lib/axios';
-import { ArrowRight, Calendar, Tag, Clock, Eye, Mic, Podcast } from 'lucide-react';
+import { ArrowRight, Calendar, Tag, Clock, Eye, Mic, Podcast, Star } from 'lucide-react';
 
 const categoryColors = {
   'Research': 'bg-primary-50 text-primary-600',
@@ -42,8 +42,10 @@ export default function Interviews() {
     fetchArticles();
   }, []);
 
-  const interviews = articles.filter((a) => a.category === 'Interview');
-  const podcasts = articles.filter((a) => a.category === 'Podcast');
+  const byCategory = (cat) => articles.filter((a) => a.category === cat);
+  const sortFeatured = (list) => [...list.filter((a) => a.featured), ...list.filter((a) => !a.featured)];
+  const interviews = sortFeatured(byCategory('Interview'));
+  const podcasts = sortFeatured(byCategory('Podcast'));
 
   const getReadingTime = (content) => {
     if (!content) return 1;
@@ -68,6 +70,11 @@ export default function Interviews() {
       className="card-hover overflow-hidden group"
     >
       <div className="h-56 bg-gray-900 relative overflow-hidden flex items-center justify-center">
+        {article.featured && (
+          <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-primary-500 text-white text-[11px] font-semibold px-3 py-1 shadow-soft">
+            <Star size={12} /> Featured
+          </span>
+        )}
         {article.videoUrl && isVideoUrl(article.videoUrl) ? (
           <>
             <video

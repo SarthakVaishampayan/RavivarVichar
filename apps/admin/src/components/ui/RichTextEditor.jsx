@@ -436,10 +436,39 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
   const [showSource, setShowSource] = useState(false);
   const [sourceCode, setSourceCode] = useState('');
   const [showPreview, setShowPreview] = useState(false);
+  const [toolbarStuck, setToolbarStuck] = useState(false);
   const isInternalChange = useRef(false);
   const prevValueRef = useRef(value);
   const editorRef = useRef(null);
   const containerRef = useRef(null);
+
+  // Detect when the sticky toolbar is pinned to the top of the viewport so we
+  // can add a shadow that signals it's floating. Offset = admin topbar height (64px).
+  useEffect(() => {
+    const handleScroll = () => {
+      const el = containerRef.current;
+      if (!el) return;
+      const toolbarEl = el.querySelector('[data-editor-toolbar]');
+      if (!toolbarEl) return;
+      const rect = toolbarEl.getBoundingClientRect();
+      // Stuck when the toolbar sits flush under the topbar (64px) or, in full
+      // screen, at the top of the fixed container (16px — the m-4 margin).
+      const threshold = fullScreen ? 16 : 64;
+      setToolbarStuck(Math.abs(rect.top - threshold) < 2);
+    };
+    // In full screen the container scrolls internally (overflow-y-auto), so watch
+    // both the window and the container itself to catch every scroll source.
+    const el = containerRef.current;
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+    el?.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      el?.removeEventListener('scroll', handleScroll);
+    };
+  }, [fullScreen]);
 
   const editor = useEditor({
     extensions: [
@@ -488,15 +517,16 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
     isInternalChange.current = false;
   }, [value, editor]);
 
-  // Full screen effect
+  // Full screen effect — the container becomes a fixed overlay that scrolls
+  // internally so long articles stay fully reachable.
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
     if (fullScreen) {
-      el.classList.add('fixed', 'inset-0', 'z-50', 'm-4');
+      el.classList.add('fixed', 'inset-0', 'z-50', 'm-4', 'overflow-y-auto');
       document.body.style.overflow = 'hidden';
     } else {
-      el.classList.remove('fixed', 'inset-0', 'z-50', 'm-4');
+      el.classList.remove('fixed', 'inset-0', 'z-50', 'm-4', 'overflow-y-auto');
       document.body.style.overflow = '';
     }
     return () => { document.body.style.overflow = ''; };
@@ -572,9 +602,14 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
 
   return (
     <>
-      <div ref={containerRef} className="rounded-lg border border-gray-200 overflow-hidden bg-white transition-all duration-300">
-        {/* Toolbar */}
-        <div className="flex flex-wrap items-center gap-0.5 border-b border-gray-200 bg-gray-50 px-3 py-2">
+      <div ref={containerRef} className="rounded-lg border border-gray-200 bg-white transition-all duration-300">
+        {/* Toolbar — sticky below the admin topbar (h-16) so it stays reachable in long articles; sticks to top-0 in full screen */}
+        <div
+          data-editor-toolbar
+          className={`sticky z-20 flex flex-wrap items-center gap-0.5 rounded-t-lg border-b border-gray-200 bg-gray-50 px-3 py-2 transition-shadow duration-200 ${
+            fullScreen ? 'top-0' : 'top-16'
+          } ${toolbarStuck ? 'shadow-soft' : ''}`}
+        >
           {/* Paragraph Style Dropdown */}
           <ParagraphDropdown editor={editor} />
 
@@ -677,40 +712,44 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
           <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo (Ctrl+Y)"><Redo size={16} /></ToolbarButton>
         </div>
 
-        {/* Source Code View */}
-        {showSource ? (
-          <textarea
-            value={sourceCode}
-            onChange={(e) => setSourceCode(e.target.value)}
-            className="w-full min-h-[300px] p-4 font-mono text-sm border-0 outline-none resize-y bg-gray-900 text-green-400"
-            spellCheck={false}
-          />
-        ) : (
-          <>
-            {/* Editor content */}
-            <EditorContent editor={editor} placeholder={placeholder} />
+        {/* Content area — wrapped so bottom corners stay rounded (overflow-hidden
+            was removed from the outer container to allow the sticky toolbar) */}
+        <div className="overflow-hidden rounded-b-lg">
+          {/* Source Code View */}
+          {showSource ? (
+            <textarea
+              value={sourceCode}
+              onChange={(e) => setSourceCode(e.target.value)}
+              className="w-full min-h-[300px] p-4 font-mono text-sm border-0 outline-none resize-y bg-gray-900 text-green-400"
+              spellCheck={false}
+            />
+          ) : (
+            <>
+              {/* Editor content */}
+              <EditorContent editor={editor} placeholder={placeholder} />
 
-            {/* Word Count Footer */}
-            <div className="flex items-center justify-between px-4 py-2 border-t border-gray-100 bg-gray-50 text-xs text-gray-400">
-              <span>Words: {wordCount}</span>
-              <span>Characters: {charCount}</span>
+              {/* Word Count Footer */}
+              <div className="flex items-center justify-between px-4 py-2 border-t border-gray-100 bg-gray-50 text-xs text-gray-400">
+                <span>Words: {wordCount}</span>
+                <span>Characters: {charCount}</span>
+              </div>
+            </>
+          )}
+
+          {/* Table context menu */}
+          {editor.isActive('table') && (
+            <div className="flex items-center gap-1 px-3 py-1.5 border-t border-gray-200 bg-blue-50 text-xs">
+              <span className="text-blue-600 font-medium mr-2">Table:</span>
+              <button type="button" onClick={() => editor.chain().focus().addRowBefore().run()} className="px-2 py-0.5 rounded hover:bg-blue-100 text-blue-700">+ Row Above</button>
+              <button type="button" onClick={() => editor.chain().focus().addRowAfter().run()} className="px-2 py-0.5 rounded hover:bg-blue-100 text-blue-700">+ Row Below</button>
+              <button type="button" onClick={() => editor.chain().focus().addColumnBefore().run()} className="px-2 py-0.5 rounded hover:bg-blue-100 text-blue-700">+ Col Left</button>
+              <button type="button" onClick={() => editor.chain().focus().addColumnAfter().run()} className="px-2 py-0.5 rounded hover:bg-blue-100 text-blue-700">+ Col Right</button>
+              <button type="button" onClick={() => editor.chain().focus().deleteRow().run()} className="px-2 py-0.5 rounded hover:bg-red-100 text-red-600">- Row</button>
+              <button type="button" onClick={() => editor.chain().focus().deleteColumn().run()} className="px-2 py-0.5 rounded hover:bg-red-100 text-red-600">- Col</button>
+              <button type="button" onClick={() => editor.chain().focus().deleteTable().run()} className="px-2 py-0.5 rounded hover:bg-red-100 text-red-600 ml-auto">Delete Table</button>
             </div>
-          </>
-        )}
-
-        {/* Table context menu */}
-        {editor.isActive('table') && (
-          <div className="flex items-center gap-1 px-3 py-1.5 border-t border-gray-200 bg-blue-50 text-xs">
-            <span className="text-blue-600 font-medium mr-2">Table:</span>
-            <button type="button" onClick={() => editor.chain().focus().addRowBefore().run()} className="px-2 py-0.5 rounded hover:bg-blue-100 text-blue-700">+ Row Above</button>
-            <button type="button" onClick={() => editor.chain().focus().addRowAfter().run()} className="px-2 py-0.5 rounded hover:bg-blue-100 text-blue-700">+ Row Below</button>
-            <button type="button" onClick={() => editor.chain().focus().addColumnBefore().run()} className="px-2 py-0.5 rounded hover:bg-blue-100 text-blue-700">+ Col Left</button>
-            <button type="button" onClick={() => editor.chain().focus().addColumnAfter().run()} className="px-2 py-0.5 rounded hover:bg-blue-100 text-blue-700">+ Col Right</button>
-            <button type="button" onClick={() => editor.chain().focus().deleteRow().run()} className="px-2 py-0.5 rounded hover:bg-red-100 text-red-600">- Row</button>
-            <button type="button" onClick={() => editor.chain().focus().deleteColumn().run()} className="px-2 py-0.5 rounded hover:bg-red-100 text-red-600">- Col</button>
-            <button type="button" onClick={() => editor.chain().focus().deleteTable().run()} className="px-2 py-0.5 rounded hover:bg-red-100 text-red-600 ml-auto">Delete Table</button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Preview Modal */}
