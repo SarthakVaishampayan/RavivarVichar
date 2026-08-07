@@ -8,14 +8,14 @@ git push RavivarVichar main
 🖥️ Step 2 — SSH into the server
 // bash
 
-ssh root@<your-droplet-ip>
+ssh root@159.65.153.153 (new server)
 
 (No SSH config file found on this machine — you connect straight to the IP. If you have a saved alias, use that instead.)
 
 🚀 Step 3 — Deploy
 
 cd /var/www/RavivarVichar
-MAINTENANCE_PASS=secret bash scripts/maintenance-on.sh   # enable
+MAINTENANCE_PASS=secret bash scripts/maintenance-on.sh   # enable mainmodeon
 bash scripts/deploy.sh                                     # deploy
 bash scripts/maintenance-off.sh                            # take site live
 

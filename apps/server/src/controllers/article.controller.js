@@ -11,6 +11,31 @@ const logActivity = async (action, resource, resourceId, user, details) => {
   await ActivityLog.create({ action, resource, resourceId, user: user?._id, details });
 };
 
+// ─── Slug helpers ───
+// Auto-generate a slug from the title ONLY when the caller didn't provide one.
+// This keeps manually-edited permalinks (e.g. for Hindi articles) intact.
+const resolveSlug = (data) => {
+  if (data.title && !data.slug) {
+    data.slug = generateSlug(data.title) || `article-${Date.now()}`;
+  }
+  return data;
+};
+
+// Append -2, -3, ... to a slug until it's unique (avoids Mongo E11000 crashes).
+const ensureUniqueSlug = async (slug, excludeId) => {
+  if (!slug) return slug;
+  let candidate = slug;
+  let i = 2;
+  while (i < 100) {
+    const query = { slug: candidate };
+    if (excludeId) query._id = { $ne: excludeId };
+    const existing = await Article.findOne(query).select('_id');
+    if (!existing) return candidate;
+    candidate = `${slug}-${i++}`;
+  }
+  return `${slug}-${Date.now()}`;
+};
+
 // ─── HTML sanitization (prevents stored XSS) ───
 const sanitizeArticleHtml = (html = '') =>
   sanitizeHtml(html, {
@@ -97,9 +122,9 @@ const getBySlug = catchAsync(async (req, res) => {
 // POST /api/v1/articles
 const create = catchAsync(async (req, res) => {
   const data = { ...req.body, author: req.user._id };
-  if (data.title && !data.slug) {
-    data.slug = generateSlug(data.title);
-  }
+  // Respect a manually-provided slug; otherwise auto-generate from the title
+  resolveSlug(data);
+  if (data.slug) data.slug = await ensureUniqueSlug(data.slug);
   // Sanitize rich-text fields before they reach the database
   if (data.content) data.content = sanitizeArticleHtml(data.content);
   if (data.excerpt) data.excerpt = sanitizePlainText(data.excerpt);
@@ -112,9 +137,10 @@ const create = catchAsync(async (req, res) => {
 // PUT /api/v1/articles/:id
 const update = catchAsync(async (req, res) => {
   const data = { ...req.body };
-  if (data.title) {
-    data.slug = generateSlug(data.title);
-  }
+  // Respect a manually-provided slug; only regenerate when no slug is sent.
+  // This is what keeps custom permalinks (e.g. Hindi titles) stable on edit.
+  resolveSlug(data);
+  if (data.slug) data.slug = await ensureUniqueSlug(data.slug, req.params.id);
   // Sanitize rich-text fields before they reach the database
   if (data.content) data.content = sanitizeArticleHtml(data.content);
   if (data.excerpt) data.excerpt = sanitizePlainText(data.excerpt);

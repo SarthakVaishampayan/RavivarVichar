@@ -1,8 +1,10 @@
-const generateSlug = (text) => {
-  return text
+const generateSlug = (text = '') => {
+  return String(text)
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '')
+    // \p{L} = any Unicode letter (keeps Devanagari/Hindi), \p{M} = combining
+    // marks (Devanagari matras like े ी ं), \p{N} = any Unicode number
+    .replace(/[^\p{L}\p{M}\p{N}\s-]/gu, '')
     .replace(/[\s_]+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-+|-+$/g, '');

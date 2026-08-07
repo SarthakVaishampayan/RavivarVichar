@@ -1,4 +1,7 @@
 import { useEditor, EditorContent } from '@tiptap/react';
+import { Node, mergeAttributes, Extension } from '@tiptap/core';
+import { Plugin, PluginKey } from '@tiptap/pm/state';
+import { Decoration, DecorationSet } from '@tiptap/pm/view';
 import StarterKit from '@tiptap/starter-kit';
 import ImageExtension from '@tiptap/extension-image';
 import LinkExtension from '@tiptap/extension-link';
@@ -25,9 +28,11 @@ import {
   Palette, PaintBucket,
   Superscript as SupIcon, Subscript as SubIcon,
   Fullscreen, Minimize, Search, Eraser,
-  FileCode, Eye, X,
+  FileCode, Eye, X, Upload, Loader2, WholeWord,
 } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import api from '../../lib/axios';
+import toast from 'react-hot-toast';
 
 const ToolbarButton = ({ onClick, active, children, title }) => (
   <button
@@ -192,6 +197,314 @@ const ColorPickerButton = ({ editor, type = 'text' }) => {
   );
 };
 
+// ─── INLINE IMAGES: custom Figure + FigCaption nodes ───
+// Figure wraps a block image with an optional editable caption and an alignment
+// attribute. Alignments render as classes (align-left/center/right/full) which the
+// editor and the public site's .article-content CSS both style.
+const Figure = Node.create({
+  name: 'figure',
+  group: 'block',
+  content: 'image figcaption?',
+  isolating: true,
+  addAttributes() {
+    return {
+      align: {
+        default: 'center',
+        parseHTML: (element) => {
+          const match = (element.getAttribute('class') || '').match(/align-(left|center|right|full)/);
+          return match ? match[1] : 'center';
+        },
+      },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'figure' }];
+  },
+  renderHTML({ HTMLAttributes, node }) {
+    return ['figure', mergeAttributes(HTMLAttributes, { class: `article-figure align-${node.attrs.align || 'center'}` }), 0];
+  },
+  addCommands() {
+    return {
+      insertFigure:
+        (attrs) =>
+        ({ commands }) =>
+          commands.insertContent({
+            type: this.name,
+            attrs: { align: attrs.align || 'center' },
+            content: [
+              { type: 'image', attrs: { src: attrs.src, alt: attrs.alt || '' } },
+              ...(attrs.caption
+                ? [{ type: 'figcaption', content: [{ type: 'text', text: attrs.caption }] }]
+                : []),
+            ],
+          }),
+      setFigureAlign:
+        (align) =>
+        ({ commands }) =>
+          commands.updateAttributes('figure', { align }),
+    };
+  },
+});
+
+const FigCaption = Node.create({
+  name: 'figcaption',
+  group: 'block',
+  content: 'inline*',
+  parseHTML() {
+    return [{ tag: 'figcaption' }];
+  },
+  renderHTML() {
+    return ['figcaption', 0];
+  },
+});
+
+// ─── SEARCH HIGHLIGHT (ProseMirror decorations) ───
+// Highlights every occurrence of the Find & Replace search term directly in the
+// editor using inline decorations: all matches get a yellow mark and the
+// currently navigated match gets a stronger orange mark.
+// ─── Shared match scanner used by BOTH the highlight extension and the panel,
+// so the counter, the highlights, and the replacements always agree ───
+const WORD_CHAR = /[\p{L}\p{N}_]/u;
+
+const findMatchesInDoc = (doc, term, wholeWord = true) => {
+  if (!term || !doc) return [];
+  const searchLower = term.toLowerCase();
+  const results = [];
+  doc.descendants((node, pos) => {
+    if (node.isText) {
+      const text = node.text;
+      let idx = 0;
+      while (idx <= text.length) {
+        const foundAt = text.toLowerCase().indexOf(searchLower, idx);
+        if (foundAt === -1) break;
+        const from = pos + foundAt;
+        const to = pos + foundAt + term.length;
+        if (wholeWord) {
+          // Require word boundaries on both sides so e.g. "n" never matches
+          // inside "strengthen". textBetween reads the neighbours even when the
+          // text is split across marks or sits next to a paragraph/leaf node.
+          const before = from > 0 ? doc.textBetween(from - 1, from) : '';
+          const after = doc.textBetween(to, to + 1);
+          if ((before && WORD_CHAR.test(before)) || (after && WORD_CHAR.test(after))) {
+            idx = foundAt + 1;
+            continue;
+          }
+        }
+        results.push({ from, to });
+        idx = foundAt + 1;
+      }
+    }
+  });
+  return results;
+};
+
+const searchPluginKey = new PluginKey('searchHighlight');
+
+const SearchHighlight = Extension.create({
+  name: 'searchHighlight',
+
+  addOptions() {
+    return {
+      searchTerm: '',
+      activeIndex: -1,
+      wholeWord: true,
+      matchClass: 'search-match',
+      activeClass: 'search-match-active',
+    };
+  },
+
+  addCommands() {
+    return {
+      setSearchTerm:
+        (term) =>
+        ({ tr, dispatch }) => {
+          this.options.searchTerm = term || '';
+          if (dispatch) {
+            tr.setMeta(searchPluginKey, { searchTerm: this.options.searchTerm });
+            dispatch(tr);
+          }
+          return true;
+        },
+      setActiveMatch:
+        (index) =>
+        ({ tr, dispatch }) => {
+          this.options.activeIndex = index;
+          if (dispatch) {
+            tr.setMeta(searchPluginKey, { activeIndex: index });
+            dispatch(tr);
+          }
+          return true;
+        },
+      setWholeWord:
+        (wholeWord) =>
+        ({ tr, dispatch }) => {
+          this.options.wholeWord = !!wholeWord;
+          if (dispatch) {
+            tr.setMeta(searchPluginKey, { wholeWord: !!wholeWord });
+            dispatch(tr);
+          }
+          return true;
+        },
+    };
+  },
+
+  addProseMirrorPlugins() {
+    const extension = this;
+
+    return [
+      new Plugin({
+        key: searchPluginKey,
+        state: {
+          init: () => ({ term: '', wholeWord: true, matches: [] }),
+          apply: (tr, value, _oldState, newState) => {
+            const meta = tr.getMeta(searchPluginKey);
+            const term =
+              meta && meta.searchTerm !== undefined ? meta.searchTerm : extension.options.searchTerm;
+            const wholeWord =
+              meta && meta.wholeWord !== undefined ? meta.wholeWord : extension.options.wholeWord;
+            if (tr.docChanged || meta || term !== value.term || wholeWord !== value.wholeWord) {
+              return {
+                term,
+                wholeWord,
+                matches: findMatchesInDoc(newState.doc, term, wholeWord),
+              };
+            }
+            return value;
+          },
+        },
+        props: {
+          decorations: (state) => {
+            const pluginState = searchPluginKey.getState(state);
+            if (!pluginState || !pluginState.term || pluginState.matches.length === 0) return null;
+            const active = extension.options.activeIndex;
+            const decos = pluginState.matches.map((m, i) =>
+              Decoration.inline(m.from, m.to, {
+                class: i === active ? extension.options.activeClass : extension.options.matchClass,
+              })
+            );
+            return DecorationSet.create(state.doc, decos);
+          },
+        },
+      }),
+    ];
+  },
+});
+
+// Shared helper: upload an image file via the existing /upload/single endpoint
+const uploadImageFile = async (file) => {
+  if (!file) return null;
+  if (!file.type.startsWith('image/')) {
+    toast.error('Please select an image file');
+    return null;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    toast.error('Image must be less than 10MB');
+    return null;
+  }
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const { data } = await api.post('/upload/single', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return data.data?.url || null;
+  } catch {
+    toast.error('Image upload failed');
+    return null;
+  }
+};
+
+// ─── INSERT IMAGE POPOVER (upload / URL / caption / alignment) ───
+const InsertImagePopover = ({ editor, onClose }) => {
+  const [uploading, setUploading] = useState(false);
+  const [url, setUrl] = useState('');
+  const [caption, setCaption] = useState('');
+  const [align, setAlign] = useState('center');
+  const fileRef = useRef(null);
+
+  const insert = (src) => {
+    if (!src) return;
+    editor.chain().focus().insertFigure({ src, caption: caption.trim(), align }).run();
+    onClose();
+  };
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const src = await uploadImageFile(file);
+    if (fileRef.current) fileRef.current.value = '';
+    if (src) insert(src);
+  };
+
+  return (
+    <div className="absolute top-full left-0 mt-1 z-20 w-80 rounded-lg border border-gray-200 bg-white p-3 shadow-lg">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-semibold text-gray-700">Insert Image</span>
+        <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-600" title="Close">
+          <X size={14} />
+        </button>
+      </div>
+
+      {/* Upload from computer */}
+      <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
+      <button
+        type="button"
+        onClick={() => fileRef.current?.click()}
+        disabled={uploading}
+        className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-3 py-3 text-xs text-gray-500 hover:border-primary-400 hover:text-gray-700 transition-colors disabled:opacity-50"
+      >
+        {uploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+        {uploading ? 'Uploading...' : 'Upload image from computer'}
+      </button>
+
+      <div className="my-2 flex items-center gap-2 text-[10px] text-gray-400">
+        <span className="h-px flex-1 bg-gray-200" />OR<span className="h-px flex-1 bg-gray-200" />
+      </div>
+
+      {/* Paste URL */}
+      <div className="flex gap-1">
+        <input
+          type="url"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="Paste image URL..."
+          className="w-full rounded border border-gray-200 px-2 py-1.5 text-xs outline-none focus:border-primary-400"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && url.trim()) insert(url.trim());
+            if (e.key === 'Escape') onClose();
+          }}
+        />
+        <button type="button" onClick={() => url.trim() && insert(url.trim())} disabled={!url.trim()} className="btn-primary text-xs px-2.5 py-1">Add</button>
+      </div>
+
+      {/* Caption */}
+      <input
+        type="text"
+        value={caption}
+        onChange={(e) => setCaption(e.target.value)}
+        placeholder="Caption (optional)"
+        className="mt-2 w-full rounded border border-gray-200 px-2 py-1.5 text-xs outline-none focus:border-primary-400"
+      />
+
+      {/* Alignment */}
+      <div className="mt-2 flex items-center gap-1">
+        <span className="text-[10px] text-gray-400 mr-1">Align:</span>
+        {['left', 'center', 'right', 'full'].map((a) => (
+          <button
+            key={a}
+            type="button"
+            onClick={() => setAlign(a)}
+            className={`rounded px-2 py-1 text-[10px] font-medium transition-colors ${align === a ? 'bg-primary-100 text-primary-700' : 'text-gray-500 hover:bg-gray-100'}`}
+          >
+            {a === 'full' ? 'Full width' : a[0].toUpperCase() + a.slice(1)}
+          </button>
+        ))}
+      </div>
+      <p className="mt-1.5 text-[10px] text-gray-400">Tip: you can also drag &amp; drop an image or paste one from the clipboard.</p>
+    </div>
+  );
+};
+
 // ─── FIND & REPLACE ───
 const FindReplace = ({ editor }) => {
   const [open, setOpen] = useState(false);
@@ -199,38 +512,59 @@ const FindReplace = ({ editor }) => {
   const [replaceText, setReplaceText] = useState('');
   const [matches, setMatches] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [wholeWord, setWholeWord] = useState(true);
 
-  // Find all match positions in the ProseMirror document
+  // Find all match positions in the ProseMirror document (shares the exact
+  // scanner used by the highlight extension so they can never disagree).
+  // NOTE: must be declared BEFORE the effects below — their dependency arrays
+  // evaluate `findMatches` during render, so a later declaration would throw
+  // a ReferenceError (TDZ) and white-screen the editor.
   const findMatches = useCallback((query) => {
     if (!query || !editor) return [];
-    const doc = editor.state.doc;
-    const searchLower = query.toLowerCase();
-    const results = [];
+    return findMatchesInDoc(editor.state.doc, query, wholeWord);
+  }, [editor, wholeWord]);
 
-    doc.descendants((node, pos) => {
-      if (node.isText) {
-        const text = node.text;
-        let idx = 0;
-        while (idx <= text.length) {
-          const foundAt = text.toLowerCase().indexOf(searchLower, idx);
-          if (foundAt === -1) break;
-          results.push({
-            from: pos + foundAt,
-            to: pos + foundAt + query.length,
-          });
-          idx = foundAt + 1;
-        }
+  // Apply/clear the in-editor highlights as the panel opens and closes.
+  // On reopen the document may have changed while closed, so re-sync the
+  // match positions too (the extension re-scans automatically on dispatch).
+  useEffect(() => {
+    if (open) {
+      editor?.commands.setSearchTerm(findText);
+      if (findText) {
+        const results = findMatches(findText);
+        setMatches(results);
+        setCurrentIndex((ci) => (ci >= results.length ? -1 : ci));
       }
-    });
+      editor?.commands.setActiveMatch(currentIndex >= 0 ? currentIndex : -1);
+    } else {
+      editor?.commands.setSearchTerm('');
+      editor?.commands.setActiveMatch(-1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, editor]);
 
-    return results;
-  }, [editor]);
+  // Keep the panel's positions in sync with the live highlights while the
+  // document changes (e.g. the author keeps typing in the editor itself).
+  useEffect(() => {
+    if (!open || !editor || !findText) return;
+    const sync = () => {
+      const results = findMatches(findText);
+      setMatches(results);
+      setCurrentIndex((ci) => (ci >= results.length ? -1 : ci));
+    };
+    editor.on('transaction', sync);
+    return () => editor.off('transaction', sync);
+  }, [open, editor, findText, findMatches]);
 
   // Navigate to a specific match by index
   const goToMatch = useCallback((index, matchList) => {
     if (!editor || !matchList || matchList.length === 0) return;
     const match = matchList[index];
     if (!match) return;
+
+    // Guard against stale positions (the doc may have changed) — never crash
+    const size = editor.state.doc.content.size;
+    if (match.from < 0 || match.to > size || match.from >= match.to) return;
 
     editor
       .chain()
@@ -252,34 +586,62 @@ const FindReplace = ({ editor }) => {
   const handleFindInput = useCallback((text) => {
     setFindText(text);
     if (!text || !editor) {
+      editor.commands.setSearchTerm('');
+      editor.commands.setActiveMatch(-1);
       setMatches([]);
       setCurrentIndex(0);
       return;
     }
+    // Update the in-editor highlights live as the author types
+    editor.commands.setSearchTerm(text);
+    editor.commands.setActiveMatch(-1);
     const results = findMatches(text);
     setMatches(results);
     setCurrentIndex(-1);
   }, [editor, findMatches]);
+
+  const handleToggleWholeWord = useCallback(() => {
+    const next = !wholeWord;
+    setWholeWord(next);
+    if (!editor) return;
+    editor.commands.setWholeWord(next);
+    if (findText) {
+      const results = findMatchesInDoc(editor.state.doc, findText, next);
+      setMatches(results);
+      setCurrentIndex((ci) => (ci >= results.length ? -1 : ci));
+      editor.commands.setActiveMatch(-1);
+    }
+  }, [wholeWord, editor, findText]);
 
   const handleReplace = useCallback(() => {
     if (!findText || !editor || matches.length === 0) return;
     const match = matches[currentIndex];
     if (!match) return;
 
-    // Select, delete, and insert plain text via a single chain
-    editor
-      .chain()
-      .focus()
-      .setTextSelection({ from: match.from, to: match.to })
-      .deleteSelection()
-      .insertContent(replaceText)
-      .run();
+    // Guard against stale positions (the doc may have changed) — never crash
+    const size = editor.state.doc.content.size;
+    if (match.from < 0 || match.to > size || match.from >= match.to) return;
+
+    try {
+      // Select, delete, and insert plain text via a single chain
+      editor
+        .chain()
+        .focus()
+        .setTextSelection({ from: match.from, to: match.to })
+        .deleteSelection()
+        .insertContent(replaceText)
+        .run();
+    } catch {
+      toast.error('Could not replace — content changed, search again');
+      return;
+    }
 
     // Recalculate matches after replacement
     const newResults = findMatches(findText);
     setMatches(newResults);
     const newIndex = Math.min(currentIndex, Math.max(0, newResults.length - 1));
     setCurrentIndex(newIndex);
+    editor.commands.setActiveMatch(newResults.length > 0 ? newIndex : -1);
     if (newResults.length > 0 && newResults[newIndex]) {
       goToMatch(newIndex, newResults);
     }
@@ -288,14 +650,25 @@ const FindReplace = ({ editor }) => {
   const handleReplaceAll = useCallback(() => {
     if (!findText || !editor || matches.length === 0) return;
 
-    // Build one transaction: replace from last to first so earlier positions stay valid
-    const sorted = [...matches].sort((a, b) => b.from - a.from);
-    const tr = editor.state.tr;
-    sorted.forEach((match) => {
-      tr.insertText(replaceText, match.from, match.to);
-    });
-    editor.view.dispatch(tr);
+    // Drop any stale positions (doc may have changed) so insertText never throws
+    const size = editor.state.doc.content.size;
+    const valid = matches.filter((m) => m.from >= 0 && m.to <= size && m.from < m.to);
+    if (valid.length === 0) return;
 
+    try {
+      // Build one transaction: replace from last to first so earlier positions stay valid
+      const sorted = [...valid].sort((a, b) => b.from - a.from);
+      const tr = editor.state.tr;
+      sorted.forEach((match) => {
+        tr.insertText(replaceText, match.from, match.to);
+      });
+      editor.view.dispatch(tr);
+    } catch {
+      toast.error('Could not replace all — content changed, search again');
+      return;
+    }
+
+    editor.commands.setActiveMatch(-1);
     setMatches([]);
     setCurrentIndex(0);
   }, [editor, findText, replaceText, matches]);
@@ -304,15 +677,17 @@ const FindReplace = ({ editor }) => {
     if (matches.length === 0) return;
     const nextIdx = (currentIndex + 1) % matches.length;
     setCurrentIndex(nextIdx);
+    editor.commands.setActiveMatch(nextIdx);
     goToMatch(nextIdx, matches);
-  }, [matches, currentIndex, goToMatch]);
+  }, [matches, currentIndex, goToMatch, editor]);
 
   const handlePrev = useCallback(() => {
     if (matches.length === 0) return;
     const prevIdx = (currentIndex - 1 + matches.length) % matches.length;
     setCurrentIndex(prevIdx);
+    editor.commands.setActiveMatch(prevIdx);
     goToMatch(prevIdx, matches);
-  }, [matches, currentIndex, goToMatch]);
+  }, [matches, currentIndex, goToMatch, editor]);
 
   // Handle Enter in FIND input → cycle to next match
   const handleFindKeyDown = useCallback((e) => {
@@ -370,6 +745,14 @@ const FindReplace = ({ editor }) => {
           ? `${currentIndex >= 0 ? currentIndex + 1 : '-'}/${matches.length}` 
           : '0'}
       </span>
+      <button
+        type="button"
+        onClick={handleToggleWholeWord}
+        title={wholeWord ? 'Whole word only (click to also match inside words)' : 'Matching inside words (click for whole word only)'}
+        className={`p-0.5 transition-colors ${wholeWord ? 'text-primary-600' : 'text-gray-400 hover:text-gray-600'}`}
+      >
+        <WholeWord size={14} />
+      </button>
       <button type="button" onClick={handlePrev} className="p-0.5 text-gray-400 hover:text-gray-600 disabled:opacity-30" title="Previous" disabled={matches.length === 0}>
         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7"/></svg>
       </button>
@@ -436,6 +819,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
   const [showSource, setShowSource] = useState(false);
   const [sourceCode, setSourceCode] = useState('');
   const [showPreview, setShowPreview] = useState(false);
+  const [showImagePopover, setShowImagePopover] = useState(false);
   const [toolbarStuck, setToolbarStuck] = useState(false);
   const isInternalChange = useRef(false);
   const prevValueRef = useRef(value);
@@ -483,6 +867,9 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
       Highlight.configure({ multicolor: true }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       ImageExtension.configure({ inline: false }),
+      Figure,
+      FigCaption,
+      SearchHighlight,
       LinkExtension.configure({ openOnClick: false }),
       UnderlineExtension,
       Superscript,
@@ -502,6 +889,55 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
       attributes: {
         class:
           'max-w-none focus:outline-none min-h-[300px] px-4 py-3',
+      },
+      // Drag-and-drop an image file straight into the editor → upload → insert
+      handleDrop: (view, event, _slice, moved) => {
+        if (moved) return false;
+        const files = event.dataTransfer?.files;
+        if (files && files.length > 0) {
+          const file = files[0];
+          if (file.type.startsWith('image/')) {
+            event.preventDefault();
+            const coords = view.posAtCoords({ left: event.clientX, top: event.clientY });
+            const pos = coords ? coords.pos : view.state.selection.from;
+            uploadImageFile(file).then((src) => {
+              if (!src) return;
+              editorRef.current
+                ?.chain()
+                .focus()
+                .insertContentAt(pos, {
+                  type: 'figure',
+                  attrs: { align: 'center' },
+                  content: [{ type: 'image', attrs: { src, alt: '' } }],
+                })
+                .run();
+            });
+            return true;
+          }
+        }
+        return false;
+      },
+      // Paste an image from the clipboard → upload → insert at cursor
+      handlePaste: (_view, event) => {
+        const files = Array.from(event.clipboardData?.files || []);
+        const file = files.find((f) => f.type.startsWith('image/'));
+        if (file) {
+          event.preventDefault();
+          uploadImageFile(file).then((src) => {
+            if (!src) return;
+            editorRef.current
+              ?.chain()
+              .focus()
+              .insertContent({
+                type: 'figure',
+                attrs: { align: 'center' },
+                content: [{ type: 'image', attrs: { src, alt: '' } }],
+              })
+              .run();
+          });
+          return true;
+        }
+        return false;
       },
     },
   });
@@ -533,13 +969,6 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
   }, [fullScreen]);
 
   if (!editor) return null;
-
-  const addImage = () => {
-    const url = window.prompt('Enter image URL:');
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  };
 
   const handleSetLink = () => {
     if (linkUrl) {
@@ -691,8 +1120,13 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
             )}
           </div>
 
-          {/* Image */}
-          <ToolbarButton onClick={addImage} title="Insert Image"><Image size={16} /></ToolbarButton>
+          {/* Image (upload / URL / caption / alignment) */}
+          <div className="relative">
+            <ToolbarButton onClick={() => setShowImagePopover(!showImagePopover)} active={showImagePopover} title="Insert Image"><Image size={16} /></ToolbarButton>
+            {showImagePopover && (
+              <InsertImagePopover editor={editor} onClose={() => setShowImagePopover(false)} />
+            )}
+          </div>
 
           <Divider />
 
@@ -734,6 +1168,24 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
                 <span>Characters: {charCount}</span>
               </div>
             </>
+          )}
+
+          {/* Figure context menu — alignment + delete when an image is selected */}
+          {editor.isActive('figure') && (
+            <div className="flex items-center gap-1 px-3 py-1.5 border-t border-gray-200 bg-amber-50 text-xs">
+              <span className="text-amber-700 font-medium mr-2">Image:</span>
+              {['left', 'center', 'right', 'full'].map((a) => (
+                <button
+                  key={a}
+                  type="button"
+                  onClick={() => editor.chain().focus().setFigureAlign(a).run()}
+                  className={`px-2 py-0.5 rounded transition-colors ${editor.getAttributes('figure').align === a ? 'bg-amber-200 text-amber-800 font-semibold' : 'text-amber-700 hover:bg-amber-100'}`}
+                >
+                  {a === 'full' ? 'Full' : a[0].toUpperCase() + a.slice(1)}
+                </button>
+              ))}
+              <button type="button" onClick={() => editor.chain().focus().deleteSelection().run()} className="px-2 py-0.5 rounded hover:bg-red-100 text-red-600 ml-auto">Delete</button>
+            </div>
           )}
 
           {/* Table context menu */}

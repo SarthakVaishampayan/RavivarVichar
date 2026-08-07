@@ -271,3 +271,122 @@
   background: var(--color-primary);
   pointer-events: none;
 }
+
+/* ─── Inline image figures (editor view) ─── */
+.ProseMirror figure {
+  margin: 1.25em 0;
+  text-align: center;
+}
+
+.ProseMirror figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  display: inline-block;
+}
+
+.ProseMirror figure figcaption {
+  font-size: 0.85em;
+  line-height: 1.6;
+  color: #6b7280;
+  margin-top: 0.4em;
+  font-style: italic;
+  text-align: center;
+}
+
+.ProseMirror figure.align-left { text-align: left; }
+.ProseMirror figure.align-left img { display: block; margin-right: auto; }
+.ProseMirror figure.align-center img { display: block; margin-left: auto; margin-right: auto; }
+.ProseMirror figure.align-right { text-align: right; }
+.ProseMirror figure.align-right img { display: block; margin-left: auto; }
+.ProseMirror figure.align-full img { width: 100%; }
+
+/* ─── Find & Replace: highlight every match, stronger mark for the active one ─── */
+.search-match {
+  background-color: rgba(255, 213, 79, 0.55);
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.85);
+}
+
+.search-match-active {
+  background-color: rgba(255, 99, 0, 0.4);
+  border-radius: 2px;
+  box-shadow: 0 0 0 1.5px var(--color-primary);
+}
+
+/* ─── Full-page article preview (mirrors the public .article-content styles) ─── */
+.article-preview-content h1 { font-size: 2.5em; font-weight: 700; line-height: 1.2; margin: 0.5em 0; }
+.article-preview-content h2 { font-size: 2em; font-weight: 700; line-height: 1.25; margin: 0.5em 0; }
+.article-preview-content h3 { font-size: 1.75em; font-weight: 600; line-height: 1.3; margin: 0.4em 0; }
+.article-preview-content h4 { font-size: 1.5em; font-weight: 600; line-height: 1.35; margin: 0.3em 0; }
+.article-preview-content h5 { font-size: 1.25em; font-weight: 600; line-height: 1.4; margin: 0.3em 0; }
+.article-preview-content h6 { font-size: 1.1em; font-weight: 600; line-height: 1.4; margin: 0.3em 0; }
+.article-preview-content p { margin: 0.75em 0; line-height: 1.8; font-size: 18px; color: #4B5563; }
+.article-preview-content ul { list-style-type: disc; padding-left: 1.5em; margin: 0.5em 0; }
+.article-preview-content ol { list-style-type: decimal; padding-left: 1.5em; margin: 0.5em 0; }
+.article-preview-content li { margin: 0.25em 0; }
+.article-preview-content blockquote {
+  border-left: 4px solid var(--color-primary);
+  padding: 0.75em 1.25em;
+  margin: 1.25em 0;
+  font-style: italic;
+  color: #4B5563;
+  background: #FFFBF0;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+.article-preview-content pre {
+  background: #1f2937;
+  color: #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.875rem;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+.article-preview-content code {
+  background: #f3f4f6;
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.875em;
+}
+.article-preview-content pre code { background: transparent; padding: 0; }
+.article-preview-content img {
+  border-radius: 0.75rem;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5em 0;
+}
+.article-preview-content a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.2s;
+}
+.article-preview-content a:hover { opacity: 0.8; }
+.article-preview-content table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+.article-preview-content th,
+.article-preview-content td { border: 1px solid #d1d5db; padding: 8px 12px; text-align: left; }
+.article-preview-content th { background: #f9fafb; font-weight: 600; }
+.article-preview-content figure { margin: 1.75em 0; text-align: center; }
+.article-preview-content figure img {
+  border-radius: 0.75rem;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+  display: inline-block;
+}
+.article-preview-content figcaption {
+  font-size: 0.85em;
+  line-height: 1.6;
+  color: #6E6E6E;
+  margin-top: 0.55em;
+  font-style: italic;
+  text-align: center;
+}
+.article-preview-content figure.align-left { text-align: left; }
+.article-preview-content figure.align-left img { display: block; margin-right: auto; }
+.article-preview-content figure.align-center img { display: block; margin-left: auto; margin-right: auto; }
+.article-preview-content figure.align-right { text-align: right; }
+.article-preview-content figure.align-right img { display: block; margin-left: auto; }
+.article-preview-content figure.align-full img { width: 100%; }

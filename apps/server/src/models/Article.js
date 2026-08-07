@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const generateSlug = require('../utils/generateSlug');
 
 const articleSchema = new mongoose.Schema(
   {
@@ -43,12 +44,7 @@ const articleSchema = new mongoose.Schema(
 
 articleSchema.pre('save', function (next) {
   if (this.isModified('title') && !this.slug) {
-    this.slug = this.title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_]+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-+|-+$/g, '');
+    this.slug = generateSlug(this.title) || `article-${Date.now()}`;
   }
   if (this.isModified('status') && this.status === 'published' && !this.publishedAt) {
     this.publishedAt = new Date();

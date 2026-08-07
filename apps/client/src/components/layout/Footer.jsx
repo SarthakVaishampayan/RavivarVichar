@@ -127,11 +127,12 @@ export default function Footer() {
             {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
             {subscribed && <p className="text-xs text-green-600 mt-2">Thank you for subscribing!</p>}
 
-            {/* Designed & Developed credit */}
-            <div className="mt-6 pt-5 border-t border-gray-200">
-              <p className="text-sm text-ink-secondary">
-                Designed &amp; Developed by{' '}
-                <span className="font-semibold text-ink-primary">Sarthak Vaishampayan</span>
+            {/* Designed & Developed credit — split across two lines to keep it narrow */}
+            {/* mt/pt reduced 5% to move the block up; font 16.4px → 15.6px (-5%) */}
+            <div className="mt-[22.8px] pt-[19px] border-t border-gray-200">
+              <p className="text-[15.6px] text-ink-secondary leading-snug">
+                <span className="block">Designed &amp; Developed by</span>
+                <span className="block font-semibold text-ink-primary">Sarthak Vaishampayan</span>
               </p>
               <div className="flex items-center max-lg:justify-center gap-2.5 mt-3">
                 {developerLinks.map((social) => {

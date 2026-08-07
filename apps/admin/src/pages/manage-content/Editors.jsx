@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import EditorForm from './EditorForm';
 import RichTextEditor from '../../components/ui/RichTextEditor';
 import ImageUpload from '../../components/ui/ImageUpload';
 import MultiImageUpload from '../../components/ui/MultiImageUpload';
 import VideoUpload from '../../components/ui/VideoUpload';
 import SeoAnalyzer from '../../components/ui/SeoAnalyzer';
+import ArticlePreview from '../../components/ui/ArticlePreview';
 import {
   ARTICLE_CATEGORIES, PARTNER_CATEGORIES,
   EVENT_TYPES,
@@ -187,24 +188,71 @@ const CollapsiblePanel = ({ title, icon: Icon, defaultOpen = false, children }) 
   );
 };
 
+// ─── PERMALINK (SLUG) INPUT ───
+// Unicode-safe slug generation (keeps Devanagari/Hindi characters) that matches
+// the server's generateSlug util. Auto-generates from the title until the author
+// edits the slug by hand, then leaves it alone.
+const makeSlug = (text = '') =>
+  String(text)
+    .toLowerCase()
+    .trim()
+    // \p{L} letters (keeps Hindi/Devanagari), \p{M} matras (े ी ं), \p{N} numbers
+    .replace(/[^\p{L}\p{M}\p{N}\s-]/gu, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const PermalinkInput = ({ title, slug, onChange }) => {
+  const touched = useRef(false);
+
+  // Auto-generate from the title, but only while the author hasn't hand-edited
+  // the slug and there isn't already a stored slug (existing articles).
+  useEffect(() => {
+    if (!touched.current && !slug) {
+      onChange(makeSlug(title));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title]);
+
+  return (
+    <div className="-mt-3">
+      <label className="text-xs text-gray-400 font-medium">Permalink (URL Slug)</label>
+      <div className="flex items-center gap-1.5 mt-1">
+        <span className="text-xs text-gray-400 font-mono shrink-0">/</span>
+        <input
+          type="text"
+          value={slug || ''}
+          onChange={(e) => { touched.current = true; onChange(e.target.value); }}
+          placeholder="auto-generated from title"
+          className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-mono text-gray-700 outline-none focus:border-primary-400 focus:bg-white"
+        />
+        <button
+          type="button"
+          onClick={() => { touched.current = false; onChange(makeSlug(title)); }}
+          className="shrink-0 text-xs font-medium text-primary-500 hover:text-primary-700 transition-colors"
+          title="Regenerate from title"
+        >
+          ↺ Regenerate
+        </button>
+      </div>
+      <p className="text-[11px] text-gray-400 mt-1">
+        {slug ? `Final URL: /articles/${slug}` : 'Will be generated from the title'}
+      </p>
+    </div>
+  );
+};
+
 // ─── ARTICLE EDITOR ───
 export function ArticleEditor() {
-  // Guess slug from title for display
-  const guessSlug = (title) => {
-    if (!title) return '';
-    return title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_]+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-+|-+$/g, '');
-  };
-
   return (
     <EditorForm
       resourceKey="articles"
       resourceLabel="Articles"
       apiPath="/articles"
+      enableAutoSave
+      previewContent={(data, onClose) => (
+        <ArticlePreview article={data} onClose={onClose} />
+      )}
       transformLoad={(data) => ({
         ...data,
         // Flatten SEO fields for form handling
@@ -227,15 +275,12 @@ export function ArticleEditor() {
                 required
               />
 
-              {/* Permalink display */}
-              {formData.title && (
-                <div className="-mt-3">
-                  <label className="text-xs text-gray-400 font-medium">English Title ( Permalink )</label>
-                  <p className="text-xs text-gray-500 mt-0.5 font-mono">
-                    /{guessSlug(formData.title)}
-                  </p>
-                </div>
-              )}
+              {/* Permalink — editable, auto-generated from title until hand-edited */}
+              <PermalinkInput
+                title={formData.title}
+                slug={formData.slug}
+                onChange={(slug) => handleChange('slug', slug)}
+              />
 
               {/* Excerpt / Summary */}
               <CounterInput

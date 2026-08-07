@@ -230,3 +230,42 @@ STEP 9 — After that (security, do soon)
 ────────────────────────────────────────────────────────────────────────────────
 The short version: GoDaddy (check DNSSEC) → Cloudflare (set Flexible) → GoDaddy (change nameservers) → wait → Cloudflare (create cert) → server (paste cert + config) → Cloudflare (set Full strict) → test.
 Tell me when you've done Step 1 & 2, and I'll guide you through the rest one step at a time. Want me to also update your resume_prompt.md with this new order so we don't lose it?
+
+
+
+
+
+
+
+All fixes are in and the admin build passes. Marking the work complete:
+• TODOs
+✓  Server: Unicode-aware generateSlug (keep Devanagari) + Article model hook update
+✓  Server: article.controller — respect custom slug on create/update + unique-slug handling
+✓  Admin: editable Permalink input with auto-generate + manual override in ArticleEditor
+✓  Admin: Inline images — Figure/FigCaption nodes, upload popover, captions, alignment, drag-drop
+✓  Admin: Auto Save Draft in EditorForm (debounce, interval, status, draft creation, localStorage restore) — opt-in
+✓  Admin: Full-page Live Preview modal + wire into ArticleEditor
+✓  Client + Admin CSS for figure/caption/alignment in article content & preview
+✓  Build admin app + sanity check server syntax; code review + fix review findings
+All 5 features are implemented, reviewed, and both apps build cleanly. Here's the summary:
+✅ What was built
+1. Custom Permalink (Slug) field — High
+- Editable "Permalink (URL Slug)" input in the Article editor — auto-generates from the title as you type, but stops the moment you edit it by hand (↺ Regenerate button to re-sync).
+- Fixed the real Hindi problem: the old slug generator stripped Devanagari and its matras ( मेरी  →  मर ). It now keeps letters, matras, and numbers, so  मेरी पहली हिंदी खबर!  →  मेरी-पहली-हिंदी-खबर  (verified with a live test).
+- Server now respects a custom slug on both create and update (previously update always overwrote it), with automatic  -2 ,  -3  de-duping instead of a 500 error.
+2. Find & Replace — was already fully built in the editor (🔍 button with Find / Replace / Replace All / match counter). No changes needed.
+3. Inline Images — High
+- New "Insert Image" popover: upload from computer (uses your existing Cloudinary endpoint), paste-URL, optional caption, and left/center/right/full-width alignment.
+- Bonus: drag-and-drop and clipboard-paste an image straight into the article — auto-uploaded and inserted.
+- Click an image to get an alignment/delete toolbar; captions are editable in-place. All styles are safe through the server's HTML sanitizer.
+4. Auto Save Draft — Critical
+- Saves 2.5s after you stop typing + every 30s while dirty. Shows "Saving… / Draft saved at 14:32".
+- New articles become server drafts automatically (URL switches to the draft's real id), manual Create/Save button kept.
+- Crash recovery: a local backup restores your unsaved draft on the next visit.
+- Safely opt-in — only the Article editor uses it; Events/Partners/etc. are untouched.
+5. Live Preview — new "Preview" button beside Save that renders the full article page (title, category, author, date, banner, thumbnail, body, tags) exactly as readers will see it.
+🛡️ Damage check — your existing functionality is safe
+- Auto-save never changes publish state (a live article stays live — the reviewer caught and I fixed a version that would have un-drafted published posts), and never races your manual Save.
+- The public site only gained new CSS for image captions/alignment; its behavior is unchanged.
+Validated: admin build ✓, client build ✓, server files syntax-checked ✓, Hindi slug behavior unit-tested ✓. Note:  @tiptap/core  was added explicitly to  apps/admin/package.json , so run  npm install  (or your deploy script) before deploying.
+One heads-up (pre-existing, not from this change): draft articles are technically reachable by direct URL. It conveniently makes previews work, but tell me if you'd like drafts blocked publicly.
