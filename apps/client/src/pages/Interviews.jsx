@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import HeroSlideshow from '../components/shared/HeroSlideshow';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
@@ -18,15 +19,10 @@ const categoryColors = {
 };
 
 export default function Interviews() {
-  const [loaded, setLoaded] = useState(false);
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const img = new Image();
-    img.src = '/events-hero.jpg';
-    img.onload = () => setLoaded(true);
-  }, []);
+
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -152,17 +148,8 @@ export default function Interviews() {
       <PageLayout>
         {/* Hero */}
         <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[35vh]">
-          <div className="absolute inset-0 bg-gray-900">
-            <img
-              src="/events-hero.jpg"
-              alt="Interviews & Podcasts"
-              onLoad={() => setLoaded(true)}
-              className={`absolute inset-0 w-full h-full object-cover object-[65%_center] transition-opacity duration-1000 ${
-                loaded ? 'opacity-100' : 'opacity-0'
-              }`}
-            />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
-          </div>
+          {/* Rotating hero background (gallery of all hero images) */}
+          <HeroSlideshow startIndex={4} imageClass="object-[65%_center]" />
           <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
               <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">INTERVIEWS & PODCASTS</span>

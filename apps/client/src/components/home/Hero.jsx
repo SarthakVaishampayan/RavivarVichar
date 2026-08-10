@@ -1,41 +1,18 @@
-import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import Button from '../shared/Button';
+import HeroSlideshow from '../shared/HeroSlideshow';
+// NOTE: "Partner With Us" / "Join Our Initiative" buttons were temporarily
+// removed from the home hero (2026-08). Restore here if we need them again.
 
 export default function Hero() {
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = '/hero-image.jpg';
-    img.onload = () => setLoaded(true);
-  }, []);
-
   return (
     <>
       <Helmet>
         <link rel="preload" as="image" href="/hero-image.jpg" />
       </Helmet>
       <section className="relative mt-[90px] min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[15vh]">
-      {/* Full-screen background image fills section (starts below navbar) */}
-      <div className="absolute inset-0 bg-[#101010]">
-        <img
-          src="/hero-image.jpg"
-          alt="Ravivar Vichar community work"
-          onLoad={() => setLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-cover object-[65%_center] transition-opacity duration-1000 ${
-            loaded ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
-        {/* Gradient overlay: dark on left, transparent on right */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)',
-          }}
-        />
-      </div>
+      {/* Full-screen rotating hero background (gallery of all hero images) */}
+      <HeroSlideshow wrapperClass="bg-[#101010]" imageClass="object-[65%_center]" />
 
       {/* Content */}
       <div className="w-full pb-24 md:pb-0 lg:pb-24 relative z-10 max-lg:px-6 pl-[5vw]">
@@ -58,25 +35,6 @@ export default function Hero() {
             <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
               Ravivar Vichar empowers women through entrepreneurship, knowledge, partnerships, and community-driven action to create lasting social and economic impact.
             </p>
-
-            <div className="flex flex-wrap items-center gap-4 mt-10">
-              <Button
-                variant="primary"
-                to="/partner-with-us"
-                className="!bg-primary-500 !text-white hover:!bg-primary-600 !border-primary-500"
-                arrow
-              >
-                Partner With Us
-              </Button>
-              <Button
-                variant="outline"
-                to="/join-our-initiative"
-                className="!border-white !text-white hover:!bg-white/10"
-                arrow
-              >
-                Join Our Initiative
-              </Button>
-            </div>
           </motion.div>
         </div>
       </div>

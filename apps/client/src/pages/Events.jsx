@@ -2,20 +2,14 @@ import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import PageLayout from '../components/layout/PageLayout';
 import Button from '../components/shared/Button';
+import HeroSlideshow from '../components/shared/HeroSlideshow';
 import { Calendar, MapPin } from 'lucide-react';
 import api from '../lib/axios';
 
 export default function Events() {
-  const [loaded, setLoaded] = useState(false);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = '/events-hero.jpg';
-    img.onload = () => setLoaded(true);
-  }, []);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -52,18 +46,8 @@ export default function Events() {
 
       <PageLayout>
         <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[35vh]">
-          {/* Background image */}
-          <div className="absolute inset-0 bg-gray-900">
-            <img
-  src="/events-hero.jpg"
-  alt="Ravivar Vichar Events"
-  onLoad={() => setLoaded(true)}
-  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-    loaded ? 'opacity-100' : 'opacity-0'
-  }`}
-/>
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
-          </div>
+          {/* Rotating hero background (gallery of all hero images) */}
+          <HeroSlideshow startIndex={4} />
           {/* Content */}
           <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">

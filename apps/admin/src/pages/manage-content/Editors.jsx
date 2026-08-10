@@ -66,15 +66,33 @@ const Toggle = ({ label, name, value, onChange, trueLabel = 'Yes', falseLabel = 
 );
 
 // ─── TAGS ───
+// Auto-growing textarea: the writing area expands as you type or paste. Enter
+// adds the tag(s); commas and newlines split pasted lists into multiple tags.
 const TagsInput = ({ label, name, value = [], onChange, placeholder = 'Type and press Enter' }) => {
   const [input, setInput] = useState('');
+  const textareaRef = useRef(null);
+
+  // Auto-grow the textarea to fit its content (cap at ~160px, then scroll)
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    const h = Math.min(el.scrollHeight, 160);
+    el.style.height = `${h}px`;
+    el.style.overflowY = el.scrollHeight > 160 ? 'auto' : 'hidden';
+  }, [input]);
+
   const addTag = () => {
-    const tag = input.trim();
-    if (tag && !value.includes(tag)) {
-      onChange(name, [...value, tag]);
-    }
+    const tags = input
+      .split(/[,\n]/)            // split on commas or newlines
+      .map((t) => t.trim())
+      .filter(Boolean);
+    if (!tags.length) return;
+    const fresh = [...new Set(tags.filter((t) => !value.includes(t)))]; // dedupe within batch too
+    if (fresh.length) onChange(name, [...value, ...fresh]);
     setInput('');
   };
+
   const removeTag = (tag) => onChange(name, value.filter((t) => t !== tag));
   return (
     <div>
@@ -87,12 +105,21 @@ const TagsInput = ({ label, name, value = [], onChange, placeholder = 'Type and 
           </span>
         ))}
       </div>
-      <input
+      <textarea
+        ref={textareaRef}
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            addTag();
+          } else if (e.key === 'Backspace' && !input.trim() && value.length) {
+            removeTag(value[value.length - 1]);
+          }
+        }}
+        rows={1}
         placeholder={placeholder}
-        className="input-field"
+        className="input-field resize-none min-h-[44px] leading-6"
       />
     </div>
   );

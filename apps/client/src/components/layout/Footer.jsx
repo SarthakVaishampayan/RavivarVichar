@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, Globe, ArrowRight, Check, Loader2 } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, ArrowRight, Check, Loader2 } from 'lucide-react';
 import api from '../../lib/axios';
 
 const footerLinks = {
@@ -39,11 +39,6 @@ const socialLinks = [
   { icon: Youtube, href: 'https://www.youtube.com/@ravivarvichar', label: 'YouTube' },
 ];
 
-const developerLinks = [
-  { icon: Linkedin, href: 'https://www.linkedin.com/in/sarthakvaishampayan/', label: 'LinkedIn' },
-  { icon: Globe, href: 'https://sarthakvaishampayan.vercel.app/', label: 'Portfolio' },
-  { icon: Instagram, href: 'https://www.instagram.com/_sxrthxkk_/', label: 'Instagram' },
-];
 
 // Right-shift percentages for the link columns (desktop only)
 const linkColumnMargins = {
@@ -132,26 +127,17 @@ export default function Footer() {
             <div className="mt-[22.8px] pt-[19px] border-t border-gray-200">
               <p className="text-[15.6px] text-ink-secondary leading-snug">
                 <span className="block">Designed &amp; Developed by</span>
-                <span className="block font-semibold text-ink-primary">Sarthak Vaishampayan</span>
+                <a
+                  href="https://sarthakvaishampayan.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Sarthak Vaishampayan Portfolio"
+                  title="Visit Portfolio"
+                  className="block font-semibold text-ink-primary hover:text-primary-500 transition-colors duration-300"
+                >
+                  Sarthak Vaishampayan
+                </a>
               </p>
-              <div className="flex items-center max-lg:justify-center gap-2.5 mt-3">
-                {developerLinks.map((social) => {
-                  const Icon = social.icon;
-                  return (
-                    <a
-                      key={social.label}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={social.label}
-                      title={social.label}
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-gray-200 text-ink-secondary hover:bg-primary-500 hover:text-white hover:border-primary-500 transition-all duration-300"
-                    >
-                      <Icon size={14} />
-                    </a>
-                  );
-                })}
-              </div>
             </div>
           </div>
 

@@ -302,7 +302,7 @@ const CHECK_GROUPS = [
   {
     key: 'contentQuality',
     label: 'Content Quality',
-    weight: 10,
+    weight: 12,
     icon: FileText,
     checks: [
       {
@@ -329,7 +329,7 @@ const CHECK_GROUPS = [
   {
     key: 'headings',
     label: 'Heading Structure',
-    weight: 10,
+    weight: 11,
     icon: Heading2,
     checks: [
       {
@@ -376,7 +376,7 @@ const CHECK_GROUPS = [
   {
     key: 'imageSEO',
     label: 'Image ALT Text',
-    weight: 5,
+    weight: 6,
     icon: ImageIcon,
     checks: [
       {
@@ -394,23 +394,23 @@ const CHECK_GROUPS = [
   {
     key: 'internalLinks',
     label: 'Internal Links',
-    weight: 10,
+    weight: 2,
     icon: Link,
     checks: [
       {
         key: 'internalCount',
-        label: 'Add at least 4 internal links',
+        label: 'Add at least 1 internal link',
         pass: (d) => {
-          return countInternalLinks(d.content || '') >= 4;
+          return countInternalLinks(d.content || '') >= 1;
         },
-        tip: 'Link to at least 4 other articles on your site.',
+        tip: 'Link to at least 1 other article on your site.',
       },
     ],
   },
   {
     key: 'summary',
     label: 'Summary / Excerpt',
-    weight: 5,
+    weight: 6,
     icon: FileText,
     checks: [
       {
@@ -433,7 +433,7 @@ const CHECK_GROUPS = [
   {
     key: 'readability',
     label: 'Readability',
-    weight: 5,
+    weight: 7,
     icon: BookOpen,
     checks: [
       {
@@ -484,7 +484,7 @@ const CHECK_GROUPS = [
   {
     key: 'ogTags',
     label: 'Open Graph',
-    weight: 5,
+    weight: 6,
     icon: Eye,
     checks: [
       {

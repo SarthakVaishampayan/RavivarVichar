@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import HeroSlideshow from '../components/shared/HeroSlideshow';
 import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
 import { useInView } from 'framer-motion';
@@ -312,15 +313,10 @@ function AnimatedCounter({ value, prefix = '', suffix = '', duration = 2000 }) {
 }
 
 export default function WhatWeDoDetail() {
-  const [loaded, setLoaded] = useState(false);
   const { slug } = useParams();
   const content = contentMap[slug];
 
-  useEffect(() => {
-    const img = new Image();
-    img.src = '/whatwedo-hero.jpg';
-    img.onload = () => setLoaded(true);
-  }, []);
+
 
   if (!content) {
     return (
@@ -347,17 +343,8 @@ export default function WhatWeDoDetail() {
       <PageLayout>
         {/* ── Hero ── */}
         <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[15vh]">
-          <div className="absolute inset-0 bg-gray-900">
-            <img
-  src="/whatwedo-hero.jpg"
-  alt=""
-  onLoad={() => setLoaded(true)}
-  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-    loaded ? 'opacity-100' : 'opacity-0'
-  }`}
-/>
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
-          </div>
+          {/* Rotating hero background (gallery of all hero images) */}
+          <HeroSlideshow startIndex={7} />
           <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
               <Link to="/" className="flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors mb-8">

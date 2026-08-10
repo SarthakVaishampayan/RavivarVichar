@@ -9,6 +9,7 @@ import Button from '../components/shared/Button';
 import { Heart, Zap, Users, Globe, Newspaper, Monitor, Calendar, Search, Megaphone, Briefcase, Shield, Leaf, X } from 'lucide-react';
 import RavivarModel from '../components/shared/RavivarModel';
 import TeamMemberModal from '../components/shared/TeamMemberModal';
+import HeroSlideshow from '../components/shared/HeroSlideshow';
 
 const stats = [
   { value: 15, suffix: '+', label: 'Years of Ravivar Digest' },
@@ -203,7 +204,6 @@ function TilePreviewModal({ tile, onClose }) {
 }
 
 export default function About() {
-  const [loaded, setLoaded] = useState(false);
   const [failedImages, setFailedImages] = useState({});
   const [selectedMember, setSelectedMember] = useState(null);
   const [selectedTile, setSelectedTile] = useState(null);
@@ -212,12 +212,6 @@ export default function About() {
   const handleImageError = (name) => {
     setFailedImages(prev => ({ ...prev, [name]: true }));
   };
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = '/about-hero.jpg';
-    img.onload = () => setLoaded(true);
-  }, []);
 
   useEffect(() => {
     if (location.hash) {
@@ -242,18 +236,8 @@ export default function About() {
       <PageLayout>
         {/* Hero */}
         <section id="our-story" className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[20vh]">
-          {/* Background image */}
-          <div className="absolute inset-0 bg-gray-900">
-            <img
-  src="/about-hero.jpg"
-  alt="About Ravivar Vichar"
-  onLoad={() => setLoaded(true)}
-  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-    loaded ? 'opacity-100' : 'opacity-0'
-  }`}
-/>
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(16,16,16,0.85) 0%, rgba(16,16,16,0.70) 35%, rgba(16,16,16,0.25) 70%, rgba(16,16,16,0.08) 100%)' }} />
-          </div>
+          {/* Rotating hero background (gallery of all hero images) */}
+          <HeroSlideshow startIndex={1} />
           {/* Content */}
           <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
