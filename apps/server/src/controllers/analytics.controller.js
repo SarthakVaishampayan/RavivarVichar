@@ -22,8 +22,10 @@ const catchAsync = require('../utils/catchAsync');
 
 // GET /api/v1/analytics/summary
 const getSummary = catchAsync(async (req, res) => {
-  // Category groups — must stay in sync with the lists on the public site & admin
-  const ARTICLE_CATEGORIES = ['General', 'Case Study', 'Explainer', 'News', 'Opinion', 'Impact Story', 'Policy Brief'];
+  // Category groups — must stay in sync with the lists on the public site & admin.
+  // The unified Content bucket = the new 'Articles' category PLUS legacy categories
+  // that pre-date the consolidation (they remain visible on the site untouched).
+  const ARTICLE_CATEGORIES = ['Articles', 'General', 'Case Study', 'Explainer', 'News', 'Opinion', 'Impact Story', 'Policy Brief'];
 
   const [
     totalArticles,
@@ -38,10 +40,6 @@ const getSummary = catchAsync(async (req, res) => {
     joinInitiative,
     partnerApplications,
     mediaMentions,
-    researchReports,
-    successStories,
-    interviews,
-    podcasts,
   ] = await Promise.all([
     Article.countDocuments(),
     Article.countDocuments({ category: { $in: ARTICLE_CATEGORIES } }),
@@ -55,15 +53,11 @@ const getSummary = catchAsync(async (req, res) => {
     JoinInitiative.countDocuments(),
     PartnerApplication.countDocuments(),
     Recognition.countDocuments(),
-    Article.countDocuments({ category: 'Research' }),
-    Article.countDocuments({ category: 'Success Stories' }),
-    Article.countDocuments({ category: 'Interview' }),
-    Article.countDocuments({ category: 'Podcast' }),
   ]);
 
   // Content distribution breakdown — keys match RESOURCES keys in admin constants
   const contentBreakdown = {
-    articles: { label: 'Articles', count: articles, color: '#F4A43B' },
+    articles: { label: 'Content', count: articles, color: '#F4A43B' },
     partners: { label: 'Partners', count: partners, color: '#8B5CF6' },
     events: { label: 'Events', count: events, color: '#E11D48' },
     testimonials: { label: 'Testimonials', count: testimonials, color: '#F59E0B' },
@@ -74,10 +68,6 @@ const getSummary = catchAsync(async (req, res) => {
     joinInitiative: { label: 'Join Initiative', count: joinInitiative, color: '#10B981' },
     partnerApplications: { label: 'Partner Applications', count: partnerApplications, color: '#F4A43B' },
     recognitions: { label: 'Recognitions', count: mediaMentions, color: '#3B82F6' },
-    researchReports: { label: 'Research & Reports', count: researchReports, color: '#8B5CF6' },
-    successStories: { label: 'Success Stories', count: successStories, color: '#10B981' },
-    interviews: { label: 'Interviews', count: interviews, color: '#F59E0B' },
-    podcasts: { label: 'Podcasts', count: podcasts, color: '#F97316' },
   };
 
   // Recent activity (last 20 actions)
@@ -91,10 +81,8 @@ const getSummary = catchAsync(async (req, res) => {
   const publishedCount = await Article.countDocuments({ status: 'published' });
   const draftCount = await Article.countDocuments({ status: 'draft' });
 
-  // articles count already excludes the special categories, so no double counting
   const total = articles + partners + events + testimonials + newsletters + contacts
-    + gallery + featureRequests + joinInitiative + partnerApplications + mediaMentions
-    + researchReports + successStories + interviews + podcasts;
+    + gallery + featureRequests + joinInitiative + partnerApplications + mediaMentions;
 
   sendSuccess(res, {
     total,

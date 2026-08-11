@@ -127,16 +127,7 @@ export default function Footer() {
             <div className="mt-[22.8px] pt-[19px] border-t border-gray-200">
               <p className="text-[15.6px] text-ink-secondary leading-snug">
                 <span className="block">Designed &amp; Developed by</span>
-                <a
-                  href="https://sarthakvaishampayan.vercel.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Sarthak Vaishampayan Portfolio"
-                  title="Visit Portfolio"
-                  className="block font-semibold text-ink-primary hover:text-primary-500 transition-colors duration-300"
-                >
-                  Sarthak Vaishampayan
-                </a>
+                <span className="block font-semibold text-ink-primary">Sarthak Vaishampayan</span>
               </p>
             </div>
           </div>

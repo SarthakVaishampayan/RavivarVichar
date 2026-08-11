@@ -8,6 +8,7 @@ import api from '../lib/axios';
 import { ArrowRight, Calendar, Tag, Clock, Eye, Mic, Podcast, Star } from 'lucide-react';
 
 const categoryColors = {
+  'Articles': 'bg-slate-100 text-slate-700',
   'Research': 'bg-primary-50 text-primary-600',
   'Case Study': 'bg-secondary-50 text-secondary-600',
   'Impact Story': 'bg-blue-50 text-blue-600',

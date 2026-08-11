@@ -269,13 +269,19 @@ const PermalinkInput = ({ title, slug, onChange }) => {
   );
 };
 
-// ─── ARTICLE EDITOR ───
+// ─── CONTENT EDITOR ───
+// One unified editor for every content type. The Primary Category dropdown
+// decides where the item appears on the public website.
 export function ArticleEditor() {
   return (
     <EditorForm
       resourceKey="articles"
-      resourceLabel="Articles"
+      resourceLabel="Content"
+      singularLabel="Content"
       apiPath="/articles"
+      // Default new content to the catch-all category so an item can never be
+      // saved with an empty category (which would make it invisible on the site).
+      defaultValues={{ category: 'Articles' }}
       enableAutoSave
       previewContent={(data, onClose) => (
         <ArticlePreview article={data} onClose={onClose} />
@@ -367,14 +373,53 @@ export function ArticleEditor() {
                 </div>
 
                 <div className="p-4 space-y-4">
-                  {/* Primary Category */}
+                  {/* Primary Category — this is the content type. The stored
+                      value maps 1:1 to a section on the public website. */}
                   <Select
                     label="Primary Category"
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    options={ARTICLE_CATEGORIES}
+                    options={[
+                      ...ARTICLE_CATEGORIES,
+                      // When editing older content that predates the 5 new
+                      // categories, surface the existing value instead of an
+                      // empty dropdown so it can be kept or changed safely.
+                      ...(formData.category &&
+                      !ARTICLE_CATEGORIES.some((c) => (typeof c === 'string' ? c : c.value) === formData.category)
+                        ? [{ value: formData.category, label: `${formData.category} (existing)` }]
+                        : []),
+                    ]}
                     placeholder="Select Primary Category"
+                  />
+                  <p className="text-xs text-gray-400 -mt-3">
+                    This is the content type — it decides where the item appears on the website (Articles, Research &amp; Reports, Success Stories, Interviews, or Podcasts).
+                  </p>
+
+                  {/* Status */}
+                  <Select
+                    label="Status"
+                    name="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                    options={['draft', 'published']}
+                  />
+
+                  {/* Featured toggle */}
+                  <Toggle
+                    label="Featured"
+                    name="featured"
+                    value={formData.featured}
+                    onChange={handleChange}
+                  />
+
+                  {/* Date Override */}
+                  <Input
+                    label="Date Override"
+                    name="publishedAt"
+                    value={formData.publishedAt ? formData.publishedAt.slice(0, 10) : ''}
+                    onChange={handleChange}
+                    type="date"
                   />
 
                   {/* Additional Category (multi-select using TagsInput style) */}
@@ -424,32 +469,6 @@ export function ArticleEditor() {
 
                   {/* Live SEO Score Analyzer */}
                   <SeoAnalyzer formData={formData} />
-
-                  {/* Status */}
-                  <Select
-                    label="Status"
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                    options={['draft', 'published']}
-                  />
-
-                  {/* Featured toggle */}
-                  <Toggle
-                    label="Featured"
-                    name="featured"
-                    value={formData.featured}
-                    onChange={handleChange}
-                  />
-
-                  {/* Date Override */}
-                  <Input
-                    label="Date Override"
-                    name="publishedAt"
-                    value={formData.publishedAt ? formData.publishedAt.slice(0, 10) : ''}
-                    onChange={handleChange}
-                    type="date"
-                  />
                 </div>
               </div>
 
@@ -676,67 +695,6 @@ export function RecognitionEditor() {
   );
 }
 
-// ─── HOMEPAGE RESEARCH CATEGORY EDITOR (Success Stories) ───
-function makeCategoryEditor(category, label, singularName, apiPath, resourceKey, extraDefaults = {}) {
-  return function CategoryEditor() {
-    return (
-      <EditorForm
-        resourceKey={resourceKey}
-        resourceLabel={label}
-        singularLabel={singularName}
-        apiPath={apiPath}
-        defaultValues={{ category, ...extraDefaults }}
-        fields={({ formData, handleChange, setField }) => (
-          <>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 space-y-4">
-                <Input label="Title" name="title" value={formData.title} onChange={handleChange} placeholder="Enter title" required />
-                <Input label="Excerpt" name="excerpt" value={formData.excerpt} onChange={handleChange} placeholder="Brief summary" rows={2} />
-                <div>
-                  <label className="label">Content</label>
-                  <RichTextEditor
-                    value={formData.content || ''}
-                    onChange={(html) => handleChange('content', html)}
-                  />
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="rounded-lg border border-gray-200 p-4 bg-gray-50">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">Category</p>
-                  <p className="text-sm font-semibold text-gray-800 mt-1">{category}</p>
-                </div>
-                <Input
-                  label="Author Name"
-                  name="authorName"
-                  value={formData.authorName}
-                  onChange={handleChange}
-                  placeholder="e.g. Riya Sharma"
-                />
-                <Input
-                  label="Credits"
-                  name="credit"
-                  value={formData.credit}
-                  onChange={handleChange}
-                  placeholder="Photo/author credits"
-                />
-                <Select label="Status" name="status" value={formData.status} onChange={handleChange} options={['draft', 'published']} />
-                <ImageUpload label="Thumbnail" value={formData.thumbnail} onChange={(url) => handleChange('thumbnail', url)} />
-                <MultiImageUpload label="Gallery" value={formData.gallery} onChange={(urls) => handleChange('gallery', urls)} />
-                <VideoUpload label="Upload Video/Audio" value={formData.videoUrl} onChange={(url) => handleChange('videoUrl', url)} />
-                <Input label="Or Paste Video URL" name="videoUrl" value={formData.videoUrl} onChange={handleChange} placeholder="https://youtube.com/watch?v=..." />
-              </div>
-            </div>
-          </>
-        )}
-      />
-    );
-  };
-}
-
-export const ResearchReportEditor = makeCategoryEditor('Research', 'Research & Reports', 'Research Report', '/articles', 'researchReports');
-export const SuccessStoryEditor = makeCategoryEditor('Success Stories', 'Success Stories', 'Success Story', '/articles', 'successStories');
-export const InterviewEditor = makeCategoryEditor('Interview', 'Interviews', 'Interview', '/articles', 'interviews');
-export const PodcastEditor = makeCategoryEditor('Podcast', 'Podcasts', 'Podcast', '/articles', 'podcasts', { status: 'published' });
 
 // ─── TESTIMONIAL EDITOR ───
 export function TestimonialEditor() {

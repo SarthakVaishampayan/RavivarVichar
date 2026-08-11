@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import Button from '../components/shared/Button';
-import { ArrowLeft, Calendar, User, Camera, Linkedin, Twitter, Facebook } from 'lucide-react';
+import { ArrowLeft, Calendar, User, Linkedin, Twitter, Facebook } from 'lucide-react';
 import api from '../lib/axios';
 
 // Categories that belong to the "Articles" group (all other categories are their own group)
@@ -196,26 +196,10 @@ export default function ArticleDetail() {
               <div className="flex flex-wrap items-center gap-5 mt-4 text-sm text-ink-secondary">
                 <span className="flex items-center gap-1.5"><User size={16} /> {authorName}</span>
                 <span className="flex items-center gap-1.5"><Calendar size={16} /> {formattedDate}</span>
-                {article.credit && (
-                  <span className="flex items-center gap-1.5"><Camera size={16} /> {article.credit}</span>
-                )}
               </div>
             </div>
           </div>
         </section>
-
-        {/* Banner Description */}
-        {article.bannerDescription && (
-          <section className="bg-surface-section py-8">
-            <div className="container-content">
-              <div className="max-w-4xl mx-auto">
-                <p className="text-lg text-ink-secondary italic leading-relaxed border-l-4 border-primary-500 pl-5">
-                  {article.bannerDescription}
-                </p>
-              </div>
-            </div>
-          </section>
-        )}
 
         <section className="bg-surface-white pb-8">
           <div className="container-content">
@@ -231,6 +215,20 @@ export default function ArticleDetail() {
                   }}
                 />
               </div>
+            )}
+
+            {/* Banner Description — centered below image */}
+            {article.bannerDescription && (
+              <p className="text-lg text-ink-secondary italic leading-relaxed text-center mt-6">
+                {article.bannerDescription}
+              </p>
+            )}
+
+            {/* Credits — centered below banner description */}
+            {article.credit && (
+              <p className="text-[11px] text-ink-secondary italic text-center mt-2">
+                {article.credit}
+              </p>
             )}
 
             {article.videoUrl && (

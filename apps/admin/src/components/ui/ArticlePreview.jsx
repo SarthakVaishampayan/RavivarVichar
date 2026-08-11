@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { X, User, Calendar, Camera } from 'lucide-react';
+import { X, User, Calendar } from 'lucide-react';
 
 // Full-page article preview mirroring the public ArticleDetail layout so authors
 // see exactly how the article will look before publishing. Body typography is
@@ -77,14 +77,7 @@ export default function ArticlePreview({ article = {}, onClose }) {
           <div className="flex flex-wrap items-center gap-5 mt-4 text-sm text-ink-secondary">
             <span className="flex items-center gap-1.5"><User size={16} /> {authorName}</span>
             <span className="flex items-center gap-1.5"><Calendar size={16} /> {formattedDate || 'Not published yet'}</span>
-            {article.credit && <span className="flex items-center gap-1.5"><Camera size={16} /> {article.credit}</span>}
           </div>
-
-          {article.bannerDescription && (
-            <p className="text-lg text-ink-secondary italic leading-relaxed border-l-4 border-primary-500 pl-5 mt-6">
-              {article.bannerDescription}
-            </p>
-          )}
 
           {article.thumbnail && (
             <img
@@ -93,6 +86,20 @@ export default function ArticlePreview({ article = {}, onClose }) {
               className="w-full h-auto max-h-[500px] object-cover rounded-xl shadow-xl mt-6"
               onError={(e) => { e.target.style.display = 'none'; }}
             />
+          )}
+
+          {/* Banner Description — centered below image */}
+          {article.bannerDescription && (
+            <p className="text-lg text-ink-secondary italic leading-relaxed text-center mt-6">
+              {article.bannerDescription}
+            </p>
+          )}
+
+          {/* Credits — centered below banner description */}
+          {article.credit && (
+            <p className="text-[11px] text-ink-secondary italic text-center mt-2">
+              {article.credit}
+            </p>
           )}
 
           {/* Body */}

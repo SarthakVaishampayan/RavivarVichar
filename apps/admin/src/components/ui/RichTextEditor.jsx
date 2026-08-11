@@ -20,7 +20,7 @@ import {
   Bold, Italic, Strikethrough, Underline,
   Heading1, Heading2, Heading3, Heading4, Heading5, Heading6,
   List, ListOrdered, Quote,
-  Link, Image, Undo, Redo,
+  Link, Link2, Image, Undo, Redo,
   AlignLeft, AlignCenter, AlignRight, AlignJustify,
   Indent, CornerDownRight,
   Minus, Code,
@@ -424,7 +424,7 @@ const InsertImagePopover = ({ editor, onClose }) => {
 
   const insert = (src) => {
     if (!src) return;
-    editor.chain().focus().insertFigure({ src, caption: caption.trim(), align }).run();
+    editor.chain().focus().insertFigure({ src, alt: '', caption: caption.trim(), align }).run();
     onClose();
   };
 
@@ -821,6 +821,10 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
   const [showPreview, setShowPreview] = useState(false);
   const [showImagePopover, setShowImagePopover] = useState(false);
   const [toolbarStuck, setToolbarStuck] = useState(false);
+  const [showArticleLink, setShowArticleLink] = useState(false); // dedicated internal-link picker popover
+  const [internalArticles, setInternalArticles] = useState([]); // published articles for the internal-link picker
+  const [internalSearch, setInternalSearch] = useState('');
+  const [internalLoaded, setInternalLoaded] = useState(false);
   const isInternalChange = useRef(false);
   const prevValueRef = useRef(value);
   const editorRef = useRef(null);
@@ -953,6 +957,22 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
     isInternalChange.current = false;
   }, [value, editor]);
 
+  // Load published articles once the link popover opens so authors can pick an
+  // internal link from real content (SEO: at least 1 internal link).
+  useEffect(() => {
+    if (!showArticleLink || internalLoaded) return;
+    (async () => {
+      try {
+        const { data } = await api.get('/articles', { params: { status: 'published', limit: 50, sort: '-createdAt' } });
+        setInternalArticles(data.data || []);
+        setInternalLoaded(true);
+      } catch {
+        /* non-fatal — the URL box still works; internalLoaded stays false so
+           the next popover open retries the fetch */
+      }
+    })();
+  }, [showArticleLink, internalLoaded]);
+
   // Full screen effect — the container becomes a fixed overlay that scrolls
   // internally so long articles stay fully reachable.
   useEffect(() => {
@@ -988,6 +1008,29 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
       setLinkUrl('');
       setShowLinkInput(false);
     }
+  };
+
+  // Link the current selection to an article on this site; if no text is
+  // selected, insert the article title as a clickable link.
+  const applyInternalLink = (article) => {
+    const href = `/articles/${article.slug}`;
+    const { empty } = editor.state.selection;
+    if (empty) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'text',
+          text: article.title,
+          marks: [{ type: 'link', attrs: { href } }],
+        })
+        .run();
+    } else {
+      editor.chain().focus().setLink({ href }).run();
+    }
+    setLinkUrl('');
+    setShowArticleLink(false);
+    setInternalSearch('');
   };
 
   const insertTable = () => {
@@ -1098,7 +1141,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
           <ToolbarButton onClick={insertTable} title="Insert Table"><TableIcon size={16} /></ToolbarButton>
           <ToolbarButton onClick={addHorizontalRule} title="Horizontal Line"><Minus size={16} /></ToolbarButton>
 
-          {/* Link */}
+          {/* Link — paste any external URL */}
           <div className="relative">
             <ToolbarButton onClick={() => setShowLinkInput(!showLinkInput)} active={editor.isActive('link')} title="Insert Link (Ctrl+K)"><Link size={16} /></ToolbarButton>
             {showLinkInput && (
@@ -1116,6 +1159,47 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
                   autoFocus
                 />
                 <button type="button" onClick={handleSetLink} className="btn-primary text-xs px-3 py-1">Add</button>
+              </div>
+            )}
+          </div>
+
+          {/* Link to an Article on this site (internal links) */}
+          <div className="relative">
+            <ToolbarButton onClick={() => setShowArticleLink(!showArticleLink)} active={showArticleLink} title="Link to an Article on this Site"><Link2 size={16} /></ToolbarButton>
+            {showArticleLink && (
+              <div className="absolute top-full left-0 mt-1 w-80 rounded-lg border border-gray-200 bg-white p-2 shadow-lg z-10">
+                <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wider mb-1">Link to an article on this site</p>
+                <input
+                  type="text"
+                  value={internalSearch}
+                  onChange={(e) => setInternalSearch(e.target.value)}
+                  placeholder="Search published articles..."
+                  className="w-full rounded border border-gray-200 px-2 py-1 text-xs outline-none focus:border-primary-400"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') setShowArticleLink(false);
+                  }}
+                  autoFocus
+                />
+                <div className="mt-1 max-h-40 overflow-y-auto">
+                  {!internalLoaded && <p className="text-[10px] text-gray-400 py-1">Loading articles...</p>}
+                  {internalLoaded && internalArticles.length === 0 && (
+                    <p className="text-[10px] text-gray-400 py-1">No published articles yet — publish one first</p>
+                  )}
+                  {internalArticles
+                    .filter((a) => !internalSearch || (a.title || '').toLowerCase().includes(internalSearch.toLowerCase()))
+                    .slice(0, 8)
+                    .map((a) => (
+                      <button
+                        key={a._id}
+                        type="button"
+                        onClick={() => applyInternalLink(a)}
+                        className="w-full text-left truncate rounded px-2 py-1.5 text-xs text-gray-600 hover:bg-gray-50 hover:text-primary-600 transition-colors"
+                        title={`Link to: ${a.title}`}
+                      >
+                        {a.title}
+                      </button>
+                    ))}
+                </div>
               </div>
             )}
           </div>
@@ -1145,6 +1229,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Start w
           <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo (Ctrl+Z)"><Undo size={16} /></ToolbarButton>
           <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo (Ctrl+Y)"><Redo size={16} /></ToolbarButton>
         </div>
+
 
         {/* Content area — wrapped so bottom corners stay rounded (overflow-hidden
             was removed from the outer container to allow the sticky toolbar) */}

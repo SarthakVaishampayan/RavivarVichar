@@ -3,7 +3,7 @@ import {
   CheckCircle2, XCircle, AlertTriangle,
   Lightbulb, FileImage, FileText, Hash, Edit3,
   Heading2, Link, MessageSquare, Search,
-  Eye, Twitter, BookOpen, Image as ImageIcon,
+  Eye, Twitter, BookOpen,
   ChevronDown, ChevronUp,
 } from 'lucide-react';
 
@@ -31,17 +31,6 @@ function sentenceCount(text) {
   if (!text) return 0;
   const sentences = text.match(/[^.!?]+[.!?]+/g);
   return sentences ? sentences.length : Math.max(1, text.split(/\n+/).filter(Boolean).length);
-}
-
-function countImages(html) {
-  if (!html) return 0;
-  return (html.match(/<img[^>]*>/gi) || []).length;
-}
-
-function countImagesWithAlt(html) {
-  if (!html) return 0;
-  const imgs = html.match(/<img[^>]*>/gi) || [];
-  return imgs.filter((img) => /alt\s*=\s*["'][^"']+["']/i.test(img)).length;
 }
 
 function countInternalLinks(html) {
@@ -239,7 +228,7 @@ const CHECK_GROUPS = [
   {
     key: 'keyphrase',
     label: 'Focus Keyphrase',
-    weight: 10,
+    weight: 11,
     icon: Hash,
     checks: [
       {
@@ -302,7 +291,7 @@ const CHECK_GROUPS = [
   {
     key: 'contentQuality',
     label: 'Content Quality',
-    weight: 12,
+    weight: 14,
     icon: FileText,
     checks: [
       {
@@ -329,7 +318,7 @@ const CHECK_GROUPS = [
   {
     key: 'headings',
     label: 'Heading Structure',
-    weight: 11,
+    weight: 12,
     icon: Heading2,
     checks: [
       {
@@ -374,24 +363,6 @@ const CHECK_GROUPS = [
     ],
   },
   {
-    key: 'imageSEO',
-    label: 'Image ALT Text',
-    weight: 6,
-    icon: ImageIcon,
-    checks: [
-      {
-        key: 'imageAlt',
-        label: 'Add descriptive ALT text to all images',
-        pass: (d) => {
-          const total = countImages(d.content || '');
-          if (total === 0) return true;
-          return countImagesWithAlt(d.content || '') === total;
-        },
-        tip: 'Add ALT text to all images for accessibility and SEO.',
-      },
-    ],
-  },
-  {
     key: 'internalLinks',
     label: 'Internal Links',
     weight: 2,
@@ -410,7 +381,7 @@ const CHECK_GROUPS = [
   {
     key: 'summary',
     label: 'Summary / Excerpt',
-    weight: 6,
+    weight: 7,
     icon: FileText,
     checks: [
       {
@@ -433,7 +404,7 @@ const CHECK_GROUPS = [
   {
     key: 'readability',
     label: 'Readability',
-    weight: 7,
+    weight: 8,
     icon: BookOpen,
     checks: [
       {
@@ -609,6 +580,7 @@ export default function SeoAnalyzer({ formData }) {
       const results = group.checks.map((check) => ({
         ...check,
         passed: check.pass(data),
+        tip: typeof check.tip === 'function' ? check.tip(data) : check.tip,
       }));
       const passed = results.filter((r) => r.passed).length;
       const total = results.length;

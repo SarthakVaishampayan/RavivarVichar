@@ -13,14 +13,17 @@ const sections = [
   { id: 'success-stories', label: 'Success Stories', icon: Star },
 ];
 
-// Maps each section to the article categories it should show
+// Maps each section to the article categories it should show.
+// 'Articles' is the unified content type; the legacy categories below are
+// kept so older content that pre-dates the consolidation stays visible.
 const sectionCategoryMap = {
-  'Articles': ['General', 'Case Study', 'Explainer', 'News', 'Opinion', 'Impact Story', 'Policy Brief'],
+  'Articles': ['Articles', 'General', 'Case Study', 'Explainer', 'News', 'Opinion', 'Impact Story', 'Policy Brief'],
   'Research & Reports': ['Research'],
   'Success Stories': ['Success Stories'],
 };
 
 const categoryColors = {
+  'Articles': 'bg-slate-100 text-slate-700',
   'Research': 'bg-primary-50 text-primary-600',
   'Case Study': 'bg-secondary-50 text-secondary-600',
   'Impact Story': 'bg-blue-50 text-blue-600',

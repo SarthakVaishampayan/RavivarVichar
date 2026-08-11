@@ -5,7 +5,7 @@ const articleSchema = new mongoose.Schema(
   {
     title: { type: String, required: [true, 'Title is required'], trim: true },
     slug: { type: String, unique: true, lowercase: true },
-    category: { type: String, default: 'General' },
+    category: { type: String, default: 'Articles' },
     additionalCategories: [{ type: String }],
     tags: [{ type: String }],
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

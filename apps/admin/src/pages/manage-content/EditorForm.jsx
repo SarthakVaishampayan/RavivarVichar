@@ -135,10 +135,13 @@ export default function EditorForm({
             draftIdRef.current = createdId;
             loadedStatusRef.current = 'draft';
             // Switch from /new to the real record so the manual Save becomes an
-            // update and a refresh keeps loading this same draft.
+            // update and a refresh keeps loading this same draft. The trailing
+            // /edit is required — there is NO route for /content/:key/:id, so
+            // navigating there would hit the catch-all and kick the user back
+            // to the Dashboard mid-typing.
             if (isNew) {
               skipFetchRef.current = true;
-              navigateRef.current(`/content/${resourceKeyRef.current}/${createdId}`, { replace: true });
+              navigateRef.current(`/content/${resourceKeyRef.current}/${createdId}/edit`, { replace: true });
             }
             localStorage.removeItem(`rv_autosave_${resourceKeyRef.current}_new`);
           }
@@ -270,20 +273,36 @@ export default function EditorForm({
 
   return (
     <div className="page-container max-w-6xl mx-auto">
-      <div className="flex items-center gap-4 mb-6">
+      <div className="flex flex-wrap items-center gap-3 mb-6">
         <button onClick={() => navigate(`/content/${resourceKey}`)} className="btn-ghost">
           <ArrowLeft size={18} />
           Back
         </button>
-        <div className="flex-1">
+        <div className="flex-1 min-w-[200px]">
           <h1 className="page-title">{isNew ? `New ${singularLabel || resourceLabel.slice(0, -1)}` : `Edit ${singularLabel || resourceLabel.slice(0, -1)}`}</h1>
         </div>
         {previewContent && (
-          <button type="button" onClick={() => setShowPreview(true)} className="btn-secondary">
+          <button type="button" onClick={() => setShowPreview(true)} className="btn-secondary shrink-0">
             <Eye size={16} />
             Preview
           </button>
         )}
+        <button type="button" onClick={() => navigate(`/content/${resourceKey}`)} className="btn-secondary shrink-0">
+          Cancel
+        </button>
+        <button type="submit" form="content-editor-form" disabled={saving} className="btn-primary shrink-0">
+          {saving ? (
+            <>
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save size={16} />
+              {isNew ? 'Create' : 'Save Changes'}
+            </>
+          )}
+        </button>
       </div>
 
       {isNew && restoredDraftAt && (
@@ -297,7 +316,7 @@ export default function EditorForm({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form id="content-editor-form" onSubmit={handleSubmit} className="space-y-6">
         {fields({
           formData,
           handleChange: (key, value) => handleChange(key, value),
@@ -305,8 +324,8 @@ export default function EditorForm({
           isNew,
         })}
 
-        <div className={`flex items-center gap-3 pt-4 border-t border-gray-200 ${enableAutoSave ? 'justify-between' : 'justify-end'}`}>
-          {enableAutoSave && (
+        {enableAutoSave && (
+          <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
             <div className="flex items-center gap-2 text-xs">
               {saveStatus.state === 'saving' && (
                 <span className="flex items-center gap-1.5 text-gray-500">
@@ -318,27 +337,8 @@ export default function EditorForm({
               {saveStatus.state === 'error' && <span className="text-red-500">Draft save failed — will retry</span>}
               {saveStatus.state === 'idle' && <span className="text-gray-400">Draft autosave enabled</span>}
             </div>
-          )}
-
-          <div className="flex items-center gap-3">
-            <button type="button" onClick={() => navigate(`/content/${resourceKey}`)} className="btn-secondary">
-              Cancel
-            </button>
-            <button type="submit" disabled={saving} className="btn-primary">
-              {saving ? (
-                <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save size={16} />
-                  {isNew ? 'Create' : 'Save Changes'}
-                </>
-              )}
-            </button>
           </div>
-        </div>
+        )}
       </form>
 
       {showPreview && previewContent && previewContent(formData, () => setShowPreview(false))}

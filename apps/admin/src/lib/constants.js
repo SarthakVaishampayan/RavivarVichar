@@ -21,7 +21,8 @@ import {
 
 export const RESOURCES = {
   articles: {
-    label: 'Articles',
+    label: 'Content',
+    singularLabel: 'Content',
     icon: FileText,
     color: 'text-primary-500',
     bgColor: 'bg-primary-50',
@@ -108,39 +109,6 @@ export const RESOURCES = {
     apiPath: '/recognitions',
     fields: ['title', 'source', 'date', 'url', 'updatedAt'],
   },
-  researchReports: {
-    label: 'Research & Reports',
-    icon: FileText,
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-50',
-    apiPath: '/articles',
-    fields: ['title', 'status', 'updatedAt'],
-  },
-  successStories: {
-    label: 'Success Stories',
-    singularLabel: 'Success Story',
-    icon: FileText,
-    color: 'text-emerald-500',
-    bgColor: 'bg-emerald-50',
-    apiPath: '/articles',
-    fields: ['title', 'status', 'updatedAt'],
-  },
-  interviews: {
-    label: 'Interviews',
-    icon: FileText,
-    color: 'text-amber-500',
-    bgColor: 'bg-amber-50',
-    apiPath: '/articles',
-    fields: ['title', 'status', 'updatedAt'],
-  },
-  podcasts: {
-    label: 'Podcasts',
-    icon: FileText,
-    color: 'text-orange-500',
-    bgColor: 'bg-orange-50',
-    apiPath: '/articles',
-    fields: ['title', 'status', 'updatedAt'],
-  },
 };
 
 export const NAV_ITEMS = [
@@ -164,16 +132,14 @@ export const NAV_ITEMS = [
   { label: 'Settings', icon: Settings, path: '/settings' },
 ];
 
+// The 5 canonical content types. The stored `value` is what the public site's
+// sections match on (e.g. category === 'Interview' feeds the Interviews tab).
 export const ARTICLE_CATEGORIES = [
-  'General',
-  'Case Study',
-  'Research',
-  'Explainer',
-  'Interview',
-  'News',
-  'Opinion',
-  'Success Stories',
-  'Podcast',
+  { value: 'Articles', label: 'Articles' },
+  { value: 'Research', label: 'Research & Reports' },
+  { value: 'Success Stories', label: 'Success Stories' },
+  { value: 'Interview', label: 'Interviews' },
+  { value: 'Podcast', label: 'Podcasts' },
 ];
 
 export const PARTNER_CATEGORIES = ['government', 'corporate', 'ngo', 'educational'];

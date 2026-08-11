@@ -2,21 +2,32 @@ import api from '../../lib/axios';
 import { RESOURCES } from '../../lib/constants';
 import ContentList from './ContentList';
 
+// Fetch EVERY record across all pages. The server caps `limit` at 100 per
+// request (see paginate util), so a single request could silently truncate
+// older content — which would hide it from the unified Content list.
 const fetchAll = (apiPath) => async () => {
-  const { data } = await api.get(apiPath, { params: { limit: 100, sort: '-updatedAt' } });
-  return data.data;
+  const items = [];
+  const LIMIT = 100;
+  let page = 1;
+  for (let i = 0; i < 50; i++) {
+    const { data } = await api.get(apiPath, { params: { limit: LIMIT, page, sort: '-updatedAt' } });
+    const batch = data.data || [];
+    items.push(...batch);
+    const meta = data.meta;
+    if (!batch.length || batch.length < LIMIT || (meta && page >= meta.totalPages)) break;
+    page++;
+  }
+  return items;
 };
 
-// Categories shown under the generic "Articles" list — everything else
-// (Research, Success Stories, Interview, Podcast) has its own dedicated list.
-const ARTICLE_LIST_CATEGORIES = 'General,Case Study,Explainer,News,Opinion,Impact Story,Policy Brief';
-
-export function ArticleList() {
+// Single unified Content list — every article (all primary categories,
+// all statuses) lives here. The Category column shows the content type.
+export function ContentListPage() {
   return (
     <ContentList
       resourceKey="articles"
       resourceConfig={RESOURCES.articles}
-      fetchFn={fetchAll(`/articles?category=${encodeURIComponent(ARTICLE_LIST_CATEGORIES)}`)}
+      fetchFn={fetchAll('/articles')}
     />
   );
 }
@@ -107,46 +118,6 @@ export function PartnerApplicationList() {
       resourceKey="partnerApplications"
       resourceConfig={RESOURCES.partnerApplications}
       fetchFn={fetchAll('/partner-applications')}
-    />
-  );
-}
-
-export function ResearchReportList() {
-  return (
-    <ContentList
-      resourceKey="researchReports"
-      resourceConfig={RESOURCES.researchReports}
-      fetchFn={fetchAll('/articles?category=Research')}
-    />
-  );
-}
-
-export function SuccessStoryList() {
-  return (
-    <ContentList
-      resourceKey="successStories"
-      resourceConfig={RESOURCES.successStories}
-      fetchFn={fetchAll('/articles?category=Success%20Stories')}
-    />
-  );
-}
-
-export function InterviewList() {
-  return (
-    <ContentList
-      resourceKey="interviews"
-      resourceConfig={RESOURCES.interviews}
-      fetchFn={fetchAll('/articles?category=Interview')}
-    />
-  );
-}
-
-export function PodcastList() {
-  return (
-    <ContentList
-      resourceKey="podcasts"
-      resourceConfig={RESOURCES.podcasts}
-      fetchFn={fetchAll('/articles?category=Podcast')}
     />
   );
 }

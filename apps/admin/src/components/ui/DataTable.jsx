@@ -16,6 +16,7 @@ export default function DataTable({
   searchPlaceholder = 'Search...',
   onAdd,
   addLabel = 'Add New',
+  toolbarExtra = null,
 }) {
   const [search, setSearch] = useState('');
   const [sorting, setSorting] = useState([]);
@@ -39,14 +40,17 @@ export default function DataTable({
     <div className="space-y-4">
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="relative w-full sm:w-72">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={searchPlaceholder}
-            className="input-field pl-9"
-          />
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+          <div className="relative w-full sm:w-72">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={searchPlaceholder}
+              className="input-field pl-9"
+            />
+          </div>
+          {toolbarExtra}
         </div>
         {onAdd && (
           <button onClick={onAdd} className="btn-primary shrink-0">

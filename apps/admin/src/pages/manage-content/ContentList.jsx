@@ -8,6 +8,7 @@ import ConfirmDialog from '../../components/ui/ConfirmDialog';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import toast from 'react-hot-toast';
 import { createColumnHelper } from '@tanstack/react-table';
+import { ARTICLE_CATEGORIES as CONTENT_CATEGORIES } from '../../lib/constants';
 
 const formatDate = (dateStr) => {
   if (!dateStr) return '—';
@@ -26,6 +27,27 @@ export default function ContentList({ resourceKey, resourceConfig, fetchFn }) {
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState('');
+
+  // Client-side category filter for the unified Content list
+  const visibleItems = useMemo(() => {
+    if (!categoryFilter || resourceKey !== 'articles') return items;
+    return items.filter((item) => item.category === categoryFilter);
+  }, [items, categoryFilter, resourceKey]);
+
+  // Filter dropdown = the 5 canonical categories PLUS any legacy categories that
+  // actually exist in the data (e.g. 'General', 'News') so older content is
+  // always findable, never stranded.
+  const categoryOptions = useMemo(() => {
+    const canon = CONTENT_CATEGORIES.map((c) => (typeof c === 'string' ? { value: c, label: c } : c));
+    if (resourceKey !== 'articles') return canon;
+    const existing = [...new Set(items.map((i) => i.category).filter(Boolean))];
+    const canonValues = new Set(canon.map((c) => c.value));
+    existing
+      .filter((c) => !canonValues.has(c))
+      .forEach((c) => canon.push({ value: c, label: `${c} (existing)` }));
+    return canon;
+  }, [items, resourceKey]);
 
   const fetchItems = useCallback(async () => {
     setLoading(true);
@@ -210,11 +232,26 @@ export default function ContentList({ resourceKey, resourceConfig, fetchFn }) {
 
       <DataTable
         columns={columns}
-        data={items}
+        data={visibleItems}
         loading={loading}
         searchPlaceholder={`Search ${resourceConfig.label.toLowerCase()}...`}
         addLabel={!submissionResources.includes(resourceKey) ? `Add ${resourceConfig.singularLabel || resourceConfig.label.slice(0, -1)}` : undefined}
         onAdd={!submissionResources.includes(resourceKey) ? () => navigate(`/content/${resourceKey}/new`) : undefined}
+        toolbarExtra={
+          resourceKey === 'articles' ? (
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="input-field sm:w-52"
+              aria-label="Filter by category"
+            >
+              <option value="">All Categories</option>
+              {categoryOptions.map((cat) => (
+                <option key={cat.value} value={cat.value}>{cat.label}</option>
+              ))}
+            </select>
+          ) : null
+        }
       />
 
       <ConfirmDialog

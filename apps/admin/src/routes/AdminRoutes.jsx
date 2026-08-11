@@ -1,19 +1,17 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import ProtectedRoute from '../components/layout/ProtectedRoute';
 import Dashboard from '../pages/Dashboard';
 import ContentHub from '../pages/manage-content/ContentHub';
 import {
-  ArticleList, EventList, PartnerList,
+  ContentListPage, EventList, PartnerList,
   TestimonialList,
   NewsletterList, ContactList,
   FeatureRequestList, JoinInitiativeList, RecognitionList, PartnerApplicationList,
-  ResearchReportList, SuccessStoryList, InterviewList, PodcastList,
 } from '../pages/manage-content/ContentListPages';
 import {
   ArticleEditor, EventEditor, PartnerEditor,
   TestimonialEditor, RecognitionEditor,
-  ResearchReportEditor, SuccessStoryEditor, InterviewEditor, PodcastEditor,
 } from '../pages/manage-content/Editors';
 import Analytics from '../pages/Analytics';
 import Traffic from '../pages/Traffic';
@@ -26,6 +24,12 @@ import Settings from '../pages/Settings';
 import ChangePassword from '../pages/ChangePassword';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
+
+// Preserve the article id when a legacy edit deep-link redirects to the new home.
+function LegacyEditRedirect() {
+  const { id } = useParams();
+  return <Navigate to={`/content/articles/${id}/edit`} replace />;
+}
 
 export default function AdminRoutes() {
   return (
@@ -42,7 +46,7 @@ export default function AdminRoutes() {
         {/* Content Management */}
         <Route path="content" element={<ContentHub />} />
 
-        <Route path="content/articles" element={<ArticleList />} />
+        <Route path="content/articles" element={<ContentListPage />} />
         <Route path="content/articles/:id/edit" element={<ArticleEditor />} />
         <Route path="content/articles/new" element={<ArticleEditor />} />
 
@@ -72,21 +76,15 @@ export default function AdminRoutes() {
         <Route path="content/recognitions/:id/edit" element={<RecognitionEditor />} />
         <Route path="content/recognitions/new" element={<RecognitionEditor />} />
 
-        <Route path="content/researchReports" element={<ResearchReportList />} />
-        <Route path="content/researchReports/:id/edit" element={<ResearchReportEditor />} />
-        <Route path="content/researchReports/new" element={<ResearchReportEditor />} />
-
-        <Route path="content/successStories" element={<SuccessStoryList />} />
-        <Route path="content/successStories/:id/edit" element={<SuccessStoryEditor />} />
-        <Route path="content/successStories/new" element={<SuccessStoryEditor />} />
-
-        <Route path="content/interviews" element={<InterviewList />} />
-        <Route path="content/interviews/:id/edit" element={<InterviewEditor />} />
-        <Route path="content/interviews/new" element={<InterviewEditor />} />
-
-        <Route path="content/podcasts" element={<PodcastList />} />
-        <Route path="content/podcasts/:id/edit" element={<PodcastEditor />} />
-        <Route path="content/podcasts/new" element={<PodcastEditor />} />
+        {/* Legacy deep-links from the old dedicated sections — all content now lives under /content/articles */}
+        <Route path="content/researchReports/:id/edit" element={<LegacyEditRedirect />} />
+        <Route path="content/successStories/:id/edit" element={<LegacyEditRedirect />} />
+        <Route path="content/interviews/:id/edit" element={<LegacyEditRedirect />} />
+        <Route path="content/podcasts/:id/edit" element={<LegacyEditRedirect />} />
+        <Route path="content/researchReports/*" element={<Navigate to="/content/articles" replace />} />
+        <Route path="content/successStories/*" element={<Navigate to="/content/articles" replace />} />
+        <Route path="content/interviews/*" element={<Navigate to="/content/articles" replace />} />
+        <Route path="content/podcasts/*" element={<Navigate to="/content/articles" replace />} />
 
         <Route path="content/partnerApplications" element={<PartnerApplicationList />} />
 

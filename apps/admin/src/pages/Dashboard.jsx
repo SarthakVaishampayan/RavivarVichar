@@ -10,7 +10,7 @@ import ContentPieChart from '../components/charts/ContentPieChart';
 import MonthlyPostChart from '../components/charts/MonthlyPostChart';
 
 const contentTypes = [
-  { key: 'articles', label: 'Articles', icon: FileText, color: 'text-primary-500', bg: 'bg-primary-50', path: '/content/articles' },
+  { key: 'articles', label: 'Content', icon: FileText, color: 'text-primary-500', bg: 'bg-primary-50', path: '/content/articles' },
   { key: 'events', label: 'Events', icon: Calendar, color: 'text-rose-500', bg: 'bg-rose-50', path: '/content/events' },
   { key: 'partners', label: 'Partners', icon: Users, color: 'text-purple-500', bg: 'bg-purple-50', path: '/content/partners' },
   { key: 'gallery', label: 'Gallery', icon: Image, color: 'text-emerald-500', bg: 'bg-emerald-50', path: '/content/gallery' },
@@ -196,7 +196,7 @@ export default function Dashboard() {
                 className="btn-ghost w-full justify-start text-sm"
               >
                 <Plus size={16} />
-                Add New Article
+                Add New Content
               </button>
               <button
                 onClick={() => navigate('/content/events?action=new')}
