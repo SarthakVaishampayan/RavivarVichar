@@ -27,7 +27,7 @@ export default function Navbar() {
         {/* Left: Logo (+ hamburger on mobile) */}
         <div className="flex items-center justify-between nav:justify-start gap-4">
           <Link to="/" className="flex items-center shrink-0">
-            <img src="/logo-hindi.png" alt="रविवार" className="h-[55px] w-auto" />
+            <img src="/logo-hindi.png" alt="रविवार" className="h-[63.25px] w-auto" />
           </Link>
 
           {/* Mobile Hamburger */}

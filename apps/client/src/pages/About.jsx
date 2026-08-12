@@ -622,56 +622,56 @@ export default function About() {
                   role: 'Chief Executive Officer',
                   bio: 'Technology leader, storyteller, and social impact entrepreneur. As CEO of Ravivar Vichar, he leads a platform dedicated to empowering SHGs and advancing women\'s financial independence through innovation and media.',
                   fullBio: 'Rohan Sharma is a technology leader, storyteller, and social impact entrepreneur committed to creating meaningful change through innovation and media.' + '\n\n' + 'As the CEO of Ravivar Vichar, he leads a digital media and print platform dedicated to empowering Self-Help Groups (SHGs) and advancing women\'s financial independence. Under his leadership, Ravivar Vichar connects grassroots communities with institutions, promoting financial literacy, inclusion, and sustainable livelihoods.' + '\n\n' + 'Rohan began his career at TCS before working with Accenture and Oracle Corporation, building expertise in technology, strategy, and digital transformation. Alongside his corporate journey, he has written for podcasts, films, and web series, creating stories inspired by India\'s cultural and social ethos.',
-                  image: '/images/team/rohan1.jpeg',
+                  image: '/images/team/rohan2.png',
                 },
                 {
                   name: 'Satyam Khandelwal',
                   role: 'Managing Director',
                   bio: 'Driving Ravivar Vichar\'s mission of empowering SHGs and advancing women\'s economic development through financial inclusion, community engagement, and sustainable livelihood initiatives.',
                   fullBio: 'Satyam Khandelwal is the Managing Director of Ravivar Vichar, where he drives the platform\'s mission of empowering Self-Help Groups (SHGs) and advancing women\'s economic and social development through financial inclusion, community engagement, and sustainable livelihood initiatives.' + '\n\n' + 'With academic qualifications in Mass Communication, Commerce, and Law, Satyam brings a multidisciplinary perspective to leadership.' + '\n\n' + 'An entrepreneur with extensive experience in land development and construction, he combines business acumen, legal expertise, and strategic vision to build impactful partnerships and strengthen Ravivar Vichar\'s commitment to inclusive growth.',
-                  image: '/images/team/satyam.jpeg',
+                  image: '/images/team/satyam1.png',
                 },
                 {
                   name: 'Dr. Subhash Khandelwal',
                   role: 'Editor-in-Chief',
                   bio: 'Editor-in-Chief of Ravivar for over 30 years, establishing it as a respected platform for incisive analysis and informed commentary on national and international affairs.',
                   fullBio: 'Dr. Subhash Khandelwal is the Editor-in-Chief of Ravivar, a position he has held for over 30 years. Under his editorial leadership, Ravivar has established itself as a respected platform for incisive analysis and informed commentary on national and international affairs, covering politics, economics, society, governance, culture, and global developments.' + '\n\n' + 'Inspired by the ideals of socialism, Dr. Khandelwal began his public life through active student politics and later served on the University Executive Council. He holds an LL.B. and a Doctorate in the Economics of the Ramayana Era, reflecting his interest in the intersection of India\'s intellectual traditions and contemporary public discourse.' + '\n\n' + 'Known for his balanced perspectives and commitment to independent journalism, Dr. Khandelwal has consistently championed democratic values, social justice, and the preservation of India\'s social fabric. Through Ravivar, he continues to contribute meaningfully to public debate, offering thoughtful analysis that informs, challenges, and inspires readers across generations.',
-                  image: '/images/team/subhash.jpeg',
+                  image: '/images/team/subhash1.png',
                 },
                 {
                   name: 'Arvind Mandloi',
                   role: 'Author & Social Commentator',
                   bio: 'Distinguished author and social commentator, recognized for his insightful contributions to literature and journalism with bestselling works and respected commentaries in leading Hindi publications.',
                   fullBio: 'Arvind Mandloi is a distinguished author and social commentator, widely recognized for his insightful contributions to the literary and journalistic world.' + '\n\n' + 'Born with a passion for words and a keen sense of social consciousness, his literary journey has been marked by a series of thought-provoking works like JADUNAMA: JAVED AKHTAR-EK SAFAR (Bestselling book of the year 2022, 2023 & 2024), SAHIR KI SHAYARANA JADUGIRI, SRIJAN KE SAAT DASHAK, AWAAZ DO HUM EK HAI & KHWAAB KE GAON MEIN (Amazon Bestseller book) that have left a mark on the hearts and minds of his readers.' + '\n\n' + 'Over the years, he has contributed insightful perspectives and commentaries to various Hindi publications like DAINIK BHASKAR, Outlook etc., making him a respected voice in the world of journalism.' + '\n\n' + 'He is actively involved with "Roopankan," a multipurpose space dedicated to nurturing the talents of underprivileged youth in Indore.',
-                  image: '/images/team/arvind.jpeg',
+                  image: '/images/team/arvind1.png',
                 },
                 {
                   name: 'Abhishek Sharma',
                   role: 'Media & Entertainment Leader',
                   bio: 'Seasoned media and entertainment leader with an esteemed journalistic career spanning years of impactful storytelling and editorial excellence, driving strategic growth and innovative entertainment initiatives.',
                   fullBio: 'Abhishek Sharma is a seasoned media and entertainment leader with an esteemed journalistic career spanning years of impactful storytelling and editorial excellence.' + '\n\n' + 'Renowned for his strategic vision and deep understanding of the media landscape, he has successfully bridged journalism with the evolving world of entertainment.' + '\n\n' + 'As the driving force behind multiple entertainment verticals, Mr. Sharma leads the strategic growth and expansion of innovative entertainment initiatives. He is instrumental in building high-value partnerships, developing original entertainment properties, and strengthening the brand\'s presence across events, media, and experiential platforms.' + '\n\n' + 'With a sharp focus on creativity, audience engagement, and scalable business models, Mr. Sharma continues to shape compelling experiences that resonate with contemporary audiences. Under his leadership, Ravivar Vichar has evolved into a dynamic platform for women empowerment, storytelling, and cultural experiences, setting new benchmarks.',
-                  image: '/images/team/abhishek.jpeg',
+                  image: '/images/team/abhishek1.png',
                 },
                 {
                   name: 'Dr. Vivek Vardhan Shrivastava',
                   role: 'Editor & Media Academician',
                   bio: 'Editor and media academician with over 25 years of experience across India\'s leading news channels and publications, committed to meaningful public discourse and sustainable progress.',
                   fullBio: 'Dr. Vivek Vardhan Shrivastava is a senior journalist, media academic, and advocate of positive and developmental journalism with over 25 years of experience across some of India\'s leading news channels and publications.' + '\n\n' + 'His work has consistently focused on issues of social development, literature, environment, public health, arts, culture, and traditional ways of living, promoting meaningful public discourse and sustainable progress.' + '\n\n' + 'Dr. Shrivastava holds a Ph.D. for his research on the role of media in the conservation of the Narmada River, reflecting his deep commitment to environmental communication and responsible journalism. Throughout his career, he has combined editorial excellence with a strong focus on public interest reporting, highlighting stories that inspire awareness, community participation, and positive change.' + '\n\n' + 'A recipient of numerous awards and recognitions across journalism, literature, environmental awareness, and social communication, Dr. Shrivastava continues to contribute to the media landscape through insightful writing, research, and thought leadership.',
-                  image: '/images/team/vivek.jpeg',
+                  image: '/images/team/vivek1.png',
                 },
                 {
                   name: 'Risika Alok',
                   role: 'Coordinating Editor',
                   bio: 'Leads editorial planning, content strategy, and digital communications at Ravivar Vichar. A graduate in Biotechnology turned journalist with a passion for research, storytelling, and public engagement.',
                   fullBio: 'Risika Alok is the Coordinating Editor at Ravivar Vichar, where she leads editorial planning, content strategy, and digital communications.' + '\n\n' + 'A graduate in Biotechnology, she transitioned into journalism and digital media with a passion for research, storytelling, and public engagement. She works closely with the editorial and creative teams to identify impactful stories, oversee multimedia content production, and ensure that Ravivar Vichar\'s initiatives are communicated effectively across digital platforms.' + '\n\n' + 'Over the years, she has conducted interviews with entrepreneurs, policymakers, social workers, artists, athletes, and changemakers, bringing forward stories that inspire dialogue and social impact. She has contributed to documenting grassroots initiatives, women-led enterprises, governance, culture, livelihoods, and community development while building partnerships and strengthening the organisation\'s public outreach. Her work combines research-driven journalism with digital storytelling to make complex issues accessible to a wider audience.' + '\n\n' + 'Beyond her role at Ravivar Vichar, she has built and grown her own social media platform, where she creates insightful content on governance, public policy, social issues, and current affairs. Through both Ravivar Vichar and her independent digital presence, she is committed to fostering informed conversations, amplifying underrepresented voices, and using media as a powerful tool for awareness, education, and positive social change.',
-                  image: '/images/team/risika.jpeg',
+                  image: '/images/team/risika1.png',
                 },
                 {
                   name: 'Vaishnavi Shukla',
                   role: 'Creative Video Editor & Graphic Designer',
                   bio: 'Creative professional with over 5 years of experience in video editing, graphic design, animation, and digital storytelling, creating compelling visual content that highlights stories of struggle, resilience, success, and social impact.',
                   fullBio: 'Vaishnavi Shukla is a creative professional with over 5 years of experience in video editing, graphic design, animation, and digital storytelling. Throughout her career, she has worked on creating compelling visual content that highlights stories of struggle, resilience, success, and social impact.' + '\n\n' + 'She believes that every story has the power to inspire and create meaningful connections. With a strong eye for detail and a passion for creative storytelling, she transforms ordinary moments into engaging visual experiences that leave a lasting impression on audiences.' + '\n\n' + 'Her work has also earned recognition through achievements such as being the runner-up at IMA Animation Maestro and receiving a nomination for Best Animation Short Film at the MAAC National Film Fest. She continues to combine creativity, technical expertise, and thoughtful storytelling to deliver impactful visual content.',
-                  image: '/images/team/vaishnavi.jpg',
+                  image: '/images/team/vaishnavi1.png',
                 },
               ].map((member, i) => (
                 <motion.div
@@ -683,7 +683,7 @@ export default function About() {
                   className="group relative w-[224px] md:hover:w-[292px] overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-2xl hover:ring-1 hover:ring-primary-200/60 transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-[1.03] hover:z-10"
                 >
                   {/* ── Image (square 224×224) ── */}
-                  <div className="relative aspect-square overflow-hidden">
+                  <div className="relative aspect-square overflow-hidden bg-[#9e9e9e]">
                     {failedImages[member.name] ? (
                       <div className="w-full h-full bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center">
                         <Users size={44} className="text-primary-400" />

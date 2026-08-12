@@ -121,15 +121,6 @@ export default function Footer() {
             </form>
             {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
             {subscribed && <p className="text-xs text-green-600 mt-2">Thank you for subscribing!</p>}
-
-            {/* Designed & Developed credit — split across two lines to keep it narrow */}
-            {/* mt/pt reduced 5% to move the block up; font 16.4px → 15.6px (-5%) */}
-            <div className="mt-[22.8px] pt-[19px] border-t border-gray-200">
-              <p className="text-[15.6px] text-ink-secondary leading-snug">
-                <span className="block">Designed &amp; Developed by</span>
-                <span className="block font-semibold text-ink-primary">Sarthak Vaishampayan</span>
-              </p>
-            </div>
           </div>
 
           {/* Link Columns */}
@@ -168,6 +159,8 @@ export default function Footer() {
         <div className="container-site pt-1 pb-4 text-center">
           <p className="text-sm text-ink-primary">
             <span className="inline-block bg-secondary-100 text-ink-primary font-medium px-4 py-1 rounded-md shadow-sm">
+              Designed &amp; Developed by <span className="font-semibold">Sarthak Vaishampayan</span>{' '}
+              <span className="mx-1 opacity-50">|</span>
               © {new Date().getFullYear()} Ravivar Vichar. All rights reserved.
             </span>
           </p>
