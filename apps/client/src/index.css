@@ -116,6 +116,8 @@
 
   .section-title {
     @apply text-section text-ink-primary mt-3;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   .section-desc {

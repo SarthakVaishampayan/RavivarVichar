@@ -105,7 +105,7 @@ export default function PartnerWithUs() {
             </p>
             <a
               href="mailto:ravivar.vichar@ravivarvichar.in?subject=Partnership%20Inquiry"
-              className="inline-flex items-center gap-2 mt-6 text-lg font-semibold text-primary-500 hover:text-primary-600 transition-colors"
+              className="inline-flex max-w-full items-center gap-2 mt-6 text-lg font-semibold text-primary-500 hover:text-primary-600 transition-colors break-all"
             >
               <Mail size={20} /> ravivar.vichar@ravivarvichar.in
             </a>

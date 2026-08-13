@@ -88,9 +88,9 @@ export default function Contact() {
                         <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
                           <Icon size={22} />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <h4 className="text-sm font-semibold text-ink-primary uppercase tracking-wider">{item.label}</h4>
-                          <p className="text-body text-ink-secondary mt-1">{item.value}</p>
+                          <p className="text-body text-ink-secondary mt-1 break-words">{item.value}</p>
                         </div>
                       </div>
                     );
@@ -100,9 +100,9 @@ export default function Contact() {
                       <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
                         <Icon size={22} />
                       </div>
-                      <div>
+                      <div className="min-w-0">
                         <h4 className="text-sm font-semibold text-ink-primary uppercase tracking-wider">{item.label}</h4>
-                        <p className="text-body text-ink-secondary mt-1">
+                        <p className="text-body text-ink-secondary mt-1 break-words">
                           {item.value}
                           {item.label === 'Phone' && alternate && (
                             <span className="ml-2 lg:hidden">

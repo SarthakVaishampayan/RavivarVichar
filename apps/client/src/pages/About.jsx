@@ -398,7 +398,7 @@ export default function About() {
         </section>
 
         {/* Our Journey */}
-        <section id="our-journey" className="section-md bg-surface-white">
+        <section id="our-journey" className="section-md bg-surface-white overflow-hidden">
           <div className="container-content">
             <SectionHeading
               label="OUR JOURNEY"

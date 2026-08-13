@@ -155,14 +155,12 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-gray-200">
-        <div className="container-site pt-1 pb-4 text-center">
+      <div className="border-t border-gray-300 bg-white">
+        <div className="container-site py-3 text-center">
           <p className="text-sm text-ink-primary">
-            <span className="inline-block bg-secondary-100 text-ink-primary font-medium px-4 py-1 rounded-md shadow-sm">
-              Designed &amp; Developed by <span className="font-semibold">Sarthak Vaishampayan</span>{' '}
-              <span className="mx-1 opacity-50">|</span>
-              © {new Date().getFullYear()} Ravivar Vichar. All rights reserved.
-            </span>
+            Designed &amp; Developed by <span className="font-semibold">Sarthak Vaishampayan</span>{' '}
+            <span className="mx-1 opacity-50">|</span>
+            © {new Date().getFullYear()} Ravivar Vichar. All rights reserved.
           </p>
         </div>
       </div>

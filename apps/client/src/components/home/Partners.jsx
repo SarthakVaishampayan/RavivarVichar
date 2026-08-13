@@ -21,11 +21,11 @@ export default function Partners({ bgClass = 'bg-surface-white' }) {
   if (loading) return null;
 
   return (
-    <section className={`section-lg ${bgClass} section-separator`}>
+    <section className={`section-lg ${bgClass} section-separator overflow-hidden`}>
       <div className="container-site">
         <SectionHeading
           label="Our Partners"
-          title="Trusted By"
+          title="Creating Change Together"
           description="We collaborate with leading organizations to amplify our impact."
         />
 
