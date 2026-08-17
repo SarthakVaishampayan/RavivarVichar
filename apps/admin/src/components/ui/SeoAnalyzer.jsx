@@ -29,7 +29,9 @@ function wordCount(text) {
 
 function sentenceCount(text) {
   if (!text) return 0;
-  const sentences = text.match(/[^.!?]+[.!?]+/g);
+  // Count English (. ! ?) and Devanagari (। ॥) sentence terminators so the
+  // readability check works fairly for both Hindi and English articles.
+  const sentences = text.match(/[^.!?।॥]+[.!?।॥]+/g);
   return sentences ? sentences.length : Math.max(1, text.split(/\n+/).filter(Boolean).length);
 }
 
@@ -89,24 +91,6 @@ function averageSentenceLength(text) {
   return sentences > 0 ? words / sentences : 0;
 }
 
-// Transition words list
-const TRANSITION_WORDS = [
-  'however', 'therefore', 'furthermore', 'moreover', 'nevertheless',
-  'consequently', 'additionally', 'meanwhile', 'otherwise', 'indeed',
-  'thus', 'hence', 'notably', 'specifically', 'conversely',
-  'likewise', 'similarly', 'accordingly', 'besides', 'finally',
-  'first', 'second', 'third', 'next', 'then', 'after', 'before',
-  'while', 'during', 'since', 'until', 'because', 'although',
-  'though', 'whereas', 'despite', 'in addition', 'for example',
-  'for instance', 'in other words', 'in particular', 'in conclusion',
-  'on the other hand', 'in contrast', 'as a result', 'in summary',
-];
-
-function countTransitionWords(text) {
-  if (!text) return 0;
-  const lower = text.toLowerCase();
-  return TRANSITION_WORDS.filter((w) => lower.includes(w)).length;
-}
 
 // ─── MOBILE SEARCH PREVIEW ───
 function MobileSearchPreview({ title, url, description }) {
@@ -365,16 +349,32 @@ const CHECK_GROUPS = [
   {
     key: 'internalLinks',
     label: 'Internal Links',
-    weight: 2,
+    weight: 8,
     icon: Link,
     checks: [
       {
-        key: 'internalCount',
+        key: 'internalCount1',
         label: 'Add at least 1 internal link',
-        pass: (d) => {
-          return countInternalLinks(d.content || '') >= 1;
-        },
-        tip: 'Link to at least 1 other article on your site.',
+        pass: (d) => countInternalLinks(d.content || '') >= 1,
+        tip: 'Link to at least 1 other article on your site (2/8 points).',
+      },
+      {
+        key: 'internalCount2',
+        label: 'Add at least 2 internal links',
+        pass: (d) => countInternalLinks(d.content || '') >= 2,
+        tip: 'Add a second internal link (4/8 points).',
+      },
+      {
+        key: 'internalCount3',
+        label: 'Add at least 3 internal links',
+        pass: (d) => countInternalLinks(d.content || '') >= 3,
+        tip: 'Add a third internal link (6/8 points).',
+      },
+      {
+        key: 'internalCount4',
+        label: 'Add 4 or more internal links',
+        pass: (d) => countInternalLinks(d.content || '') >= 4,
+        tip: 'Add 4 or more internal links for the full 8 points.',
       },
     ],
   },
@@ -404,7 +404,7 @@ const CHECK_GROUPS = [
   {
     key: 'readability',
     label: 'Readability',
-    weight: 8,
+    weight: 2,
     icon: BookOpen,
     checks: [
       {
@@ -417,16 +417,6 @@ const CHECK_GROUPS = [
           return avg >= 10 && avg <= 25;
         },
         tip: 'Short sentences (15–20 words) improve readability.',
-      },
-      {
-        key: 'transitionWords',
-        label: 'Use transition words (however, therefore, etc.)',
-        pass: (d) => {
-          const text = stripHtml(d.content || '');
-          if (!text) return false;
-          return countTransitionWords(text) >= 3;
-        },
-        tip: 'Transition words improve the flow of your writing.',
       },
     ],
   },
