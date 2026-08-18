@@ -65,7 +65,10 @@ curl -s -o /dev/null -w "%{http_code}\n" https://ravivarvichar.in/articles     #
 1. In Search Console → **Sitemaps** (left menu).
 2. Enter: `sitemap.xml` → **Submit**.
 3. Within a day you should see "Success" with the discovered URL count
-   (currently ~15 entries: 13 pages + every published article).
+   (currently ~17 entries: 13 site pages + 4 What We Do pages + every
+   published article + every recognition). Articles cover all content types
+   — success stories, interviews, podcasts, research — they're all stored
+   as articles with different categories.
 
 > The sitemap is generated live from the database — every article you publish
 > as **Published** (status) appears in it automatically within seconds. Drafts
