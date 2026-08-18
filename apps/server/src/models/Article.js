@@ -34,7 +34,7 @@ const articleSchema = new mongoose.Schema(
       keywords: [{ type: String }],
       metaNewsKeywords: [{ type: String }],
       canonicalUrl: { type: String },
-      schemaType: { type: String, default: 'NewsArticle' },
+      schemaType: { type: String, default: 'Article' },
       excludeFromSearch: { type: Boolean, default: false },
     },
     views: { type: Number, default: 0 },

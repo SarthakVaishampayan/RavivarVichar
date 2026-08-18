@@ -58,6 +58,9 @@ if (env.NODE_ENV === 'development') {
 // API routes
 app.use('/api/v1', routes);
 
+// SEO: dynamic sitemap.xml + robots.txt (served at the site root)
+app.use(require('./routes/seo.routes'));
+
 // Health check at root
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'RavivarVichar CMS API' });

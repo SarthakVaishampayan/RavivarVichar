@@ -112,13 +112,19 @@ export default function ArticleDetail() {
 
   // ─── SEO values ───
   const seo = article.seo || {};
-  const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const canonicalUrl = seo.canonicalUrl || pageUrl;
+  // Canonical = the clean public URL (no query string, no hash). If the CMS
+  // has a custom canonical URL use it; otherwise self-reference the article.
+  const canonicalUrl =
+    seo.canonicalUrl ||
+    (typeof window !== 'undefined'
+      ? `${window.location.origin}${window.location.pathname}`
+      : '');
   const plainContent = (article.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const metaDescription = (seo.metaDescription || article.excerpt || plainContent).slice(0, 160);
   const ogImage = toAbsoluteUrl(seo.ogImage || article.thumbnail || '');
   const twitterImage = toAbsoluteUrl(seo.twitterImage || ogImage);
-  const schemaType = seo.schemaType || 'NewsArticle';
+  // Plain 'Article' by default — NewsArticle is only correct for genuine news
+  const schemaType = seo.schemaType || 'Article';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -130,7 +136,7 @@ export default function ArticleDetail() {
     ...(article.updatedAt ? { dateModified: article.updatedAt } : {}),
     author: { '@type': 'Person', name: authorName },
     publisher: { '@type': 'Organization', name: 'Ravivar Vichar' },
-    mainEntityOfPage: canonicalUrl,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
   };
 
   return (
@@ -146,7 +152,7 @@ export default function ArticleDetail() {
       <Helmet>
         <title>{seo.metaTitle || article.title} — Ravivar Vichar</title>
         <meta name="description" content={metaDescription} />
-        {seo.canonicalUrl && <link rel="canonical" href={seo.canonicalUrl} />}
+        {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         {seo.excludeFromSearch && <meta name="robots" content="noindex, nofollow" />}
         {seo.keywords?.length > 0 && <meta name="keywords" content={seo.keywords.join(', ')} />}
         {seo.metaNewsKeywords?.length > 0 && <meta name="news_keywords" content={seo.metaNewsKeywords.join(', ')} />}

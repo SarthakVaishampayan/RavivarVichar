@@ -500,12 +500,12 @@ export function ArticleEditor() {
                 <Select
                   label="Select Schema"
                   name="seo.schemaType"
-                  value={formData.seo?.schemaType || 'NewsArticle'}
+                  value={formData.seo?.schemaType || 'Article'}
                   onChange={handleChange}
                   options={[
-                    { value: 'NewsArticle', label: 'Default NewsArticle' },
+                    { value: 'Article', label: 'Default Article' },
+                    { value: 'NewsArticle', label: 'NewsArticle (only for real news)' },
                     { value: 'BlogPosting', label: 'BlogPosting' },
-                    { value: 'Article', label: 'Article' },
                     { value: 'Report', label: 'Report' },
                     { value: 'Interview', label: 'Interview' },
                   ]}
