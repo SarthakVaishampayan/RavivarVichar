@@ -47,7 +47,9 @@ const WHAT_WE_DO_SLUGS = [
   'leadership-skill-development',
 ];
 
-const buildUrl = (base, path) => `${base}${path}`;
+// Percent-encode non-ASCII characters (e.g. Devanagari slugs) so the URLs
+// are valid per the sitemap spec — Google can reject raw UTF-8 in <loc>.
+const buildUrl = (base, path) => encodeURI(`${base}${path}`);
 
 // Sitemap is built from the DB on every request. At this site's scale that is
 // cheap, and it guarantees a freshly-published article appears immediately.
