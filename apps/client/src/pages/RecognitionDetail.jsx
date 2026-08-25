@@ -48,11 +48,44 @@ export default function RecognitionDetail() {
       })
     : '';
 
+  // ─── SEO values ───
+  const canonicalUrl = (() => {
+    if (typeof window === 'undefined') return '';
+    const origin = window.location.origin.replace(/\/\/www\./, '//');
+    return `${origin}${window.location.pathname}`;
+  })();
+  const description = recognition.summary?.slice(0, 160) || `Recognition from ${recognition.source}`;
+  const ogImage = recognition.imageUrl || '';
+
   return (
     <>
       <Helmet>
         <title>{recognition.title} — Recognitions — Ravivar Vichar</title>
-        <meta name="description" content={recognition.summary?.slice(0, 160) || `Recognition from ${recognition.source}`} />
+        <meta name="description" content={description} />
+        {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={recognition.title} />
+        <meta property="og:description" content={description} />
+        {ogImage && <meta property="og:image" content={ogImage} />}
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:site_name" content="Ravivar Vichar" />
+        <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+        <meta name="twitter:title" content={recognition.title} />
+        <meta name="twitter:description" content={description} />
+        {ogImage && <meta name="twitter:image" content={ogImage} />}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'NewsArticle',
+            headline: recognition.title,
+            description,
+            ...(ogImage ? { image: [ogImage] } : {}),
+            datePublished: recognition.date,
+            author: { '@type': 'Organization', name: recognition.source },
+            publisher: { '@type': 'Organization', name: 'Ravivar Vichar' },
+            mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+          })}
+        </script>
       </Helmet>
 
       <PageLayout>

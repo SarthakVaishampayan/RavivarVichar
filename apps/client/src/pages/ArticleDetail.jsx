@@ -114,11 +114,16 @@ export default function ArticleDetail() {
   const seo = article.seo || {};
   // Canonical = the clean public URL (no query string, no hash). If the CMS
   // has a custom canonical URL use it; otherwise self-reference the article.
-  const canonicalUrl =
-    seo.canonicalUrl ||
-    (typeof window !== 'undefined'
-      ? `${window.location.origin}${window.location.pathname}`
-      : '');
+  // Always use the non-www origin to stay consistent with the server-rendered
+  // canonical (which uses CLIENT_URL = https://ravivarvichar.in).
+  const canonicalUrl = (() => {
+    if (seo.canonicalUrl) return seo.canonicalUrl;
+    if (typeof window === 'undefined') return '';
+    // Strip www. from the hostname so the canonical always points to
+    // ravivarvichar.in (not www.ravivarvichar.in).
+    const origin = window.location.origin.replace(/\/\/www\./, '//');
+    return `${origin}${window.location.pathname}`;
+  })();
   const plainContent = (article.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const metaDescription = (seo.metaDescription || article.excerpt || plainContent).slice(0, 160);
   const ogImage = toAbsoluteUrl(seo.ogImage || article.thumbnail || '');

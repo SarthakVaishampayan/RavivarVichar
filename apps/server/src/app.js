@@ -58,8 +58,16 @@ if (env.NODE_ENV === 'development') {
 // API routes
 app.use('/api/v1', routes);
 
+// Old website URL redirects (301 permanent redirects)
+app.use(require('./routes/redirects.routes'));
+
 // SEO: dynamic sitemap.xml + robots.txt (served at the site root)
 app.use(require('./routes/seo.routes'));
+
+// Server-rendered article & recognition pages (SEO metadata in initial HTML)
+// These MUST come before the 404 handler so /articles/:slug and
+// /recognitions/:slug are handled with proper server-side metadata.
+app.use(require('./routes/article-page.routes'));
 
 // Health check at root
 app.get('/', (req, res) => {

@@ -162,4 +162,15 @@ router.get('/robots.txt', (req, res) => {
     .send(robots);
 });
 
+// Catch-all for any *-sitemap.xml requests that don't exist.
+// Without this, nginx serves the SPA shell (HTTP 200) for /category-sitemap.xml
+// which Search Console reports as an error.  Returning a real 404 tells Google
+// this sitemap doesn't exist and it should stop trying.
+router.get('/*sitemap*.xml', (req, res) => {
+  res
+    .status(404)
+    .type('text/plain')
+    .send('Not Found');
+});
+
 module.exports = router;

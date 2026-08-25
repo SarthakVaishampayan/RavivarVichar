@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Quote } from 'lucide-react';
 import SectionHeading from '../shared/SectionHeading';
 import Button from '../shared/Button';
@@ -45,7 +46,7 @@ export default function FeaturedResearch({ bgClass = 'bg-surface-white' }) {
                 >
                   {/* Image */}
                   <div className={`${i % 2 === 1 ? 'lg:order-2' : ''}`}>
-                    <div className="img-card overflow-hidden shadow-card">
+                    <Link to={`/articles/${item.slug}`} className="block img-card overflow-hidden shadow-card hover:shadow-lg transition-shadow">
                       {item.thumbnail ? (
                         <img
                           src={item.thumbnail}
@@ -58,7 +59,7 @@ export default function FeaturedResearch({ bgClass = 'bg-surface-white' }) {
                           <Quote size={48} className="text-gray-300" />
                         </div>
                       )}
-                    </div>
+                    </Link>
                   </div>
 
                   {/* Content */}
@@ -69,12 +70,20 @@ export default function FeaturedResearch({ bgClass = 'bg-surface-white' }) {
                         <span className="text-sm text-ink-secondary font-medium">{item.location}</span>
                       </div>
                     )}
-                    <h3 className="text-[32px] font-heading font-bold text-ink-primary leading-tight mb-4">
-                      {item.title}
-                    </h3>
+                    <Link to={`/articles/${item.slug}`}>
+                      <h3 className="text-[32px] font-heading font-bold text-ink-primary leading-tight mb-4 hover:text-primary-500 transition-colors">
+                        {item.title}
+                      </h3>
+                    </Link>
                     <p className="text-body text-ink-secondary leading-relaxed">
                       {item.excerpt || item.summary}
                     </p>
+                    <Link
+                      to={`/articles/${item.slug}`}
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500 hover:text-primary-600 transition-colors mt-4"
+                    >
+                      Read full story →
+                    </Link>
                   </div>
                 </motion.div>
               ))}

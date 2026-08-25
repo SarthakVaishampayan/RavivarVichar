@@ -88,6 +88,29 @@ new_spa = """    # ─── SEO: known client routes get the SPA, unknown paths
         try_files /index.html =404;
     }
 
+    # ─── Server-rendered article/ recognition pages ───
+    # Proxy single-article detail pages to Express so crawlers and social bots
+    # (WhatsApp, Facebook, Googlebot) see article-specific <title>, <meta>,
+    # canonical, OG tags, and JSON-LD in the FIRST HTML response — not the
+    # generic SPA shell.  The SPA still loads and hydrates on top.
+    # Matches: /articles/my-slug  but NOT /articles  or  /articles/section/x
+    location ~ ^/articles/[^/]+/?$ {
+        proxy_pass {proxy};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Recognition detail pages — same treatment as articles
+    location ~ ^/recognitions/[^/]+/?$ {
+        proxy_pass {proxy};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     location ~ ^/(about|articles|interviews|contact|media|get-featured|join-our-initiative|gallery|partner-with-us|what-we-do|recognitions|events|faq)(/|$) {
         try_files $uri $uri/ /index.html;
     }
@@ -117,5 +140,6 @@ echo "[PASS] Done. Verify from your local machine:"
 echo "  curl -s https://ravivarvichar.in/robots.txt      # should end with the Sitemap line"
 echo "  curl -s https://ravivarvichar.in/sitemap.xml     # real XML, not HTML"
 echo "  curl -s -o /dev/null -w '%{http_code}\\n' https://ravivarvichar.in/bank-sakhi   # expect 404"
+echo "  curl -sI https://ravivarvichar.in/articles/ARTICLE-SLUG  # should have article title in <title>"
 echo ""
 echo "  Rollback if needed: cp ${CONFIG}.bak-seo-* ${CONFIG} && nginx -t && systemctl reload nginx"

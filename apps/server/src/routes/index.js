@@ -33,6 +33,9 @@ router.use('/homepage', require('./homepage.routes'));
 // Search
 router.use('/search', require('./search.routes'));
 
+// SEO monitoring (admin only)
+router.use('/seo', require('./seo-monitor.routes'));
+
 // Health check
 router.get('/health', (req, res) => {
   res.json({ success: true, message: 'RavivarVichar API is running', timestamp: new Date().toISOString() });
