@@ -402,80 +402,55 @@ export default function About() {
           <div className="container-content">
             <SectionHeading
               label="OUR JOURNEY"
-              title="A Decade of Impact"
-              description="From a small initiative to a recognized force in rural development — our journey of growth and impact."
+              title="From a Voice of Thought to a Force for Change"
+              description="What began as a magazine that shaped minds gradually evolved into a platform connecting ideas with people, conversations with communities, and thought with action."
             />
             <div className="relative mt-16">
               <div className="absolute left-4 min-[550px]:left-1/2 top-0 bottom-0 w-px bg-gray-200 min-[550px]:-translate-x-px" />
               <div className="space-y-2">
                 {(() => {
-                  const milestoneMap = {
-                    '2010': { title: 'Foundation', description: 'Ravivar Vichar was established with a vision to revive rural livelihoods through research and community action.' },
-                    '2013': { title: 'First SHG Network', description: 'Associated with first Self-Help Group network in 20 villages across Bhilwara district.' },
-                    '2016': { title: 'Entrepreneurship Program', description: 'Started the women entrepreneurship program, training 500+ rural women in business skills.' },
-                    '2019': { title: 'Research Wing', description: 'Established our research division to produce data-driven policy recommendations for rural development.' },
-                    '2023': { title: 'Digital Expansion', description: 'Launched digital literacy programs and expanded our reach to 500+ villages across Central India.' },
-                    '2025': { title: 'National Impact', description: 'Recognized nationally for our community-driven development model and sustainable impact.' },
-                    '2026': { title: 'Strategic Brand Collaborations', description: 'Established partnerships with leading ethical and sustainable brands including Suta Bombay, expanding market access for women-led enterprises.' },
-                  };
-                  const years = [];
-                  for (let y = 2010; y <= 2026; y++) {
-                    const key = String(y);
-                    const m = milestoneMap[key];
-                    years.push({
-                      year: key,
-                      title: m?.title || null,
-                      description: m?.description || null,
-                      isMilestone: !!m,
-                    });
-                  }
-                  return years;
-                })().map((item, i, arr) => {
-                  /* Compute milestone-only index for alternating layout */
-                  let milestoneIndex = 0;
-                  for (let j = 0; j < i; j++) {
-                    if (arr[j].isMilestone) milestoneIndex++;
-                  }
-                  const isLeft = milestoneIndex % 2 === 0;
-
-                  if (item.isMilestone) {
-                    /* ── Milestone year: slide-in from side on scroll ── */
-                    return (
-                      <motion.div
-                        key={item.year}
-                        initial={{ opacity: 0, x: isLeft ? -30 : 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ margin: '-220px 0px -40px 0px' }}
-                        transition={{ duration: 0.5, delay: milestoneIndex * 0.1, ease: 'easeOut' }}
-                        className={`relative flex flex-col min-[550px]:flex-row items-start gap-4 min-[550px]:gap-6 ${isLeft ? 'min-[550px]:flex-row' : 'min-[550px]:flex-row-reverse'}`}>
-                        <div className={`flex-1 ${isLeft ? 'min-[550px]:text-right' : 'min-[550px]:text-left'}`}>
-                          <div className="card p-3 min-[550px]:p-4 inline-block max-w-lg">
-                            <span className="text-xs font-bold text-primary-500">{item.year}</span>
-                            <h3 className="text-sm min-[550px]:text-base font-bold font-heading text-ink-primary mt-0.5">{item.title}</h3>
-                            <p className="text-xs min-[550px]:text-sm text-ink-secondary mt-1.5 leading-relaxed">{item.description}</p>
-                          </div>
+                  const milestones = [
+                    { period: '1990s', title: 'THE FOUNDATION', subtitle: 'The Birth of RAVIVAR', description: 'The name RAVIVAR was chosen for a socio-political analysis magazine with a powerful purpose — to question, examine and make India think. For readers across the Hindi-speaking heartland and middle cities, Ravivar was a new window to the world. It brought serious thought, contemporary issues and fresh perspectives closer to its readers. A magazine was born. A relationship of trust began.' },
+                    { period: '1990s – 2000s', title: 'THE ERA OF IDEAS', subtitle: 'A Magazine That Made India Pause & Think', description: 'As India witnessed changing governments, social movements and economic transformation, Ravivar became a thoughtful chronicler of the times. Renowned editors, distinguished writers and leading thinkers from Delhi, Mumbai and across India and beyond became part of its journey. Its pages became a space where government, opposition, intellectuals and society engaged with the questions that mattered. Ravivar had become part of India\u2019s national conversation.' },
+                    { period: '2000s', title: 'READING A CHANGING INDIA', subtitle: 'A Witness to a Nation in Transformation', description: 'India was changing — its politics, aspirations, economy, villages, cities and people. Ravivar looked beyond immediate events to understand the larger forces transforming Indian society. Its depth, perspective and distinctive voice earned it a special place among readers. The readership grew. The roots deepened. The Ravivar family became stronger.' },
+                    { period: '2010s', title: 'FROM OBSERVATION TO ENGAGEMENT', subtitle: 'When Ideas Met the Ground', description: 'The journey moved beyond analysing change to understanding where change was actually happening. Rural communities, livelihoods, women, entrepreneurship and grassroots development became an important part of the Ravivar vision. The stories came closer to the people. The ideas came closer to the ground. And the Ravivar caravan moved forward with a new purpose — not just to understand change, but to become part of it.' },
+                    { period: '2020', title: 'A NEW CHAPTER', subtitle: 'From Print to Digital', description: 'COVID-19 changed the way the world communicated — and Ravivar changed with it. Keeping its readers at the heart of the journey, the legacy of the print publication moved into a new digital era with RAVIVAR VICHAR. This was more than a change of medium. It was a new beginning — connecting thought, conversation and action.' },
+                    { period: '2020 – 2022', title: 'REIMAGINING RAVIVAR', subtitle: 'A Legacy for the Digital Generation', description: 'The values of the original Ravivar continued, while new digital possibilities became part of the journey. Women\u2019s empowerment, environment, education, health and social development gained greater focus. A new generation joined the old Ravivar family — editors, writers, video editors, camera professionals and podcast teams. A new newsroom. A podcast studio. A new digital identity. And Ravivar began reaching audiences across YouTube, Facebook, Instagram and podcasts.' },
+                    { period: '2022 – 2023', title: 'FROM VICHAR TO GROUND REALITY', subtitle: 'Taking the Conversation to the People', description: 'The digital platform opened a new possibility — going beyond stories to build connections on the ground. Ravivar Vichar began documenting the struggles, achievements and journeys of women working towards self-reliance. By the end of 2023, the initiative had connected with Self-Help Groups across all 55 districts of Madhya Pradesh, reaching approximately 5 lakh groups and nearly 58 lakh women members through these networks. The story was no longer just being told. It was being lived, documented and connected.' },
+                    { period: '2023 – Present', title: 'A VOICE ACROSS STATES', subtitle: 'Ravivar Vichar Finds Its Place Across India', description: 'The stories travelled. From Madhya Pradesh to Chhattisgarh, Odisha, Uttar Pradesh, Uttarakhand, Himachal Pradesh, Punjab, Gujarat, Rajasthan and Maharashtra, grassroots voices began finding a larger platform. Women shared their stories in their own voices — of resilience, enterprise, livelihoods and transformation. Hundreds of groups joined. The circle continued to grow.' },
+                    { period: '2023 – Present', title: 'THOUSANDS OF STORIES', subtitle: 'Giving the Unsung a Voice', description: 'The Ravivar team continued going where the stories were — documenting grassroots communities and bringing their voices to a wider audience. 3,000+ ground-level stories have been covered, while stories, reports, features and events across the platform have crossed 5,000+ pieces of content. The mission goes beyond storytelling — bringing unsung women and grassroots achievers into wider social, institutional and governance conversations. Meanwhile, the digital team expanded the conversation through YouTube, Facebook, Instagram and podcasts, with 3 million+ YouTube views in just three years.' },
+                    { period: '2023 – Present', title: 'THE RAVIVAR CIRCLE', subtitle: 'When Changemakers Began Coming to Us', description: 'As Ravivar Vichar grew, its office became a space for conversations with people shaping society. Political leaders, social workers, experts and changemakers joined the platform. From Madhya Pradesh Deputy Chief Minister Jagdish Devda and Shankar Lalwani to social worker Dr. Rajni Bhandari, the conversations have brought diverse voices and perspectives together. Every conversation added a new idea. Every interaction brought new energy.' },
+                    { period: '2024 – Present', title: 'THE POWER OF COLLABORATION', subtitle: 'From Conversations to Collective Action', description: 'The journey took another step forward as organisations working for social change began joining hands with Ravivar Vichar. Collaborations and conversations with organisations including Paani Foundation, Manjari Foundation and SUTA have opened new possibilities for creating meaningful impact. The encouragement of changemakers such as Anar Patel, founder of Craftroots Ahmedabad, has further strengthened the belief that collaboration can take ideas much further. From storytelling to partnerships. From partnerships to possibilities.' },
+                  ];
+                  return milestones.map((m, i) => ({
+                    period: m.period,
+                    title: m.title,
+                    subtitle: m.subtitle,
+                    description: m.description,
+                    isMilestone: true,
+                  }));
+                })().map((item, i) => {
+                  const isLeft = i % 2 === 0;
+                  return (
+                    <motion.div
+                      key={item.period}
+                      initial={{ opacity: 0, x: isLeft ? -30 : 30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ margin: '-220px 0px -40px 0px' }}
+                      transition={{ duration: 0.5, delay: i * 0.1, ease: 'easeOut' }}
+                      className={`relative flex flex-col min-[550px]:flex-row items-start gap-4 min-[550px]:gap-6 ${isLeft ? 'min-[550px]:flex-row' : 'min-[550px]:flex-row-reverse'}`}>
+                      <div className={`flex-1 ${isLeft ? 'min-[550px]:text-right' : 'min-[550px]:text-left'}`}>
+                        <div className="card p-3 min-[550px]:p-4 inline-block max-w-lg">
+                          <span className="text-xs font-bold text-primary-500">{item.period}</span>
+                          <h3 className="text-sm min-[550px]:text-base font-bold font-heading text-ink-primary mt-0.5">{item.title}</h3>
+                          <p className="text-xs min-[550px]:text-sm font-medium text-ink-secondary mt-1 italic">{item.subtitle}</p>
+                          <p className="text-xs min-[550px]:text-sm text-ink-secondary mt-2 leading-relaxed">{item.description}</p>
                         </div>
-                        <div className="absolute left-4 min-[550px]:left-1/2 w-4 h-4 rounded-full bg-primary-500 border-4 border-white shadow -translate-x-1.5 min-[550px]:-translate-x-2 mt-2 z-10" />
-                        <div className="flex-1 hidden min-[550px]:block" />
-                      </motion.div>
-                    );
-                  } else {
-                    /* ── Non-milestone year: fade-in dot on scroll ── */
-                    return (
-                      <motion.div
-                        key={item.year}
-                        initial={{ opacity: 0, scale: 0.6 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ margin: '-150px 0px -30px 0px' }}
-                        transition={{ duration: 0.35, delay: i * 0.03 }}
-                        className="relative flex items-center py-1.5">
-                        <div className="absolute left-4 min-[550px]:left-1/2 w-2.5 h-2.5 rounded-full bg-gray-300 border-2 border-white shadow-sm -translate-x-[5px] min-[550px]:-translate-x-[5px] z-10" />
-                        <div className="flex-1 pl-10 min-[550px]:pl-[calc(50%+1.5rem)]">
-                          <span className="text-sm text-gray-400 font-medium">{item.year}</span>
-                        </div>
-                      </motion.div>
-                    );
-                  }
+                      </div>
+                      <div className="absolute left-4 min-[550px]:left-1/2 w-4 h-4 rounded-full bg-primary-500 border-4 border-white shadow -translate-x-1.5 min-[550px]:-translate-x-2 mt-2 z-10" />
+                      <div className="flex-1 hidden min-[550px]:block" />
+                    </motion.div>
+                  );
                 })}
               </div>
 
@@ -497,17 +472,23 @@ export default function About() {
                 {/* Message */}
                 <div className="pl-14 min-[550px]:pl-[calc(50%+2rem)] pr-4">
                   <div className="max-w-md">
-                    <span className="text-xs font-bold tracking-widest text-primary-500 uppercase">Ongoing</span>
-                    <p className="text-sm text-ink-secondary mt-2 leading-relaxed italic">
-                      Our work does not pause at a milestone. With every passing day, we continue to 
-                      empower more women, strengthen more communities, and move closer to our vision 
-                      of a truly equitable society.
+                    <span className="text-xs font-bold tracking-widest text-primary-500 uppercase">TODAY</span>
+                    <h3 className="text-sm min-[550px]:text-base font-bold font-heading text-ink-primary mt-2">RAVIVAR VICHAR</h3>
+                    <p className="text-sm min-[550px]:text-base font-bold text-primary-500 italic">FROM VICHAR TO VIKAS</p>
+                    <p className="text-sm text-ink-secondary mt-3 leading-relaxed">
+                      Today, Ravivar Vichar stands at the intersection of thought, people and action. A journey that began with a magazine has evolved into a platform for:
                     </p>
-                    <div className="flex items-center gap-1.5 mt-3 text-primary-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {['Stories', 'Ideas', 'Conversations', 'Communities', 'Collaboration', 'Impact'].map((item) => (
+                        <span key={item} className="text-xs font-semibold text-primary-500 bg-primary-50 px-2 py-1 rounded-full">{item}</span>
+                      ))}
                     </div>
+                    <p className="text-sm text-ink-secondary mt-3 leading-relaxed italic">
+                      The medium changed. The times changed. The generations changed.<br/>
+                      But the purpose remained the same — to make India think.
+                    </p>
+                    <p className="text-sm font-bold text-primary-500 mt-3">RAVIVAR → RAVIVAR VICHAR</p>
+                    <p className="text-sm font-bold text-ink-primary mt-1 italic">From a Voice of Thought to a Force for Change.</p>
                   </div>
                 </div>
               </motion.div>
