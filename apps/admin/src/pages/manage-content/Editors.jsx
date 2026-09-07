@@ -413,14 +413,34 @@ export function ArticleEditor() {
                     onChange={handleChange}
                   />
 
-                  {/* Date Override */}
-                  <Input
-                    label="Date Override"
-                    name="publishedAt"
-                    value={formData.publishedAt ? formData.publishedAt.slice(0, 10) : ''}
-                    onChange={handleChange}
-                    type="date"
-                  />
+                  {/* Publish Date — fixed once set, cannot be changed */}
+                  {formData.publishedAt ? (
+                    <div>
+                      <label className="label">Published On</label>
+                      <input
+                        type="text"
+                        value={new Date(formData.publishedAt).toLocaleDateString('en-IN', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                        readOnly
+                        className="input-field bg-gray-50 text-gray-500 cursor-not-allowed"
+                        title="Publish date is fixed after first publish"
+                      />
+                      <p className="text-xs text-gray-400 -mt-3">
+                        Set automatically on first publish — cannot be changed.
+                      </p>
+                    </div>
+                  ) : (
+                    <Input
+                      label="Publish Date (optional)"
+                      name="publishedAt"
+                      value=""
+                      onChange={handleChange}
+                      type="date"
+                    />
+                  )}
 
                   {/* Additional Category (multi-select using TagsInput style) */}
                   <TagsInput

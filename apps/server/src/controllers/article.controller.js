@@ -137,6 +137,17 @@ const create = catchAsync(async (req, res) => {
 // PUT /api/v1/articles/:id
 const update = catchAsync(async (req, res) => {
   const data = { ...req.body };
+  // publishedAt is immutable: set once (on first publish or via the optional
+  // backdate field on creation) and never changed by subsequent edits.
+  const existing = await Article.findById(req.params.id).select('publishedAt status');
+  if (!existing) return sendError(res, 'Article not found', 404);
+  if (existing.publishedAt) {
+    delete data.publishedAt;
+  } else if (data.status === 'published') {
+    // First publish via findByIdAndUpdate — pre('save') hooks don't run here,
+    // so set it explicitly (respects an explicit backdate if one was sent).
+    data.publishedAt = data.publishedAt || new Date();
+  }
   // Respect a manually-provided slug; only regenerate when no slug is sent.
   // This is what keeps custom permalinks (e.g. Hindi titles) stable on edit.
   resolveSlug(data);

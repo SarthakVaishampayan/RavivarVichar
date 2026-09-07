@@ -162,9 +162,19 @@ export default function ContentList({ resourceKey, resourceConfig, fetchFn }) {
       );
     }
 
+    // Publish date — set once on first publish, never changes afterwards
+    if (resourceKey === 'articles') {
+      cols.push(
+        columnHelper.accessor('publishedAt', {
+          header: 'Published',
+          cell: (info) => <span className="text-sm text-gray-500">{formatDate(info.getValue())}</span>,
+        })
+      );
+    }
+
     cols.push(
       columnHelper.accessor('updatedAt', {
-        header: 'Updated',
+        header: 'Last Modified',
         cell: (info) => <span className="text-sm text-gray-500">{formatDate(info.getValue())}</span>,
       })
     );
