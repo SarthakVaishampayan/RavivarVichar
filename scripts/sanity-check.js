@@ -159,9 +159,17 @@ const fetchJson = async (url, options = {}) => {
       if (byId === 200) testPass('Article by ID', `id=${id}`);
       else testFail('Article by ID', `status=${byId}`);
 
-      const { status: bySlug } = await fetchJson(`${API}/articles/slug/${slug}`);
-      if (bySlug === 200) testPass('Article by slug', `slug=${slug}`);
-      else testFail('Article by slug', `status=${bySlug}`);
+      // Slug check is data-dependent: an article with an empty/missing slug is
+      // unreachable by slug by design (and invisible on the public site), so a
+      // 404 for it says nothing about the route — warn instead of failing the
+      // whole deploy.
+      if (slug) {
+        const { status: bySlug } = await fetchJson(`${API}/articles/slug/${slug}`);
+        if (bySlug === 200) testPass('Article by slug', `slug=${slug}`);
+        else testFail('Article by slug', `status=${bySlug}, slug=${slug}`);
+      } else {
+        testWarn('Article by slug', 'skipped — fetched article has no slug');
+      }
     } else {
       testWarn('Single article endpoints', 'No articles in database — skipping');
     }
