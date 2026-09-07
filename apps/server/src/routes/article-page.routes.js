@@ -27,6 +27,13 @@ try {
 // ─── Helpers ───────────────────────────────────────────────────────────
 const siteUrl = () => String(env.CLIENT_URL || '').replace(/\/+$/, '');
 
+// Social scrapers (Facebook, WhatsApp, Twitter) reject relative image URLs —
+// turn /uploads/... into absolute URLs rooted at the canonical site origin.
+const toAbsoluteUrl = (url) => {
+  if (!url || !url.startsWith('/')) return url;
+  return `${siteUrl()}${url}`;
+};
+
 const escapeHtml = (str = '') =>
   String(str)
     .replace(/&/g, '&amp;')
@@ -54,7 +61,7 @@ const buildArticleHeadTags = (article, canonicalUrl) => {
   const base = siteUrl();
   const title = seo.metaTitle || `${article.title} — Ravivar Vichar`;
   const description = (seo.metaDescription || article.excerpt || '').slice(0, 160);
-  const ogImage = seo.ogImage || article.thumbnail || '';
+  const ogImage = toAbsoluteUrl(seo.ogImage || article.thumbnail || '');
   const authorName =
     article.authorName || article.credit || article.author?.name || 'Ravivar Vichar Team';
   const schemaType = seo.schemaType || 'Article';
@@ -227,7 +234,7 @@ router.get('/recognitions/:slug', async (req, res) => {
     const canonicalUrl = `${base}/recognitions/${recognition.slug}`;
     const title = `${recognition.title} — Recognitions — Ravivar Vichar`;
     const description = (recognition.summary || `Recognition from ${recognition.source}`).slice(0, 160);
-    const ogImage = recognition.imageUrl || '';
+    const ogImage = toAbsoluteUrl(recognition.imageUrl || '');
 
     const tags = [
       `<title>${escapeHtml(title)}</title>`,
