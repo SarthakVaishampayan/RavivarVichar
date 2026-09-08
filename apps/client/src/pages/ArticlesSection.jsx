@@ -11,6 +11,8 @@ const sectionConfig = {
   'articles': { label: 'Articles', title: 'All Articles', description: 'Thought-provoking pieces on rural development, community stories, and sector analysis.' },
   'research-reports': { label: 'Research & Reports', title: 'All Research & Reports', description: 'In-depth studies and policy recommendations grounded in field research across Rajasthan.' },
   'success-stories': { label: 'Success Stories', title: 'All Success Stories', description: 'Inspiring journeys of individuals and communities transforming their lives through our programs.' },
+  'vishleshan': { label: 'Vishleshan', title: 'All Vishleshan', description: 'Analytical deep dives on the policies, trends, and ground realities shaping rural development.' },
+  'aangan': { label: 'Aangan', title: 'All Aangan', description: 'Community voices, everyday stories, and moments from the aangan — the heart of rural life.' },
 };
 
 const sectionCategoryMap = {
@@ -19,6 +21,8 @@ const sectionCategoryMap = {
   'Articles': ['Articles', 'General', 'Case Study', 'Explainer', 'News', 'Opinion', 'Impact Story', 'Policy Brief'],
   'Research & Reports': ['Research'],
   'Success Stories': ['Success Stories'],
+  'Vishleshan': ['Vishleshan'],
+  'Aangan': ['Aangan'],
 };
 
 const categoryColors = {
@@ -30,7 +34,12 @@ const categoryColors = {
   'Opinion': 'bg-purple-50 text-purple-600',
   'Success Stories': 'bg-emerald-50 text-emerald-600',
   'Interview': 'bg-amber-50 text-amber-600',
+  'Vishleshan': 'bg-cyan-50 text-cyan-600',
+  'Aangan': 'bg-rose-50 text-rose-600',
 };
+
+// Stored category values are shown on cards; 'Interview' displays as "Talks".
+const categoryLabel = { 'Interview': 'Talks' };
 
 export default function ArticlesSection() {
   const { sectionId } = useParams();
@@ -125,7 +134,8 @@ export default function ArticlesSection() {
               <div className="text-center py-16"><p className="text-lg text-ink-secondary">Loading {config.label.toLowerCase()}...</p></div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-16">
-                <p className="text-lg text-ink-secondary">No {config.label.toLowerCase()} published yet.</p>
+                <p className="text-xl font-heading font-semibold text-ink-primary">Content will be shared soon</p>
+                <p className="text-sm text-ink-secondary mt-2">नई विषय-वस्तु जल्द ही साझा की जाएगी — please check back shortly.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -149,7 +159,7 @@ export default function ArticlesSection() {
                     </div>
                     <div className="p-6">
                       <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${categoryColors[article.category] || 'bg-gray-100 text-gray-600'} mb-3`}>
-                        {article.category}
+                        {categoryLabel[article.category] || article.category}
                       </span>
                       <h3 className="text-card font-heading font-bold text-ink-primary group-hover:text-primary-500 transition-colors line-clamp-2">
                         {article.title}

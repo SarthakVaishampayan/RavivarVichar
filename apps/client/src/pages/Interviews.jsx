@@ -19,6 +19,9 @@ const categoryColors = {
   'Podcast': 'bg-orange-50 text-orange-600',
 };
 
+// Stored category values are shown on cards; 'Interview' displays as "Talks".
+const categoryLabel = { 'Interview': 'Talks' };
+
 export default function Interviews() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -99,7 +102,7 @@ export default function Interviews() {
       </div>
       <div className="p-6">
         <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${categoryColors[article.category] || 'bg-gray-100 text-gray-600'} mb-3`}>
-          {article.category}
+          {categoryLabel[article.category] || article.category}
         </span>
         <h3 className="text-card font-heading font-bold text-ink-primary group-hover:text-primary-500 transition-colors line-clamp-2">
           {article.title}
@@ -141,8 +144,8 @@ export default function Interviews() {
   return (
     <>
       <Helmet>
-        <title>Interviews & Podcasts — Ravivar Vichar</title>
-        <meta name="description" content="Exclusive interviews and podcasts featuring community leaders, experts, and changemakers in rural development." />
+        <title>Talks & Podcasts — Ravivar Vichar</title>
+        <meta name="description" content="Exclusive talks and podcasts featuring community leaders, experts, and changemakers in rural development." />
         <link rel="preload" as="image" href="/events-hero.jpg" />
       </Helmet>
 
@@ -153,12 +156,12 @@ export default function Interviews() {
           <HeroSlideshow startIndex={4} imageClass="object-[65%_center]" />
           <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
             <div className="max-w-[580px]">
-              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">INTERVIEWS & PODCASTS</span>
+              <span className="text-sm font-semibold tracking-[0.15em] text-white/70 uppercase inline-block mb-5">TALKS & PODCASTS</span>
               <h1 className="text-3xl max-lg:text-hero-mobile lg:text-5xl text-white leading-[1.2]">
                 Conversations That <span className="text-primary-500">Matter</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
-                Exclusive interviews and podcasts with community leaders, experts, and changemakers driving rural development.
+                Exclusive talks and podcasts with community leaders, experts, and changemakers driving rural development.
               </p>
             </div>
           </div>
@@ -172,17 +175,20 @@ export default function Interviews() {
           </section>
         ) : (
           <>
-            {/* Interviews Section */}
+            {/* Talks Section */}
             <section id="interviews" className="section-md bg-surface-white scroll-mt-[110px]">
               <div className="container-content">
                 <SectionHeading
-                  label="INTERVIEWS"
+                  label="TALKS"
                   title="Conversations That Matter"
-                  description="Exclusive interviews with community leaders, experts, and changemakers in rural development."
+                  description="Exclusive talks with community leaders, experts, and changemakers in rural development."
                 />
 
                 {interviews.length === 0 ? (
-                  <p className="text-center text-ink-secondary mt-10">No interviews published yet.</p>
+                  <div className="text-center mt-12 py-6">
+                    <p className="text-xl font-heading font-semibold text-ink-primary">Content will be shared soon</p>
+                    <p className="text-sm text-ink-secondary mt-2">नई विषय-वस्तु जल्द ही साझा की जाएगी — please check back shortly.</p>
+                  </div>
                 ) : (
                   <>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
@@ -203,7 +209,10 @@ export default function Interviews() {
                 />
 
                 {podcasts.length === 0 ? (
-                  <p className="text-center text-ink-secondary mt-10">No podcasts published yet.</p>
+                  <div className="text-center mt-12 py-6">
+                    <p className="text-xl font-heading font-semibold text-ink-primary">Content will be shared soon</p>
+                    <p className="text-sm text-ink-secondary mt-2">नई विषय-वस्तु जल्द ही साझा की जाएगी — please check back shortly.</p>
+                  </div>
                 ) : (
                   <>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">

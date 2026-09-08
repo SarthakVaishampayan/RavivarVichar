@@ -132,13 +132,16 @@ export const NAV_ITEMS = [
   { label: 'Settings', icon: Settings, path: '/settings' },
 ];
 
-// The 5 canonical content types. The stored `value` is what the public site's
-// sections match on (e.g. category === 'Interview' feeds the Interviews tab).
+// The 7 canonical content types. The stored `value` is what the public site's
+// sections match on (e.g. category === 'Interview' feeds the Talks tab; the
+// value is kept as 'Interview' for existing data, only the label is 'Talks').
 export const ARTICLE_CATEGORIES = [
   { value: 'Articles', label: 'Articles' },
   { value: 'Research', label: 'Research & Reports' },
   { value: 'Success Stories', label: 'Success Stories' },
-  { value: 'Interview', label: 'Interviews' },
+  { value: 'Vishleshan', label: 'Vishleshan' },
+  { value: 'Aangan', label: 'Aangan' },
+  { value: 'Interview', label: 'Talks' },
   { value: 'Podcast', label: 'Podcasts' },
 ];
 

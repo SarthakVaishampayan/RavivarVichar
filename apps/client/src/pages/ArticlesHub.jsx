@@ -5,12 +5,14 @@ import { Link, useLocation } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import SectionHeading from '../components/shared/SectionHeading';
 import api from '../lib/axios';
-import { Search, ArrowRight, Calendar, Tag, FileText, BarChart3, Star, Clock, Eye } from 'lucide-react';
+import { Search, ArrowRight, Calendar, Tag, FileText, BarChart3, Star, Clock, Eye, LineChart, Home } from 'lucide-react';
 
 const sections = [
   { id: 'articles', label: 'Articles', icon: FileText },
   { id: 'research-reports', label: 'Research & Reports', icon: BarChart3 },
   { id: 'success-stories', label: 'Success Stories', icon: Star },
+  { id: 'vishleshan', label: 'Vishleshan', icon: LineChart },
+  { id: 'aangan', label: 'Aangan', icon: Home },
 ];
 
 // Maps each section to the article categories it should show.
@@ -20,6 +22,8 @@ const sectionCategoryMap = {
   'Articles': ['Articles', 'General', 'Case Study', 'Explainer', 'News', 'Opinion', 'Impact Story', 'Policy Brief'],
   'Research & Reports': ['Research'],
   'Success Stories': ['Success Stories'],
+  'Vishleshan': ['Vishleshan'],
+  'Aangan': ['Aangan'],
 };
 
 const categoryColors = {
@@ -31,12 +35,19 @@ const categoryColors = {
   'Opinion': 'bg-purple-50 text-purple-600',
   'Success Stories': 'bg-emerald-50 text-emerald-600',
   'Interview': 'bg-amber-50 text-amber-600',
+  'Vishleshan': 'bg-cyan-50 text-cyan-600',
+  'Aangan': 'bg-rose-50 text-rose-600',
 };
+
+// Stored category values are shown on cards; 'Interview' displays as "Talks".
+const categoryLabel = { 'Interview': 'Talks' };
 
 const sectionHeadings = {
   'Articles': { label: 'ARTICLES', title: 'Latest Articles & Insights', description: 'Thought-provoking pieces on rural development, community stories, and sector analysis.' },
   'Research & Reports': { label: 'RESEARCH & REPORTS', title: 'Data-Driven Research', description: 'In-depth studies and policy recommendations grounded in field research across Rajasthan.' },
   'Success Stories': { label: 'SUCCESS STORIES', title: 'Real Stories, Real Impact', description: 'Inspiring journeys of individuals and communities transforming their lives through our programs.' },
+  'Vishleshan': { label: 'VISHLESHAN', title: 'In-Depth Analysis', description: 'Analytical deep dives on the policies, trends, and ground realities shaping rural development.' },
+  'Aangan': { label: 'AANGAN', title: 'Stories from the Aangan', description: 'Community voices, everyday stories, and moments from the aangan — the heart of rural life.' },
 };
 
 export default function ArticlesHub() {
@@ -194,11 +205,16 @@ export default function ArticlesHub() {
                   />
 
                   {filtered.length === 0 ? (
-                    <p className="text-center text-ink-secondary mt-10">
-                      {searchQuery
-                        ? `No ${section.label.toLowerCase()} match your search.`
-                        : `No ${section.label.toLowerCase()} published yet.`}
-                    </p>
+                    <div className="text-center mt-12 py-10">
+                      {searchQuery ? (
+                        <p className="text-lg text-ink-secondary">No {section.label.toLowerCase()} match your search.</p>
+                      ) : (
+                        <>
+                          <p className="text-xl font-heading font-semibold text-ink-primary">Content will be shared soon</p>
+                          <p className="text-sm text-ink-secondary mt-2">नई विषय-वस्तु जल्द ही साझा की जाएगी — please check back shortly.</p>
+                        </>
+                      )}
+                    </div>
                   ) : (
                     <>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
@@ -222,7 +238,7 @@ export default function ArticlesHub() {
                             </div>
                             <div className="p-6">
                               <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${categoryColors[article.category] || 'bg-gray-100 text-gray-600'} mb-3`}>
-                                {article.category}
+                                {categoryLabel[article.category] || article.category}
                               </span>
                               <h3 className="text-card font-heading font-bold text-ink-primary group-hover:text-primary-500 transition-colors line-clamp-2">
                                 {article.title}

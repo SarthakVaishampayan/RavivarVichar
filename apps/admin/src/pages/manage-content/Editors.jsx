@@ -393,7 +393,7 @@ export function ArticleEditor() {
                     placeholder="Select Primary Category"
                   />
                   <p className="text-xs text-gray-400 -mt-3">
-                    This is the content type — it decides where the item appears on the website (Articles, Research &amp; Reports, Success Stories, Interviews, or Podcasts).
+                    This is the content type — it decides where the item appears on the website (Articles, Research &amp; Reports, Success Stories, Vishleshan, Aangan, Talks, or Podcasts).
                   </p>
 
                   {/* Status */}

@@ -8,7 +8,7 @@ const footerLinks = {
     { label: 'Home', path: '/' },
     { label: 'About Us', path: '/about' },
     { label: 'Articles', path: '/articles' },
-    { label: 'Interviews', path: '/interviews' },
+    { label: 'Talks', path: '/interviews' },
     { label: 'Gallery', path: '/gallery' },
     { label: 'Contact Us', path: '/contact' },
   ],
@@ -16,9 +16,11 @@ const footerLinks = {
     { label: 'Articles', path: '/articles#articles' },
     { label: 'Research & Reports', path: '/articles#research-reports' },
     { label: 'Success Stories', path: '/articles#success-stories' },
+    { label: 'Vishleshan', path: '/articles#vishleshan' },
+    { label: 'Aangan', path: '/articles#aangan' },
   ],
-  'Interviews': [
-    { label: 'Interviews', path: '/interviews#interviews' },
+  'Talks': [
+    { label: 'Talks', path: '/interviews#interviews' },
     { label: 'Podcasts', path: '/interviews#podcasts' },
   ],
   'About Us': [
@@ -44,7 +46,7 @@ const socialLinks = [
 const linkColumnMargins = {
   'Quick Links': 'lg:ml-[25%]',
   'Articles': 'lg:ml-[25%]',
-  'Interviews': 'lg:ml-[15%]',
+  'Talks': 'lg:ml-[15%]',
 };
 
 export default function Footer() {
