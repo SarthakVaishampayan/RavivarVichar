@@ -18,7 +18,12 @@ const escapeXml = (str = '') =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
 
-const toIsoDate = (date) => (date ? new Date(date).toISOString().split('T')[0] : undefined);
+const toIsoDate = (date) => {
+  if (!date) return undefined;
+  const d = new Date(date);
+  if (isNaN(d.getTime()) || d.getFullYear() < 2000) return undefined;
+  return d.toISOString().split('T')[0];
+};
 
 // Static public pages (top-level client routes). These are fixed, so they can
 // live here — article/recognition URLs below are generated from the database.
@@ -89,10 +94,13 @@ router.get('/sitemap.xml', catchAsync(async (req, res) => {
 
   const articleUrls = articles
     .map((a) => {
-      const lastmod = toIsoDate(a.publishedAt || a.updatedAt);
+      const pubDate = toIsoDate(a.publishedAt);
+      const updDate = toIsoDate(a.updatedAt);
+      const lastmod = pubDate || updDate;
+      const cleanSlug = String(a.slug || '').trim();
       return (
         `  <url>\n` +
-        `    <loc>${escapeXml(buildUrl(base, `/articles/${a.slug}`))}</loc>\n` +
+        `    <loc>${escapeXml(buildUrl(base, `/articles/${cleanSlug}`))}</loc>\n` +
         (lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : '') +
         `  </url>`
       );
@@ -102,9 +110,10 @@ router.get('/sitemap.xml', catchAsync(async (req, res) => {
   const recognitionUrls = recognitions
     .map((r) => {
       const lastmod = toIsoDate(r.updatedAt);
+      const cleanSlug = String(r.slug || '').trim();
       return (
         `  <url>\n` +
-        `    <loc>${escapeXml(buildUrl(base, `/recognitions/${r.slug}`))}</loc>\n` +
+        `    <loc>${escapeXml(buildUrl(base, `/recognitions/${cleanSlug}`))}</loc>\n` +
         (lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : '') +
         `  </url>`
       );

@@ -250,6 +250,7 @@ const PermalinkInput = ({ title, slug, onChange }) => {
           type="text"
           value={slug || ''}
           onChange={(e) => { touched.current = true; onChange(e.target.value); }}
+          onBlur={() => { if (slug) onChange(makeSlug(slug)); }}
           placeholder="auto-generated from title"
           className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-mono text-gray-700 outline-none focus:border-primary-400 focus:bg-white"
         />
@@ -413,8 +414,8 @@ export function ArticleEditor() {
                     onChange={handleChange}
                   />
 
-                  {/* Publish Date — fixed once set, cannot be changed */}
-                  {formData.publishedAt ? (
+                  {/* Publish Date — fixed once set, cannot be changed unless corrupted */}
+                  {formData.publishedAt && new Date(formData.publishedAt).getFullYear() >= 2000 ? (
                     <div>
                       <label className="label">Published On</label>
                       <input
@@ -436,7 +437,7 @@ export function ArticleEditor() {
                     <Input
                       label="Publish Date (optional)"
                       name="publishedAt"
-                      value=""
+                      value={formData.publishedAt && new Date(formData.publishedAt).getFullYear() >= 2000 ? formData.publishedAt : ''}
                       onChange={handleChange}
                       type="date"
                     />

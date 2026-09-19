@@ -15,7 +15,9 @@ const logActivity = async (action, resource, resourceId, user, details) => {
 // Auto-generate a slug from the title ONLY when the caller didn't provide one.
 // This keeps manually-edited permalinks (e.g. for Hindi articles) intact.
 const resolveSlug = (data) => {
-  if (data.title && !data.slug) {
+  if (data.slug) {
+    data.slug = generateSlug(data.slug) || (data.title ? generateSlug(data.title) : `article-${Date.now()}`);
+  } else if (data.title) {
     data.slug = generateSlug(data.title) || `article-${Date.now()}`;
   }
   return data;
@@ -111,7 +113,19 @@ const getOne = catchAsync(async (req, res) => {
 
 // GET /api/v1/articles/slug/:slug
 const getBySlug = catchAsync(async (req, res) => {
-  const article = await Article.findOne({ slug: req.params.slug }).populate('author', 'name email');
+  const rawSlug = req.params.slug;
+  const cleanSlug = String(rawSlug || '').trim();
+  let article = await Article.findOne({ slug: rawSlug }).populate('author', 'name email');
+  if (!article && cleanSlug !== rawSlug) {
+    article = await Article.findOne({ slug: cleanSlug }).populate('author', 'name email');
+  }
+  if (!article) {
+    // Fallback for database records that were saved with trailing whitespace
+    const escaped = cleanSlug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    article = await Article.findOne({
+      slug: { $regex: new RegExp(`^${escaped}\\s*$`, 'i') }
+    }).populate('author', 'name email');
+  }
   if (!article) return sendError(res, 'Article not found', 404);
   // Increment views
   article.views = (article.views || 0) + 1;
@@ -141,11 +155,11 @@ const update = catchAsync(async (req, res) => {
   // backdate field on creation) and never changed by subsequent edits.
   const existing = await Article.findById(req.params.id).select('publishedAt status');
   if (!existing) return sendError(res, 'Article not found', 404);
-  if (existing.publishedAt) {
+  const hasValidPublishedAt = existing.publishedAt && new Date(existing.publishedAt).getFullYear() >= 2000;
+  if (hasValidPublishedAt && !data.publishedAt) {
     delete data.publishedAt;
-  } else if (data.status === 'published') {
-    // First publish via findByIdAndUpdate — pre('save') hooks don't run here,
-    // so set it explicitly (respects an explicit backdate if one was sent).
+  } else if (!hasValidPublishedAt && (data.status === 'published' || data.publishedAt)) {
+    // First publish or repairing a corrupt/missing publishedAt date
     data.publishedAt = data.publishedAt || new Date();
   }
   // Respect a manually-provided slug; only regenerate when no slug is sent.
