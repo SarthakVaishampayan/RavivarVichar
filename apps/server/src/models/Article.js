@@ -4,7 +4,8 @@ const generateSlug = require('../utils/generateSlug');
 const articleSchema = new mongoose.Schema(
   {
     title: { type: String, required: [true, 'Title is required'], trim: true },
-    slug: { type: String, unique: true, lowercase: true },
+    slug: { type: String, unique: true, lowercase: true, trim: true },
+    previousSlugs: [{ type: String, lowercase: true, trim: true }],
     category: { type: String, default: 'Articles' },
     additionalCategories: [{ type: String }],
     tags: [{ type: String }],
@@ -51,5 +52,7 @@ articleSchema.pre('save', function (next) {
   }
   next();
 });
+
+articleSchema.index({ previousSlugs: 1 });
 
 module.exports = mongoose.model('Article', articleSchema);

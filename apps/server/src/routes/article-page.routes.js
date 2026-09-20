@@ -30,8 +30,10 @@ const siteUrl = () => String(env.CLIENT_URL || '').replace(/\/+$/, '');
 // Social scrapers (Facebook, WhatsApp, Twitter) reject relative image URLs —
 // turn /uploads/... into absolute URLs rooted at the canonical site origin.
 const toAbsoluteUrl = (url) => {
-  if (!url || !url.startsWith('/')) return url;
-  return `${siteUrl()}${url}`;
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  const path = url.startsWith('/') ? url : `/${url}`;
+  return `${siteUrl()}${path}`;
 };
 
 const escapeHtml = (str = '') =>
@@ -61,7 +63,9 @@ const buildArticleHeadTags = (article, canonicalUrl) => {
   const base = siteUrl();
   const title = seo.metaTitle || `${article.title} — Ravivar Vichar`;
   const description = (seo.metaDescription || article.excerpt || '').slice(0, 160);
-  const ogImage = toAbsoluteUrl(seo.ogImage || article.thumbnail || '');
+  const rawImage = seo.ogImage || article.thumbnail || '';
+  const ogImage = rawImage ? toAbsoluteUrl(rawImage) : `${base}/logo.png`;
+  const twitterImage = seo.twitterImage ? toAbsoluteUrl(seo.twitterImage) : ogImage;
   const authorName =
     article.authorName || article.credit || article.author?.name || 'Ravivar Vichar Team';
   const schemaType = seo.schemaType || 'Article';
@@ -90,16 +94,18 @@ const buildArticleHeadTags = (article, canonicalUrl) => {
     '<meta property="og:type" content="article">',
     `<meta property="og:title" content="${escapeHtml(seo.ogTitle || article.title)}">`,
     `<meta property="og:description" content="${escapeHtml(seo.ogDescription || description)}">`,
-    ogImage ? `<meta property="og:image" content="${escapeHtml(ogImage)}">` : null,
     `<meta property="og:url" content="${escapeHtml(canonicalUrl)}">`,
     '<meta property="og:site_name" content="Ravivar Vichar">',
+    ogImage ? `<meta property="og:image" content="${escapeHtml(ogImage)}">` : null,
+    ogImage && ogImage.startsWith('https://') ? `<meta property="og:image:secure_url" content="${escapeHtml(ogImage)}">` : null,
+    ogImage ? '<meta property="og:image:width" content="1200">' : null,
+    ogImage ? '<meta property="og:image:height" content="630">' : null,
+    ogImage ? '<meta property="og:image:type" content="image/jpeg">' : null,
     // Twitter Card
     `<meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}">`,
     `<meta name="twitter:title" content="${escapeHtml(seo.twitterTitle || seo.ogTitle || article.title)}">`,
     `<meta name="twitter:description" content="${escapeHtml(seo.twitterDescription || seo.ogDescription || description)}">`,
-    ogImage
-      ? `<meta name="twitter:image" content="${escapeHtml(seo.twitterImage || ogImage)}">`
-      : null,
+    twitterImage ? `<meta name="twitter:image" content="${escapeHtml(twitterImage)}">` : null,
     // JSON-LD structured data
     `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`,
   ].filter(Boolean);
@@ -113,16 +119,19 @@ const renderWithTemplate = (headTags) => {
 
   let html = indexTemplate;
 
-  // 1. Replace the default <title> tag
-  html = html.replace(/<title>[^<]*<\/title>/, '');
+  // 1. Strip default title
+  html = html.replace(/<title>[^<]*<\/title>/gi, '');
 
-  // 2. Replace the default meta description (if present)
-  html = html.replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/, '');
+  // 2. Strip default meta description
+  html = html.replace(/<meta\s+name=["']description["'][^>]*>/gi, '');
 
-  // 3. Replace the default og:title (if present)
-  html = html.replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/, '');
+  // 3. Strip all default Open Graph meta tags to eliminate duplicate/conflicting tags
+  html = html.replace(/<meta\s+property=["']og:[^"']*["'][^>]*>/gi, '');
 
-  // 4. Insert all article-specific tags right before </head>
+  // 4. Strip all default Twitter card meta tags
+  html = html.replace(/<meta\s+name=["']twitter:[^"']*["'][^>]*>/gi, '');
+
+  // 5. Insert all article-specific tags right before </head>
   html = html.replace('</head>', `    ${headTags}\n  </head>`);
 
   return html;
@@ -187,10 +196,48 @@ const notFoundPage = `<!DOCTYPE html>
 // ═════════════════════════════════════════════════════════════════════════
 router.get('/articles/:slug', async (req, res) => {
   try {
-    const article = await Article.findOne({
-      slug: req.params.slug,
+    const rawSlug = req.params.slug || '';
+    let cleanSlug = '';
+    try {
+      cleanSlug = decodeURIComponent(rawSlug).trim();
+    } catch {
+      cleanSlug = String(rawSlug).trim();
+    }
+
+    // 1. Exact raw or clean slug lookup
+    let article = await Article.findOne({
+      slug: rawSlug,
       status: 'published',
     }).populate('author', 'name');
+
+    if (!article && cleanSlug !== rawSlug) {
+      article = await Article.findOne({
+        slug: cleanSlug,
+        status: 'published',
+      }).populate('author', 'name');
+    }
+
+    // 2. Regex fallback for database records with trailing whitespace
+    if (!article) {
+      const escaped = cleanSlug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      article = await Article.findOne({
+        slug: { $regex: new RegExp(`^${escaped}\\s*$`, 'i') },
+        status: 'published',
+      }).populate('author', 'name');
+    }
+
+    // 3. Check previousSlugs history: 301 Permanent Redirect
+    if (!article) {
+      const movedArticle = await Article.findOne({
+        $or: [{ previousSlugs: cleanSlug }, { previousSlugs: rawSlug }],
+        status: 'published',
+      }).select('slug');
+
+      if (movedArticle?.slug) {
+        const base = siteUrl();
+        return res.redirect(301, `${base}/articles/${movedArticle.slug}`);
+      }
+    }
 
     if (!article) {
       return res.status(404).type('html').send(notFoundPage);
@@ -224,7 +271,24 @@ router.get('/articles/:slug', async (req, res) => {
 // ═════════════════════════════════════════════════════════════════════════
 router.get('/recognitions/:slug', async (req, res) => {
   try {
-    const recognition = await Recognition.findOne({ slug: req.params.slug });
+    const rawSlug = req.params.slug || '';
+    let cleanSlug = '';
+    try {
+      cleanSlug = decodeURIComponent(rawSlug).trim();
+    } catch {
+      cleanSlug = String(rawSlug).trim();
+    }
+
+    let recognition = await Recognition.findOne({ slug: rawSlug });
+    if (!recognition && cleanSlug !== rawSlug) {
+      recognition = await Recognition.findOne({ slug: cleanSlug });
+    }
+    if (!recognition) {
+      const escaped = cleanSlug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      recognition = await Recognition.findOne({
+        slug: { $regex: new RegExp(`^${escaped}\\s*$`, 'i') },
+      });
+    }
 
     if (!recognition) {
       return res.status(404).type('html').send(notFoundPage);
@@ -234,7 +298,8 @@ router.get('/recognitions/:slug', async (req, res) => {
     const canonicalUrl = `${base}/recognitions/${recognition.slug}`;
     const title = `${recognition.title} — Recognitions — Ravivar Vichar`;
     const description = (recognition.summary || `Recognition from ${recognition.source}`).slice(0, 160);
-    const ogImage = toAbsoluteUrl(recognition.imageUrl || '');
+    const rawImage = recognition.imageUrl || '';
+    const ogImage = rawImage ? toAbsoluteUrl(rawImage) : `${base}/logo.png`;
 
     const tags = [
       `<title>${escapeHtml(title)}</title>`,
@@ -244,9 +309,13 @@ router.get('/recognitions/:slug', async (req, res) => {
       '<meta property="og:type" content="article">',
       `<meta property="og:title" content="${escapeHtml(recognition.title)}">`,
       `<meta property="og:description" content="${escapeHtml(description)}">`,
-      ogImage ? `<meta property="og:image" content="${escapeHtml(ogImage)}">` : null,
       `<meta property="og:url" content="${escapeHtml(canonicalUrl)}">`,
       '<meta property="og:site_name" content="Ravivar Vichar">',
+      ogImage ? `<meta property="og:image" content="${escapeHtml(ogImage)}">` : null,
+      ogImage && ogImage.startsWith('https://') ? `<meta property="og:image:secure_url" content="${escapeHtml(ogImage)}">` : null,
+      ogImage ? '<meta property="og:image:width" content="1200">' : null,
+      ogImage ? '<meta property="og:image:height" content="630">' : null,
+      ogImage ? '<meta property="og:image:type" content="image/jpeg">' : null,
       `<meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}">`,
       `<meta name="twitter:title" content="${escapeHtml(recognition.title)}">`,
       `<meta name="twitter:description" content="${escapeHtml(description)}">`,

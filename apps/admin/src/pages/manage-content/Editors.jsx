@@ -219,8 +219,14 @@ const CollapsiblePanel = ({ title, icon: Icon, defaultOpen = false, children }) 
 // Unicode-safe slug generation (keeps Devanagari/Hindi characters) that matches
 // the server's generateSlug util. Auto-generates from the title until the author
 // edits the slug by hand, then leaves it alone.
-const makeSlug = (text = '') =>
-  String(text)
+const makeSlug = (text = '') => {
+  let str = String(text).trim();
+  try {
+    str = decodeURIComponent(str);
+  } catch {
+    // ignore malformed sequences
+  }
+  return str
     .toLowerCase()
     .trim()
     // \p{L} letters (keeps Hindi/Devanagari), \p{M} matras (े ी ं), \p{N} numbers
@@ -228,41 +234,70 @@ const makeSlug = (text = '') =>
     .replace(/[\s_]+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-+|-+$/g, '');
+};
 
-const PermalinkInput = ({ title, slug, onChange }) => {
-  const touched = useRef(false);
+const PermalinkInput = ({ title, slug, isPublished = false, onChange }) => {
+  const userEditedRef = useRef(false);
+  const initialSlugRef = useRef(slug);
 
-  // Auto-generate from the title, but only while the author hasn't hand-edited
-  // the slug and there isn't already a stored slug (existing articles).
+  // Auto-generate from the title while in draft mode and untouched
   useEffect(() => {
-    if (!touched.current && !slug) {
+    if (!isPublished && !userEditedRef.current && title) {
       onChange(makeSlug(title));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [title]);
+  }, [title, isPublished]);
+
+  const handleManualChange = (val) => {
+    userEditedRef.current = true;
+    onChange(val);
+  };
+
+  const handleRegenerate = () => {
+    userEditedRef.current = false;
+    onChange(makeSlug(title));
+  };
+
+  const hasChangedFromInitial = isPublished && initialSlugRef.current && slug !== initialSlugRef.current;
 
   return (
     <div className="-mt-3">
-      <label className="text-xs text-gray-400 font-medium">Permalink (URL Slug)</label>
+      <div className="flex items-center justify-between">
+        <label className="text-xs text-gray-400 font-medium">Permalink (URL Slug)</label>
+        {isPublished ? (
+          <span className="text-[11px] font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200" title="Permalink is locked to protect live shared links and SEO ranking">
+            🔒 Locked (Published)
+          </span>
+        ) : (
+          <span className="text-[11px] font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded border border-primary-200">
+            Auto-syncing with title
+          </span>
+        )}
+      </div>
       <div className="flex items-center gap-1.5 mt-1">
-        <span className="text-xs text-gray-400 font-mono shrink-0">/</span>
+        <span className="text-xs text-gray-400 font-mono shrink-0">/articles/</span>
         <input
           type="text"
           value={slug || ''}
-          onChange={(e) => { touched.current = true; onChange(e.target.value); }}
+          onChange={(e) => handleManualChange(e.target.value)}
           onBlur={() => { if (slug) onChange(makeSlug(slug)); }}
           placeholder="auto-generated from title"
           className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-mono text-gray-700 outline-none focus:border-primary-400 focus:bg-white"
         />
         <button
           type="button"
-          onClick={() => { touched.current = false; onChange(makeSlug(title)); }}
+          onClick={handleRegenerate}
           className="shrink-0 text-xs font-medium text-primary-500 hover:text-primary-700 transition-colors"
           title="Regenerate from title"
         >
           ↺ Regenerate
         </button>
       </div>
+      {hasChangedFromInitial && (
+        <p className="text-[11px] text-amber-600 mt-1 font-medium">
+          ⚠️ Notice: Changing the slug of a published article will create an automatic 301 permanent redirect from the old URL to this new URL.
+        </p>
+      )}
       <p className="text-[11px] text-gray-400 mt-1">
         {slug ? `Final URL: /articles/${slug}` : 'Will be generated from the title'}
       </p>
@@ -313,6 +348,7 @@ export function ArticleEditor() {
               <PermalinkInput
                 title={formData.title}
                 slug={formData.slug}
+                isPublished={formData.status === 'published'}
                 onChange={(slug) => handleChange('slug', slug)}
               />
 

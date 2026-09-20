@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
 import Button from '../components/shared/Button';
 import { ArrowLeft, Calendar, User, Linkedin, Twitter, Facebook, Link2, Check } from 'lucide-react';
@@ -85,6 +85,7 @@ const getEmbedUrl = (url) => {
 
 export default function ArticleDetail() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -94,10 +95,18 @@ export default function ArticleDetail() {
     const fetchArticle = async () => {
       try {
         const { data } = await api.get(`/articles/slug/${slug}`);
-        setArticle(data.data);
+        const articleData = data.data;
+        setArticle(articleData);
+
+        // If the article was accessed via an old slug (301 redirect candidate),
+        // update the client URL smoothly to the canonical slug.
+        if (articleData?.slug && articleData.slug !== slug) {
+          navigate(`/articles/${articleData.slug}`, { replace: true });
+        }
+
         // Fetch related articles from the SAME category group only
         // (e.g. a podcast only relates to other podcasts, an article only to articles)
-        const group = getCategoryGroup(data.data?.category);
+        const group = getCategoryGroup(articleData?.category);
         const { data: related } = await api.get('/articles', { params: { status: 'published', limit: 20 } });
         setRelatedArticles((related.data || []).filter((a) => a.slug !== slug && group.includes(a.category)).slice(0, 3));
       } catch (err) {

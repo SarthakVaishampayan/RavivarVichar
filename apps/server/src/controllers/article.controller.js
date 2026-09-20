@@ -126,6 +126,12 @@ const getBySlug = catchAsync(async (req, res) => {
       slug: { $regex: new RegExp(`^${escaped}\\s*$`, 'i') }
     }).populate('author', 'name email');
   }
+  if (!article) {
+    // Fallback: check if requested slug was previously used (301 redirect candidate)
+    article = await Article.findOne({
+      $or: [{ previousSlugs: cleanSlug }, { previousSlugs: rawSlug }]
+    }).populate('author', 'name email');
+  }
   if (!article) return sendError(res, 'Article not found', 404);
   // Increment views
   article.views = (article.views || 0) + 1;
@@ -153,7 +159,7 @@ const update = catchAsync(async (req, res) => {
   const data = { ...req.body };
   // publishedAt is immutable: set once (on first publish or via the optional
   // backdate field on creation) and never changed by subsequent edits.
-  const existing = await Article.findById(req.params.id).select('publishedAt status');
+  const existing = await Article.findById(req.params.id).select('publishedAt status slug previousSlugs');
   if (!existing) return sendError(res, 'Article not found', 404);
   const hasValidPublishedAt = existing.publishedAt && new Date(existing.publishedAt).getFullYear() >= 2000;
   if (hasValidPublishedAt && !data.publishedAt) {
@@ -162,10 +168,32 @@ const update = catchAsync(async (req, res) => {
     // First publish or repairing a corrupt/missing publishedAt date
     data.publishedAt = data.publishedAt || new Date();
   }
-  // Respect a manually-provided slug; only regenerate when no slug is sent.
-  // This is what keeps custom permalinks (e.g. Hindi titles) stable on edit.
-  resolveSlug(data);
-  if (data.slug) data.slug = await ensureUniqueSlug(data.slug, req.params.id);
+
+  // ─── Slug Lifecycle & Immutability Protocol ───
+  // 1. If the article already has a slug:
+  //    - If no slug is passed (or empty), KEEP existing.slug. Title edits NEVER change the permalink!
+  //    - If an explicit new slug is passed and differs: archive the old slug in previousSlugs
+  //      so existing links 301-redirect to the new URL.
+  // 2. If the article has no slug yet (new draft): generate from title or slug candidate.
+  const incomingSlug = data.slug ? generateSlug(data.slug) : '';
+  if (existing.slug) {
+    if (incomingSlug && incomingSlug !== existing.slug) {
+      // Deliberate manual rename by admin
+      data.slug = await ensureUniqueSlug(incomingSlug, req.params.id);
+      const history = Array.isArray(existing.previousSlugs) ? [...existing.previousSlugs] : [];
+      if (!history.includes(existing.slug)) {
+        history.push(existing.slug);
+      }
+      data.previousSlugs = history.filter((s) => s !== data.slug);
+    } else {
+      // Preserve existing permalink
+      data.slug = existing.slug;
+    }
+  } else {
+    data.slug = incomingSlug || (data.title ? generateSlug(data.title) : `article-${Date.now()}`);
+    data.slug = await ensureUniqueSlug(data.slug, req.params.id);
+  }
+
   // Sanitize rich-text fields before they reach the database
   if (data.content) data.content = sanitizeArticleHtml(data.content);
   if (data.excerpt) data.excerpt = sanitizePlainText(data.excerpt);

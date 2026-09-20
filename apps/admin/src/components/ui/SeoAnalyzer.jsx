@@ -436,7 +436,7 @@ const CHECK_GROUPS = [
             if (!title) return false;
             return true; // server generates slug from title, so it'll be fine
           }
-          return slug === slug.toLowerCase() && !slug.includes('_') && /^[a-z0-9-]+$/.test(slug);
+          return slug === slug.toLowerCase() && !slug.includes('_') && /^[\p{L}\p{M}\p{N}-]+$/u.test(slug);
         },
         tip: 'Use lowercase with hyphens in the URL slug.',
       },

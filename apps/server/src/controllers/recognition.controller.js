@@ -47,9 +47,17 @@ const create = catchAsync(async (req, res) => {
 // PUT /api/v1/recognitions/:id — admin only
 const update = catchAsync(async (req, res) => {
   const data = { ...req.body };
-  if (data.title) {
+  const existing = await Recognition.findById(req.params.id);
+  if (!existing) return sendError(res, 'Recognition not found', 404);
+
+  if (data.slug) {
+    data.slug = generateSlug(data.slug);
+  } else if (!existing.slug && data.title) {
     data.slug = generateSlug(data.title);
+  } else {
+    data.slug = existing.slug;
   }
+
   const recognition = await Recognition.findByIdAndUpdate(req.params.id, data, {
     new: true,
     runValidators: true,

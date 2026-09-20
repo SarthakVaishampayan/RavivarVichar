@@ -1,5 +1,11 @@
 const generateSlug = (text = '') => {
-  return String(text)
+  let str = String(text).trim();
+  try {
+    str = decodeURIComponent(str);
+  } catch {
+    // ignore malformed URI sequences
+  }
+  return str
     .toLowerCase()
     .trim()
     // \p{L} = any Unicode letter (keeps Devanagari/Hindi), \p{M} = combining
