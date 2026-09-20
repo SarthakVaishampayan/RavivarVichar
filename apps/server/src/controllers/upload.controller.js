@@ -3,6 +3,8 @@ const { cloudinary } = require('../config/cloudinary');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
 const catchAsync = require('../utils/catchAsync');
 
+const { optimizeImage, optimizeImages } = require('../utils/imageOptimizer');
+
 // Helper: build response for a single file (always disk storage now)
 const fileResponse = (file) => ({
   url: `/uploads/${file.filename}`,
@@ -30,7 +32,10 @@ const uploadToCloudinary = (filePath, options = {}) => {
 const uploadSingle = catchAsync(async (req, res) => {
   if (!req.file) return sendError(res, 'No file uploaded', 400);
 
-  // File already saved to disk by multer
+  // Auto-compress and resize image on disk before serving/uploading
+  await optimizeImage(req.file);
+
+  // File already saved to disk by multer (and optimized)
   if (!process.env.CLOUDINARY_CLOUD_NAME) {
     return sendSuccess(res, fileResponse(req.file), 'File uploaded', 200);
   }
@@ -54,6 +59,9 @@ const uploadMultiple = catchAsync(async (req, res) => {
   if (!req.files || req.files.length === 0) {
     return sendError(res, 'No files uploaded', 400);
   }
+
+  // Auto-compress and resize all images on disk
+  await optimizeImages(req.files);
 
   if (!process.env.CLOUDINARY_CLOUD_NAME) {
     const files = req.files.map(fileResponse);
