@@ -165,14 +165,26 @@ export default function ArticleDetail() {
   // Canonical = the clean public URL (no query string, no hash). If the CMS
   // has a custom canonical URL use it; otherwise self-reference the article.
   // Always use the non-www origin to stay consistent with the server-rendered
-  // canonical (which uses CLIENT_URL = https://ravivarvichar.in).
   const canonicalUrl = (() => {
-    if (seo.canonicalUrl) return seo.canonicalUrl;
+    let custom = (seo.canonicalUrl || '').trim();
+    if (custom) {
+      if (custom.startsWith('ttps://')) custom = `h${custom}`;
+      if (custom.startsWith('http://') || custom.startsWith('https://')) {
+        try {
+          new URL(custom);
+          return custom.replace(/\/+$/, '');
+        } catch {
+          // invalid URL format, fall through to self-canonical
+        }
+      }
+      // If custom is relative (e.g. /articles/slug or /delhi-...), ignore to avoid 404s
+    }
     if (typeof window === 'undefined') return '';
     // Strip www. from the hostname so the canonical always points to
     // ravivarvichar.in (not www.ravivarvichar.in).
     const origin = window.location.origin.replace(/\/\/www\./, '//');
-    return `${origin}${window.location.pathname}`;
+    const cleanPath = window.location.pathname.replace(/\/+$/, '') || '/';
+    return `${origin}${cleanPath}`;
   })();
   const plainContent = (article.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const metaDescription = (seo.metaDescription || article.excerpt || plainContent).slice(0, 160);

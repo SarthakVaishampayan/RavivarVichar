@@ -516,9 +516,18 @@ const CHECK_GROUPS = [
     checks: [
       {
         key: 'canonicalUrl',
-        label: 'Set a canonical URL',
-        pass: (d) => !!(d.seo?.canonicalUrl || '').trim(),
-        tip: 'A canonical URL prevents duplicate content issues.',
+        label: 'Canonical URL configuration',
+        pass: (d) => {
+          const val = (d.seo?.canonicalUrl || '').trim();
+          if (!val) return true; // Default auto-generated self-canonical is recommended & valid
+          try {
+            const u = new URL(val);
+            return u.protocol === 'http:' || u.protocol === 'https:';
+          } catch {
+            return false;
+          }
+        },
+        tip: 'Self-referencing canonical URL is auto-generated. Only set a custom URL if this article was syndicated from another site.',
       },
     ],
   },

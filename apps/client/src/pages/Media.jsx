@@ -44,7 +44,7 @@ export default function Media() {
       <Helmet>
         <title>Media — Ravivar Vichar</title>
         <meta name="description" content="Browse photos, videos, and press releases from Ravivar Vichar's rural development programs and events." />
-      <link rel="preload" as="image" href="/media-hero.jpg" />
+        <link rel="preload" as="image" href="/hero-image.webp" type="image/webp" />
       </Helmet>
 
       <PageLayout>

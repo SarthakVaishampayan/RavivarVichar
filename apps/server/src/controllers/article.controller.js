@@ -139,6 +139,33 @@ const getBySlug = catchAsync(async (req, res) => {
   sendSuccess(res, article);
 });
 
+// ─── Published Date & SEO Sanitization ───
+const sanitizePublishDate = (dateVal) => {
+  if (!dateVal) return undefined;
+  const d = new Date(dateVal);
+  if (isNaN(d.getTime())) return undefined;
+  // If year is corrupted (e.g. year 0002 -> set to 2026)
+  if (d.getFullYear() < 2000) {
+    d.setFullYear(2026);
+  }
+  return d;
+};
+
+const sanitizeSeoData = (seo = {}) => {
+  if (!seo || typeof seo !== 'object') return seo;
+  const clean = { ...seo };
+  if (clean.canonicalUrl) {
+    let c = String(clean.canonicalUrl).trim();
+    if (c.startsWith('ttps://')) c = `h${c}`;
+    if (!c.startsWith('http://') && !c.startsWith('https://')) {
+      delete clean.canonicalUrl;
+    } else {
+      clean.canonicalUrl = c.replace(/\/+$/, '');
+    }
+  }
+  return clean;
+};
+
 // POST /api/v1/articles
 const create = catchAsync(async (req, res) => {
   const data = { ...req.body, author: req.user._id };
@@ -149,6 +176,17 @@ const create = catchAsync(async (req, res) => {
   if (data.content) data.content = sanitizeArticleHtml(data.content);
   if (data.excerpt) data.excerpt = sanitizePlainText(data.excerpt);
   if (data.title) data.title = sanitizePlainText(data.title);
+
+  // Validate and sanitize published date & SEO fields
+  if (data.publishedAt) {
+    data.publishedAt = sanitizePublishDate(data.publishedAt);
+  } else if (data.status === 'published') {
+    data.publishedAt = new Date();
+  }
+  if (data.seo) {
+    data.seo = sanitizeSeoData(data.seo);
+  }
+
   const article = await Article.create(data);
   await logActivity('create', 'Article', article._id, req.user, `Created article: ${article.title}`);
   sendSuccess(res, article, 'Article created', 201);
@@ -161,12 +199,20 @@ const update = catchAsync(async (req, res) => {
   // backdate field on creation) and never changed by subsequent edits.
   const existing = await Article.findById(req.params.id).select('publishedAt status slug previousSlugs');
   if (!existing) return sendError(res, 'Article not found', 404);
+
+  if (data.publishedAt) {
+    data.publishedAt = sanitizePublishDate(data.publishedAt);
+  }
+  if (data.seo) {
+    data.seo = sanitizeSeoData(data.seo);
+  }
+
   const hasValidPublishedAt = existing.publishedAt && new Date(existing.publishedAt).getFullYear() >= 2000;
   if (hasValidPublishedAt && !data.publishedAt) {
     delete data.publishedAt;
   } else if (!hasValidPublishedAt && (data.status === 'published' || data.publishedAt)) {
     // First publish or repairing a corrupt/missing publishedAt date
-    data.publishedAt = data.publishedAt || new Date();
+    data.publishedAt = sanitizePublishDate(data.publishedAt) || new Date();
   }
 
   // ─── Slug Lifecycle & Immutability Protocol ───

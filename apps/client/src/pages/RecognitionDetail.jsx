@@ -52,7 +52,8 @@ export default function RecognitionDetail() {
   const canonicalUrl = (() => {
     if (typeof window === 'undefined') return '';
     const origin = window.location.origin.replace(/\/\/www\./, '//');
-    return `${origin}${window.location.pathname}`;
+    const cleanPath = window.location.pathname.replace(/\/+$/, '') || '/';
+    return `${origin}${cleanPath}`;
   })();
   const description = recognition.summary?.slice(0, 160) || `Recognition from ${recognition.source}`;
   const ogImage = recognition.imageUrl || '';

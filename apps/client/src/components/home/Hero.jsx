@@ -8,7 +8,7 @@ export default function Hero() {
   return (
     <>
       <Helmet>
-        <link rel="preload" as="image" href="/hero-image.jpg" />
+        <link rel="preload" as="image" href="/hero-image.webp" type="image/webp" />
       </Helmet>
       <section className="relative mt-[90px] min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[15vh]">
       {/* Full-screen rotating hero background (gallery of all hero images) */}

@@ -244,8 +244,14 @@ router.get('/articles/:slug', async (req, res) => {
     }
 
     const base = siteUrl();
-    const canonicalUrl =
-      article.seo?.canonicalUrl || `${base}/articles/${article.slug}`;
+    let canonicalUrl = `${base}/articles/${article.slug}`;
+    const customCanonical = String(article.seo?.canonicalUrl || '').trim();
+    if (customCanonical) {
+      const fixed = customCanonical.startsWith('ttps://') ? `h${customCanonical}` : customCanonical;
+      if (fixed.startsWith('http://') || fixed.startsWith('https://')) {
+        canonicalUrl = fixed.replace(/\/+$/, '');
+      }
+    }
 
     const headTags = buildArticleHeadTags(article, canonicalUrl);
 

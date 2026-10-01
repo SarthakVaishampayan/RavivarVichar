@@ -63,8 +63,32 @@ async function run() {
       }
     }
 
-    if (Object.keys(updates).length > 0) {
-      await collection.updateOne({ _id: article._id }, { $set: updates });
+    // 3. Check and clean canonicalUrl
+    const unsets = {};
+    if (article.seo?.canonicalUrl) {
+      let canonical = String(article.seo.canonicalUrl).trim();
+      if (canonical.startsWith('ttps://')) {
+        canonical = `h${canonical}`;
+      }
+      if (!canonical.startsWith('http://') && !canonical.startsWith('https://')) {
+        // Relative path or malformed string -> unset it so self-canonical takes over cleanly
+        unsets['seo.canonicalUrl'] = '';
+        console.log(`🔗 Removing broken relative canonical for "${article.title}": "${article.seo.canonicalUrl}" (will use self-canonical)`);
+      } else {
+        const cleanCanonical = canonical.replace(/\/+$/, '');
+        if (cleanCanonical !== article.seo.canonicalUrl) {
+          updates['seo.canonicalUrl'] = cleanCanonical;
+          console.log(`🔗 Normalizing canonical URL for "${article.title}": "${article.seo.canonicalUrl}" -> "${cleanCanonical}"`);
+        }
+      }
+    }
+
+    const mongoOp = {};
+    if (Object.keys(updates).length > 0) mongoOp.$set = updates;
+    if (Object.keys(unsets).length > 0) mongoOp.$unset = unsets;
+
+    if (Object.keys(mongoOp).length > 0) {
+      await collection.updateOne({ _id: article._id }, mongoOp);
       updatedCount++;
     }
   }

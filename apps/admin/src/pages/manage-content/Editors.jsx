@@ -12,7 +12,7 @@ import {
 } from '../../lib/constants';
 
 // ─── TEXT INPUT ───
-const Input = ({ label, name, value, onChange, placeholder, type = 'text', required, rows }) => {
+const Input = ({ label, name, value, onChange, placeholder, type = 'text', required, rows, hint }) => {
   const Tag = rows ? 'textarea' : 'input';
   return (
     <div>
@@ -27,6 +27,7 @@ const Input = ({ label, name, value, onChange, placeholder, type = 'text', requi
         className="input-field"
         required={required}
       />
+      {hint && <p className="text-xs text-gray-500 mt-1">{hint}</p>}
     </div>
   );
 };
@@ -322,12 +323,41 @@ export function ArticleEditor() {
       previewContent={(data, onClose) => (
         <ArticlePreview article={data} onClose={onClose} />
       )}
-      transformLoad={(data) => ({
-        ...data,
-        // Flatten SEO fields for form handling
-        seo: data.seo || {},
-      })}
-      transformSave={(data) => data}
+      transformLoad={(data) => {
+        let publishedAt = data.publishedAt;
+        if (publishedAt) {
+          const d = new Date(publishedAt);
+          if (!isNaN(d.getTime()) && d.getFullYear() < 2000) {
+            d.setFullYear(2026);
+            publishedAt = d.toISOString().split('T')[0];
+          }
+        }
+        return {
+          ...data,
+          publishedAt,
+          seo: data.seo || {},
+        };
+      }}
+      transformSave={(data) => {
+        const payload = { ...data };
+        if (payload.publishedAt) {
+          const d = new Date(payload.publishedAt);
+          if (isNaN(d.getTime()) || d.getFullYear() < 2000) {
+            delete payload.publishedAt;
+          }
+        }
+        if (payload.seo?.canonicalUrl) {
+          let c = String(payload.seo.canonicalUrl).trim();
+          if (c.startsWith('ttps://')) c = `h${c}`;
+          if (!c.startsWith('http://') && !c.startsWith('https://')) {
+            // Strip broken relative slugs so clean self-canonical takes over
+            delete payload.seo.canonicalUrl;
+          } else {
+            payload.seo.canonicalUrl = c.replace(/\/+$/, '');
+          }
+        }
+        return payload;
+      }}
       fields={({ formData, handleChange, setField }) => (
         <>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -574,6 +604,7 @@ export function ArticleEditor() {
                   value={formData.seo?.canonicalUrl}
                   onChange={handleChange}
                   placeholder="https://..."
+                  hint="Leave blank to use this article's own permanent URL (recommended). Only set if republished from another site."
                 />
 
                 <CounterInput

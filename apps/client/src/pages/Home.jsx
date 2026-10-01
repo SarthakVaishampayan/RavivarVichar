@@ -59,21 +59,36 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>Ravivar Vichar — Empowering Rural Communities</title>
-        <meta name="description" content="Ravivar Vichar empowers rural communities through research, entrepreneurship, and self-help groups. Working across Rajasthan for sustainable development." />
-        <meta property="og:title" content="Ravivar Vichar — Empowering Rural Communities" />
-        <meta property="og:description" content="Empowering rural communities through research, entrepreneurship, and self-help groups." />
+        <title>Ravivar Vichar — Independent Journalism & Grassroots Stories</title>
+        <meta name="description" content="Ravivar Vichar covers inspiring stories of grassroots changemakers, women entrepreneurs, rural innovation, and social change across India." />
+        <link rel="canonical" href="https://ravivarvichar.in" />
+        <meta property="og:title" content="Ravivar Vichar — Independent Journalism & Grassroots Stories" />
+        <meta property="og:description" content="Ravivar Vichar covers inspiring stories of grassroots changemakers, women entrepreneurs, rural innovation, and social change across India." />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ravivarvichar.in" />
+        <meta property="og:image" content="https://ravivarvichar.in/logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Ravivar Vichar — Independent Journalism & Grassroots Stories" />
+        <meta name="twitter:description" content="Ravivar Vichar covers inspiring stories of grassroots changemakers, women entrepreneurs, rural innovation, and social change across India." />
+        <meta name="twitter:image" content="https://ravivarvichar.in/logo.png" />
         <script type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',
-            '@type': 'NGO',
+            '@type': 'NewsMediaOrganization',
             name: 'Ravivar Vichar',
-            description: 'Empowering rural communities through research, entrepreneurship, and self-help groups.',
-            url: 'https://ravivarvichar.org',
-            logo: 'https://ravivarvichar.org/logo.png', /* ⚠️ Replace with actual logo URL after uploading */
-            location: { '@type': 'Place', address: { '@type': 'PostalAddress', addressRegion: 'Madhya Pradesh', addressCountry: 'IN' } },
+            alternateName: 'रविवार विचार',
+            description: 'Independent digital publication documenting grassroots transformation, women entrepreneurs, and social changemakers.',
+            url: 'https://ravivarvichar.in',
+            logo: {
+              '@type': 'ImageObject',
+              url: 'https://ravivarvichar.in/logo.png',
+            },
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Indore',
+              addressRegion: 'Madhya Pradesh',
+              addressCountry: 'IN',
+            },
           })}
         </script>
       </Helmet>
