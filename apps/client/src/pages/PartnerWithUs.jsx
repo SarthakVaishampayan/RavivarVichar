@@ -67,7 +67,7 @@ export default function PartnerWithUs() {
       <Helmet>
         <title>Partner With Us — Ravivar Vichar</title>
         <meta name="description" content="Partner with Ravivar Vichar to empower rural communities through research, entrepreneurship, and self-help groups." />
-      <link rel="preload" as="image" href="/partner-hero.jpg" />
+        <link rel="preload" as="image" href="/partner-hero.webp" type="image/webp" />
       </Helmet>
 
       <PageLayout>
@@ -124,31 +124,100 @@ export default function PartnerWithUs() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-ink-primary mb-2">Full Name</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your full name" className="input-field w-full" required />
+                    <label htmlFor="partner-name" className="block text-sm font-semibold text-ink-primary mb-2">
+                      Full Name <span className="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                      id="partner-name"
+                      type="text"
+                      name="name"
+                      autoComplete="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="Your full name"
+                      className="input-field w-full"
+                      required
+                      aria-required="true"
+                    />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-ink-primary mb-2">Organization</label>
-                    <input type="text" name="organization" value={formData.organization} onChange={handleChange} placeholder="Your organization" className="input-field w-full" required />
+                    <label htmlFor="partner-org" className="block text-sm font-semibold text-ink-primary mb-2">
+                      Organization <span className="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                      id="partner-org"
+                      type="text"
+                      name="organization"
+                      autoComplete="organization"
+                      value={formData.organization}
+                      onChange={handleChange}
+                      placeholder="Your organization"
+                      className="input-field w-full"
+                      required
+                      aria-required="true"
+                    />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-ink-primary mb-2">Email</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your email" className="input-field w-full" required />
+                    <label htmlFor="partner-email" className="block text-sm font-semibold text-ink-primary mb-2">
+                      Email Address <span className="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                      id="partner-email"
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="Your email"
+                      className="input-field w-full"
+                      required
+                      aria-required="true"
+                    />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-ink-primary mb-2">Phone Number</label>
-                    <input type="tel" name="phoneNo" value={formData.phoneNo} onChange={handleChange} placeholder="Your phone number" className="input-field w-full" required />
+                    <label htmlFor="partner-phone" className="block text-sm font-semibold text-ink-primary mb-2">
+                      Phone Number <span className="text-red-500" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                      id="partner-phone"
+                      type="tel"
+                      name="phoneNo"
+                      autoComplete="tel"
+                      value={formData.phoneNo}
+                      onChange={handleChange}
+                      placeholder="Your phone number"
+                      className="input-field w-full"
+                      required
+                      aria-required="true"
+                    />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-ink-primary mb-2">Message (optional)</label>
-                  <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your interest in partnership..." rows={4} className="input-field w-full resize-none" />
+                  <label htmlFor="partner-message" className="block text-sm font-semibold text-ink-primary mb-2">
+                    Message (optional)
+                  </label>
+                  <textarea
+                    id="partner-message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Tell us about your interest in partnership..."
+                    rows={4}
+                    className="input-field w-full resize-none"
+                  />
                 </div>
-                {error && <p className="text-sm text-red-500 bg-red-50 p-3 rounded-lg">{error}</p>}
+                <p className="text-xs text-ink-secondary/70">
+                  We respect your privacy. Your contact details are only used to respond to your partnership inquiry and will never be shared.
+                </p>
+                {error && (
+                  <div role="alert" aria-live="assertive" className="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+                    {error}
+                  </div>
+                )}
                 <button type="submit" disabled={loading} className="btn-primary w-full justify-center">
-                  {loading ? <><Loader2 size={18} className="animate-spin" /> Submitting...</> : <><Handshake size={18} /> Send Partnership Inquiry</>}
+                  {loading ? <><Loader2 size={18} className="animate-spin mr-2" /> Submitting...</> : <><Handshake size={18} className="mr-2" /> Send Partnership Inquiry</>}
                 </button>
               </form>
             </div>

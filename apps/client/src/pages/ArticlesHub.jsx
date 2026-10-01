@@ -44,8 +44,8 @@ const categoryLabel = { 'Interview': 'Talks' };
 
 const sectionHeadings = {
   'Articles': { label: 'ARTICLES', title: 'Latest Articles & Insights', description: 'Thought-provoking pieces on rural development, community stories, and sector analysis.' },
-  'Research & Reports': { label: 'RESEARCH & REPORTS', title: 'Data-Driven Research', description: 'In-depth studies and policy recommendations grounded in field research across Rajasthan.' },
-  'Success Stories': { label: 'SUCCESS STORIES', title: 'Real Stories, Real Impact', description: 'Inspiring journeys of individuals and communities transforming their lives through our programs.' },
+  'Research & Reports': { label: 'RESEARCH & REPORTS', title: 'Data-Driven Research', description: 'In-depth studies and policy recommendations grounded in field research across Central India.' },
+  'Success Stories': { label: 'SUCCESS STORIES', title: 'Real Stories, Real Impact', description: 'Inspiring journeys of individuals and communities transforming their lives through grassroots enterprise and leadership.' },
   'Vishleshan': { label: 'VISHLESHAN', title: 'In-Depth Analysis', description: 'Analytical deep dives on the policies, trends, and ground realities shaping rural development.' },
   'Aangan': { label: 'AANGAN', title: 'Stories from the Aangan', description: 'Community voices, everyday stories, and moments from the aangan — the heart of rural life.' },
 };

@@ -12,10 +12,10 @@ import TeamMemberModal from '../components/shared/TeamMemberModal';
 import HeroSlideshow from '../components/shared/HeroSlideshow';
 
 const stats = [
-  { value: 15, suffix: '+', label: 'Years of Ravivar Digest' },
-  { value: 2023, suffix: '', label: 'Ravivar Vichar Launched' },
-  { value: 50, suffix: 'M+', label: 'Digital Reach' },
-  { value: 100, suffix: '+', label: 'Ravivar Digest Published' },
+  { value: 30, suffix: '+', label: 'Years of Editorial Heritage' },
+  { value: 2023, suffix: '', label: 'Digital Platform Launched' },
+  { value: 50, suffix: 'M+', label: 'Lifetime Digital Reach' },
+  { value: 100, suffix: '+', label: 'Digest Editions Published' },
 ];
 
 const coreValues = [
@@ -247,7 +247,7 @@ export default function About() {
                 <span className="text-primary-500">Voices</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
-                Ravivar Vichar is a social impact organization empowering women through entrepreneurship, knowledge, leadership, and community-driven action. We connect women, Self Help Groups, entrepreneurs, and institutions to create opportunities that foster economic independence and lasting social impact.
+                Ravivar Vichar is an independent digital news and documentary publication under Ravivar Publications Pvt. Ltd., headquartered in Indore, Madhya Pradesh. We chronicle inspiring stories of grassroots changemakers, women entrepreneurs, rural Self Help Groups, and sustainable development across Central India and nationwide.
               </p>
             </div>
           </div>
@@ -550,28 +550,25 @@ export default function About() {
             />
             <div className="max-w-3xl mx-auto mt-12 space-y-8 text-body text-ink-secondary">
               <p>
-                Ravivar Vichar, a prominent digital and print platform, is a publication under the esteemed banner 
-                of Ravivar Publications Pvt. Ltd. It has been a part of the media landscape for over three decades, 
-                gaining recognition for its flagship publication, <strong>Ravivar Digest</strong>, which has been in 
-                circulation for 32 years.
+                Ravivar Vichar is published under the banner of <strong>Ravivar Publications Pvt. Ltd.</strong>, 
+                headquartered in Indore, Madhya Pradesh. It builds upon more than three decades of journalistic heritage, 
+                originating with its foundational socio-political publication, <strong>Ravivar Digest</strong>, which has 
+                served readers across the Hindi heartland for over 30 years.
               </p>
               <p>
-                Ravivar Digest has been a trailblazer in addressing social and contemporary issues. It has consistently 
-                played a vital role in enlightening society about various pertinent matters, with a particular emphasis 
-                on promoting awareness about self-help groups and women's issues. Over the years, it has established 
-                itself as a trusted source of information and inspiration.
+                Ravivar Digest established a respected tradition of rigorous public-interest commentary, focusing 
+                on rural governance, social change, and the burgeoning self-help group movement. Over decades of reporting, 
+                it earned widespread trust among citizens, civil society, and policymakers alike.
               </p>
               <p>
-                In <strong>2023</strong>, the publication expanded its horizons by launching Ravivar Vichar, a platform 
-                that aimed to provide a digital space for contemporary discourse. This venture was driven by the 
-                commitment to amplify the voices of marginalised communities, especially women, and shed light on the 
-                challenges they face. The response to Ravivar Vichar has been nothing short of phenomenal, resonating 
-                with a diverse cross-section of society.
+                In <strong>2020</strong>, the publication initiated its digital transformation, expanding beyond print 
+                into digital video reporting, podcast studios, and ground journalism. In <strong>2023</strong>, 
+                <strong>Ravivar Vichar</strong> formally launched as a dedicated multimedia platform to amplify the voices of 
+                marginalized communities, women entrepreneurs, and rural leaders across Madhya Pradesh, Chhattisgarh, and nationwide.
               </p>
               <p>
-                Ravivar Vichar continues to uphold the legacy of Ravivar Publications Pvt. Ltd., serving as a beacon 
-                of informed journalism and social awareness as it carries forward its mission to educate, inspire, and 
-                empower its readership.
+                Today, Ravivar Vichar carries forward this 30-year legacy of independent journalism, producing ground reports, 
+                investigative features, and video documentaries that celebrate resilience, inform public policy, and make India think.
               </p>
             </div>
           </div>

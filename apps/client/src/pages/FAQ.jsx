@@ -9,82 +9,82 @@ import { ChevronDown, Search, ArrowLeft, Building2, Briefcase, Handshake, BookOp
 const allFaqs = [
   {
     q: 'What is Ravivar Vichar?',
-    a: 'Ravivar Vichar is a social impact organisation working to empower women through entrepreneurship, knowledge, leadership, capacity building, and community-driven action. We connect women, Self Help Groups, entrepreneurs, institutions, and partners with opportunities and resources that foster economic independence and lasting social impact.',
+    a: 'Ravivar Vichar is an independent digital news, documentary, and multimedia publication under Ravivar Publications Pvt. Ltd. Headquartered in Indore, Madhya Pradesh, we are dedicated to documenting grassroots transformation, women entrepreneurs, Self Help Groups, and rural changemakers across Central India and nationwide.',
     category: 'About Us',
   },
   {
     q: 'Who does Ravivar Vichar work with?',
-    a: 'We work with women entrepreneurs, aspiring entrepreneurs, Self Help Groups, rural communities, young people, institutions, NGOs, businesses, government bodies, and other organisations working towards inclusive development.',
+    a: 'We report on and engage with women entrepreneurs, Self Help Group federations, rural artisans, grassroots leaders, researchers, policymakers, and institutions committed to social and economic empowerment.',
     category: 'About Us',
   },
   {
     q: 'What are Ravivar Vichar\'s main focus areas?',
-    a: 'Our core focus areas are: Women Entrepreneurship, Self Help Groups and Community Development, Financial Literacy and Economic Independence, and Leadership and Skill Development. Our work also includes research, knowledge-building, partnerships, and market access.',
+    a: 'Our core editorial focus areas are: Women Entrepreneurship, Self Help Groups & Rural Collectives, Financial Literacy & Economic Independence, and Leadership & Community Governance. We also produce investigative reports, video documentaries, and policy analyses.',
     category: 'About Us',
   },
   {
     q: 'How does Ravivar Vichar help women entrepreneurs?',
-    a: 'We connect women entrepreneurs with knowledge, mentorship, networks, market opportunities, training, institutional partnerships, and information about relevant schemes and support systems.',
+    a: 'We provide women entrepreneurs with dedicated media visibility, in-depth feature profiling, and accessible journalistic guides on government schemes, credit access, and market opportunities. We also bring their insights to the attention of policymakers and industry networks.',
     category: 'Entrepreneurship',
   },
   {
     q: 'How can an SHG work with Ravivar Vichar?',
-    a: 'Self Help Groups can connect with us for capacity building, training, knowledge resources, market linkages, partnerships, storytelling, and participation in relevant programmes and initiatives.',
+    a: 'Self Help Groups can connect with our newsroom to share their journey, document their collective achievements, and participate in our ground reporting, video documentaries, and case studies.',
     category: 'SHGs & Communities',
   },
   {
     q: 'Does Ravivar Vichar provide funding or loans?',
-    a: 'Ravivar Vichar does not directly provide loans or funding in every case. However, we work to connect women and community enterprises with relevant institutions, schemes, financial resources, and opportunities wherever possible.',
+    a: 'No. Ravivar Vichar is an independent journalistic publication, not a financial institution, lender, or grant-making foundation. We cover financial inclusion, investigate government schemes, and publish guides to help our audience understand and access formal banking independently.',
     category: 'Support',
   },
   {
     q: 'How can I become part of the Ravivar Vichar network?',
-    a: 'You can participate as a woman entrepreneur, SHG member, mentor, volunteer, trainer, institutional partner, or organisation. Explore the relevant section on our website or contact us to find the best way to get involved.',
+    a: 'You can contribute as a citizen journalist, pitch your story as a woman entrepreneur or SHG leader, share research insights, or collaborate as an institutional knowledge partner. Visit our "Get Featured" or "Join Our Initiative" pages to connect.',
     category: 'Get Involved',
   },
   {
     q: 'How can I partner with Ravivar Vichar?',
-    a: 'Organisations, businesses, NGOs, government bodies, CSR teams, educational institutions, and industry networks can partner with us through programmes, training, research, market access, funding, mentorship, and community initiatives.',
+    a: 'Academic institutions, media organizations, CSR foundations, and developmental bodies can partner with us on editorial research, documentary storytelling, awareness campaigns, and knowledge dissemination.',
     category: 'Partnerships',
   },
   {
     q: 'How can my organisation collaborate with Ravivar Vichar?',
-    a: 'You can collaborate with us through: CSR partnerships, Capacity-building programmes, Research, Mentorship, Training, Market linkages, Community development, Knowledge partnerships, and Events and campaigns.',
+    a: 'You can collaborate with us through: Knowledge and research partnerships, editorial roundtables, documentary co-productions, case study documentation, and developmental dialogues.',
     category: 'Partnerships',
   },
   {
     q: 'Does Ravivar Vichar work only with rural women?',
-    a: 'No. While rural communities and grassroots development are an important part of our work, we work with women and communities across different backgrounds, including entrepreneurs, SHGs, professionals, students, and institutions.',
+    a: 'While grassroots and rural communities are at the heart of our reporting, our journalism spans women entrepreneurs, artisans, professionals, and community innovators across villages, small towns, and urban centers.',
     category: 'About Us',
   },
   {
     q: 'Does Ravivar Vichar conduct training programmes?',
-    a: 'Yes. Our learning and capacity-building initiatives include workshops, masterclasses, training programmes, mentorship opportunities, and practical resources focused on entrepreneurship, financial literacy, leadership, digital skills, and business development.',
+    a: 'As a media publication, our role is informative and analytical. We host public webinars, expert panel discussions, and podcasts, and publish step-by-step explanatory guides on financial literacy and business management. We do not provide direct operational training courses or incubator services.',
     category: 'Programmes',
   },
   {
     q: 'Can I feature my business or initiative on Ravivar Vichar?',
-    a: 'Women entrepreneurs, SHGs, grassroots organisations, and social impact initiatives may be considered for features, case studies, interviews, and other forms of storytelling based on relevance and editorial or organisational criteria.',
+    a: 'Yes. Women entrepreneurs, SHGs, rural innovators, and social impact pioneers are encouraged to submit a story pitch via our "Get Featured" page. Our editorial team reviews every submission for journalistic relevance and grassroots impact.',
     category: 'Get Involved',
   },
   {
     q: 'Does Ravivar Vichar conduct research?',
-    a: 'Yes. Research and knowledge-building are important parts of our work. We aim to produce and share research, reports, case studies, policy insights, and practical knowledge related to women\'s entrepreneurship, livelihoods, SHGs, financial inclusion, and community development.',
+    a: 'Yes. In-depth investigative reporting and developmental research are central to our editorial mission. We publish field surveys, policy briefs, case studies, and grounded analyses on rural livelihoods, SHG dynamics, and financial inclusion.',
     category: 'Programmes',
   },
   {
     q: 'How can I volunteer with Ravivar Vichar?',
-    a: 'You can express your interest through our volunteer form. Opportunities may include research, communication, documentation, events, community engagement, and other areas depending on our ongoing initiatives.',
+    a: 'You can express interest through our community form. Opportunities include field research, grassroots translation, visual documentation, and community communication across Central India.',
     category: 'Get Involved',
   },
   {
     q: 'How can I support Ravivar Vichar\'s work?',
-    a: 'You can support our work by partnering with us, volunteering, mentoring, sharing opportunities, supporting programmes, collaborating on research, or helping connect women and communities with relevant resources.',
+    a: 'You can support our mission by reading and sharing our stories, pitching impactful grassroots initiatives, collaborating on research projects, or partnering on multimedia storytelling series.',
     category: 'Support',
   },
   {
     q: 'What makes Ravivar Vichar different?',
-    a: 'Ravivar Vichar brings together knowledge, community, entrepreneurship, partnerships, and action. We do not only talk about women\'s empowerment — we work to create the connections, capabilities, and opportunities that can help women build greater economic independence and stronger communities.',
+    a: 'Ravivar Vichar unites a 30+ year print journalism lineage with an active digital newsroom and video documentary team. Rather than chasing fleeting headlines, we dedicate our platform to chronicling the unsung heroes of India\'s grassroots economic transformation.',
     category: 'About Us',
   },
 ];

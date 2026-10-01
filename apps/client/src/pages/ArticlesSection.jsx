@@ -9,8 +9,8 @@ import { ArrowLeft, ArrowRight, Calendar, Tag, Clock, Eye, Star } from 'lucide-r
 
 const sectionConfig = {
   'articles': { label: 'Articles', title: 'All Articles', description: 'Thought-provoking pieces on rural development, community stories, and sector analysis.' },
-  'research-reports': { label: 'Research & Reports', title: 'All Research & Reports', description: 'In-depth studies and policy recommendations grounded in field research across Rajasthan.' },
-  'success-stories': { label: 'Success Stories', title: 'All Success Stories', description: 'Inspiring journeys of individuals and communities transforming their lives through our programs.' },
+  'research-reports': { label: 'Research & Reports', title: 'All Research & Reports', description: 'In-depth studies and policy recommendations grounded in field research across Central India.' },
+  'success-stories': { label: 'Success Stories', title: 'All Success Stories', description: 'Inspiring journeys of individuals and communities transforming their lives through grassroots enterprise and leadership.' },
   'vishleshan': { label: 'Vishleshan', title: 'All Vishleshan', description: 'Analytical deep dives on the policies, trends, and ground realities shaping rural development.' },
   'aangan': { label: 'Aangan', title: 'All Aangan', description: 'Community voices, everyday stories, and moments from the aangan — the heart of rural life.' },
 };

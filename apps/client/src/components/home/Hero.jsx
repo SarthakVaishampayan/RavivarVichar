@@ -33,7 +33,7 @@ export default function Hero() {
               <span className="text-primary-500">Communities</span>
             </h1>
             <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
-              Ravivar Vichar empowers women through entrepreneurship, knowledge, partnerships, and community-driven action to create lasting social and economic impact.
+              Ravivar Vichar chronicles and amplifies grassroots changemakers, women entrepreneurs, and rural collectives — driving social change through independent journalism and video storytelling.
             </p>
           </motion.div>
         </div>

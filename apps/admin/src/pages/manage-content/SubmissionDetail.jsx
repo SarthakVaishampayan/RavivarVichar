@@ -50,6 +50,7 @@ const resourceConfigs = {
       { key: 'placeOfWork', label: 'Place of Work' },
       { key: 'typeOfWork', label: 'Type of Work' },
       { key: 'phoneNo', label: 'Phone No.', icon: Phone },
+      { key: 'storySummary', label: 'Story Summary', fullWidth: true },
     ],
   },
   partnerApplications: {

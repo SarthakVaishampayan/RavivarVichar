@@ -15,65 +15,65 @@ import {
 const modelSteps = [
   {
     step: 1,
-    label: 'LEARN',
+    label: 'AWARENESS & KNOWLEDGE',
     tabLabel: 'Learn',
     icon: BookOpen,
     description:
-      'Access knowledge, awareness, and information through workshops, training, and digital resources.',
+      'Accessing foundational rights, financial literacy, and verified market knowledge through journalism and educational resources.',
     gradient: 'from-primary-500 to-primary-600',
   },
   {
     step: 2,
-    label: 'BUILD SKILLS',
+    label: 'SKILL & CAPABILITY',
     tabLabel: 'Build',
     icon: Zap,
     description:
-      'Develop entrepreneurial, financial, and leadership skills through hands-on training and mentorship.',
+      'Developing entrepreneurial, digital, and management capabilities to navigate formal economic systems with confidence.',
     gradient: 'from-primary-400 to-primary-500',
   },
   {
     step: 3,
-    label: 'START / STRENGTHEN BUSINESS',
+    label: 'ENTERPRISE CREATION',
     tabLabel: 'Start',
     icon: Briefcase,
     description:
-      'Launch or grow a business with support in market access, financial linkages, and capacity building.',
+      'Launching micro-enterprises and artisan ventures backed by institutional credit linkages, community support, and market visibility.',
     gradient: 'from-secondary-400 to-primary-500',
   },
   {
     step: 4,
-    label: 'EARN',
+    label: 'SUSTAINABLE LIVELIHOODS',
     tabLabel: 'Earn',
     icon: TrendingUp,
     description:
-      'Generate sustainable income through entrepreneurship, SHG livelihoods, and market opportunities.',
+      'Generating predictable, sustainable income through value addition, collective bargaining, and diversified rural markets.',
     gradient: 'from-secondary-500 to-secondary-400',
   },
   {
     step: 5,
-    label: 'BECOME ECONOMICALLY INDEPENDENT',
+    label: 'ECONOMIC AUTONOMY',
     tabLabel: 'Freedom',
     icon: Shield,
     description:
-      'Achieve financial autonomy with savings, assets, and the confidence to make independent decisions.',
+      'Achieving independent savings, asset ownership, and decision-making authority within family and community spheres.',
     gradient: 'from-secondary-600 to-secondary-500',
   },
   {
     step: 6,
-    label: 'LEAD',
+    label: 'COMMUNITY LEADERSHIP',
     tabLabel: 'Lead',
     icon: Award,
     description:
-      'Take on leadership roles in SHGs, community institutions, and local governance structures.',
+      'Stepping into leadership roles across SHG federations, village panchayats, and local governance institutions.',
     gradient: 'from-primary-600 to-secondary-600',
   },
   {
     step: 7,
-    label: 'STRENGTHEN THE COMMUNITY',
+    label: 'SYSTEMIC TRANSFORMATION',
     tabLabel: 'Community',
     icon: Users,
     description:
-      'Mentor other women, create local opportunities, and build resilient communities that drive lasting change.',
+      'Mentoring next-generation peers, driving local policy accountability, and building resilient, self-sustaining community ecosystems.',
     gradient: 'from-primary-500 to-primary-700',
   },
 ];
@@ -141,7 +141,7 @@ export default function RavivarModel() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            OUR APPROACH
+            THE GRASSROOTS PATHWAY
           </motion.span>
           <motion.h2
             className="section-title"
@@ -150,7 +150,7 @@ export default function RavivarModel() {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            The Pathway to Empowerment
+            The Journey We Chronicle
           </motion.h2>
           <motion.p
             className="section-desc"
@@ -159,7 +159,7 @@ export default function RavivarModel() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Seven progressive steps — from gaining knowledge to leading communities.
+            Seven progressive stages of transformation experienced by women changemakers across India.
           </motion.p>
         </div>
 

@@ -74,7 +74,7 @@ export default function JoinInitiative() {
       <Helmet>
         <title>Join Our Initiative — Ravivar Vichar</title>
         <meta name="description" content="Join Ravivar Vichar's initiative to empower rural communities through research, entrepreneurship, and self-help groups." />
-      <link rel="preload" as="image" href="/join-hero.jpg" />
+        <link rel="preload" as="image" href="/join-hero.webp" type="image/webp" />
       </Helmet>
 
       <PageLayout>
@@ -93,8 +93,8 @@ export default function JoinInitiative() {
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
                 At Ravivar Vichar, we believe that real change happens when passionate individuals come together. 
-                Whether you're a researcher, community worker, entrepreneur, or simply someone who wants to make 
-                a difference — we invite you to join our mission of empowering rural communities across Rajasthan.
+                Whether you're a researcher, storyteller, community worker, or simply someone who wants to make 
+                a difference — we invite you to join our mission of chronicling and amplifying grassroots communities across Central India and nationwide.
               </p>
             </div>
           </div>
@@ -135,61 +135,84 @@ export default function JoinInitiative() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-ink-primary mb-2">Full Name</label>
+                    <label htmlFor="join-name" className="block text-sm font-semibold text-ink-primary mb-2">
+                      Full Name <span className="text-red-500" aria-hidden="true">*</span>
+                    </label>
                     <input
+                      id="join-name"
                       type="text"
                       name="name"
+                      autoComplete="name"
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="Your full name"
                       className="input-field w-full"
                       required
+                      aria-required="true"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-ink-primary mb-2">Phone Number</label>
+                    <label htmlFor="join-phone" className="block text-sm font-semibold text-ink-primary mb-2">
+                      Phone Number <span className="text-red-500" aria-hidden="true">*</span>
+                    </label>
                     <input
+                      id="join-phone"
                       type="tel"
                       name="phoneNo"
+                      autoComplete="tel"
                       value={formData.phoneNo}
                       onChange={handleChange}
                       placeholder="Your phone number"
                       className="input-field w-full"
                       required
+                      aria-required="true"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-ink-primary mb-2">City</label>
+                    <label htmlFor="join-city" className="block text-sm font-semibold text-ink-primary mb-2">
+                      City <span className="text-red-500" aria-hidden="true">*</span>
+                    </label>
                     <input
+                      id="join-city"
                       type="text"
                       name="city"
+                      autoComplete="address-level2"
                       value={formData.city}
                       onChange={handleChange}
                       placeholder="Your city"
                       className="input-field w-full"
                       required
+                      aria-required="true"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-ink-primary mb-2">State</label>
+                    <label htmlFor="join-state" className="block text-sm font-semibold text-ink-primary mb-2">
+                      State <span className="text-red-500" aria-hidden="true">*</span>
+                    </label>
                     <input
+                      id="join-state"
                       type="text"
                       name="state"
+                      autoComplete="address-level1"
                       value={formData.state}
                       onChange={handleChange}
                       placeholder="Your state"
                       className="input-field w-full"
                       required
+                      aria-required="true"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-ink-primary mb-2">Reason to Join</label>
+                  <label htmlFor="join-reason" className="block text-sm font-semibold text-ink-primary mb-2">
+                    Reason to Join <span className="text-red-500" aria-hidden="true">*</span>
+                  </label>
                   <textarea
+                    id="join-reason"
                     name="reasonToJoin"
                     value={formData.reasonToJoin}
                     onChange={handleChange}
@@ -197,12 +220,16 @@ export default function JoinInitiative() {
                     rows={3}
                     className="input-field w-full resize-none"
                     required
+                    aria-required="true"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-ink-primary mb-2">Brief About Your Work</label>
+                  <label htmlFor="join-work" className="block text-sm font-semibold text-ink-primary mb-2">
+                    Brief About Your Work <span className="text-red-500" aria-hidden="true">*</span>
+                  </label>
                   <textarea
+                    id="join-work"
                     name="briefAboutWork"
                     value={formData.briefAboutWork}
                     onChange={handleChange}
@@ -210,11 +237,18 @@ export default function JoinInitiative() {
                     rows={3}
                     className="input-field w-full resize-none"
                     required
+                    aria-required="true"
                   />
                 </div>
 
+                <p className="text-xs text-ink-secondary/70">
+                  We respect your privacy. Your information is only used to evaluate your application and will never be shared.
+                </p>
+
                 {error && (
-                  <p className="text-sm text-red-500 bg-red-50 p-3 rounded-lg">{error}</p>
+                  <div role="alert" aria-live="assertive" className="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+                    {error}
+                  </div>
                 )}
 
                 <button
@@ -222,7 +256,7 @@ export default function JoinInitiative() {
                   disabled={loading}
                   className="btn-primary w-full justify-center"
                 >
-                  {loading ? <><Loader2 size={18} className="animate-spin" /> Submitting...</> : <><Heart size={18} /> Submit Application</>}
+                  {loading ? <><Loader2 size={18} className="animate-spin mr-2" /> Submitting...</> : <><Heart size={18} className="mr-2" /> Submit Application</>}
                 </button>
               </form>
             </div>

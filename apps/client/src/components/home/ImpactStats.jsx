@@ -7,8 +7,8 @@ const stats = [
     icon: FileText,
     end: 5000,
     suffix: '+',
-    label: 'No. of Stories',
-    description: 'Inspiring stories of impact and transformation',
+    label: 'Published Stories & Reports',
+    description: 'Ground reports, analytical articles & field investigations',
     color: 'text-primary-500',
     bgColor: 'bg-primary-50',
   },
@@ -16,8 +16,8 @@ const stats = [
     icon: Video,
     end: 3000,
     suffix: '+',
-    label: 'No. of Videos',
-    description: 'Visual stories and documentaries',
+    label: 'Video Documentaries Produced',
+    description: 'Multimedia field stories, video reports & grassroots interviews',
     color: 'text-secondary-500',
     bgColor: 'bg-secondary-50',
   },
@@ -25,8 +25,8 @@ const stats = [
     icon: Globe,
     end: 50,
     suffix: 'M+',
-    label: 'Digital Reach',
-    description: 'Across all platforms and channels',
+    label: 'Lifetime Digital Impressions',
+    description: 'Multi-platform reach across Web, YouTube & social channels',
     color: 'text-amber-600',
     bgColor: 'bg-amber-50',
   },
@@ -82,10 +82,10 @@ export default function ImpactStats({ bgClass = 'bg-surface-white' }) {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <span className="section-label">OUR STORIES</span>
-          <h2 className="section-title">Creating an Impact</h2>
+          <span className="section-label">EDITORIAL REACH</span>
+          <h2 className="section-title">Documenting Grassroots Change</h2>
           <p className="section-desc">
-            Tangible outcomes of our digital presence across Central India.
+            Quantifiable scale of our investigative reporting, documentary production, and digital readership across Central India.
           </p>
         </motion.div>
 
@@ -125,6 +125,13 @@ export default function ImpactStats({ bgClass = 'bg-surface-white' }) {
               </motion.div>
             );
           })}
+        </div>
+
+        {/* Methodology Footnote */}
+        <div className="text-center mt-10">
+          <p className="text-xs text-ink-secondary/70 italic max-w-2xl mx-auto leading-relaxed">
+            * Metrics reflect cumulative editorial publications, documentary video productions, and cross-platform readership across web, YouTube, and digital syndication since our digital transition.
+          </p>
         </div>
       </div>
     </section>

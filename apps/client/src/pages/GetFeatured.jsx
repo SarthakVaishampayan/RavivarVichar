@@ -16,6 +16,7 @@ export default function GetFeatured() {
     placeOfWork: '',
     typeOfWork: '',
     phoneNo: '',
+    storySummary: '',
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -55,7 +56,7 @@ export default function GetFeatured() {
                 Thank You!
               </h1>
               <p className="text-body text-ink-secondary mt-4 max-w-lg mx-auto">
-                Your story has been submitted successfully! Our team will review it and get back to you.
+                Your story has been submitted successfully! Our editorial team will review it and get in touch with you.
               </p>
               <Button variant="primary" to="/" className="mt-8">
                 Back to Home
@@ -71,13 +72,13 @@ export default function GetFeatured() {
     <>
       <Helmet>
         <title>Get Featured — Ravivar Vichar</title>
-        <meta name="description" content="Share your story with us and get featured on Ravivar Vichar's platform." />
-      <link rel="preload" as="image" href="/featured-hero.jpg" />
+        <meta name="description" content="Share your story with us and get featured on Ravivar Vichar's journalism and media platform." />
+        <link rel="preload" as="image" href="/featured-hero.webp" type="image/webp" />
       </Helmet>
 
       <PageLayout>
         <section className="relative min-h-[70vh] lg:min-h-[calc(100vh-90px)] flex items-center overflow-hidden max-md:items-start max-md:pt-[12vh] lg:items-start lg:pt-[25vh]">
-          {/* Rotating hero background (gallery of all hero images) */}
+          {/* Rotating hero background */}
           <HeroSlideshow startIndex={8} />
           {/* Content */}
           <div className="w-full relative z-10 max-lg:px-6 pl-[5vw]">
@@ -90,8 +91,8 @@ export default function GetFeatured() {
                 Share Your <span className="text-primary-500">Story</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
-                Have an inspiring story to tell? We'd love to feature you on our platform. 
-                Fill out the form below and our team will review your submission.
+                Have an inspiring story of enterprise, innovation, or grassroots impact? We'd love to feature your journey.
+                Fill out the form below and our editorial team will review your pitch.
               </p>
             </div>
           </div>
@@ -102,59 +103,99 @@ export default function GetFeatured() {
             <div className="card p-8 lg:p-12">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold text-ink-primary mb-2">Full Name</label>
+                  <label htmlFor="featured-name" className="block text-sm font-semibold text-ink-primary mb-2">
+                    Full Name <span className="text-red-500" aria-hidden="true">*</span>
+                  </label>
                   <input
+                    id="featured-name"
                     type="text"
                     name="name"
+                    autoComplete="name"
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Your full name"
                     className="input-field w-full"
                     required
+                    aria-required="true"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-ink-primary mb-2">Place of Work</label>
+                  <label htmlFor="featured-place" className="block text-sm font-semibold text-ink-primary mb-2">
+                    Location / Place of Work <span className="text-red-500" aria-hidden="true">*</span>
+                  </label>
                   <input
+                    id="featured-place"
                     type="text"
                     name="placeOfWork"
                     value={formData.placeOfWork}
                     onChange={handleChange}
-                    placeholder="Where do you work?"
+                    placeholder="e.g. Indore, Madhya Pradesh"
                     className="input-field w-full"
                     required
+                    aria-required="true"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-ink-primary mb-2">Type of Work</label>
+                  <label htmlFor="featured-type" className="block text-sm font-semibold text-ink-primary mb-2">
+                    Type of Work / Domain <span className="text-red-500" aria-hidden="true">*</span>
+                  </label>
                   <input
+                    id="featured-type"
                     type="text"
                     name="typeOfWork"
                     value={formData.typeOfWork}
                     onChange={handleChange}
-                    placeholder="What kind of work do you do?"
+                    placeholder="e.g. Handicrafts, Micro-enterprise, Agriculture, Tech"
                     className="input-field w-full"
                     required
+                    aria-required="true"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-ink-primary mb-2">Phone Number</label>
+                  <label htmlFor="featured-phone" className="block text-sm font-semibold text-ink-primary mb-2">
+                    Phone Number <span className="text-red-500" aria-hidden="true">*</span>
+                  </label>
                   <input
+                    id="featured-phone"
                     type="tel"
                     name="phoneNo"
+                    autoComplete="tel"
                     value={formData.phoneNo}
                     onChange={handleChange}
                     placeholder="Your phone number"
                     className="input-field w-full"
                     required
+                    aria-required="true"
                   />
                 </div>
 
+                <div>
+                  <label htmlFor="featured-summary" className="block text-sm font-semibold text-ink-primary mb-2">
+                    Story Summary & Highlights <span className="text-red-500" aria-hidden="true">*</span>
+                  </label>
+                  <textarea
+                    id="featured-summary"
+                    name="storySummary"
+                    value={formData.storySummary}
+                    onChange={handleChange}
+                    placeholder="Briefly describe your journey, challenges overcome, and the impact of your work..."
+                    className="input-field w-full min-h-[140px] resize-y"
+                    required
+                    aria-required="true"
+                  />
+                </div>
+
+                <p className="text-xs text-ink-secondary/70">
+                  We respect your privacy. Your information is only used by the Ravivar Vichar editorial team to evaluate your story submission and will never be shared.
+                </p>
+
                 {error && (
-                  <p className="text-sm text-red-500 bg-red-50 p-3 rounded-lg">{error}</p>
+                  <div role="alert" aria-live="assertive" className="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+                    {error}
+                  </div>
                 )}
 
                 <button
@@ -162,7 +203,7 @@ export default function GetFeatured() {
                   disabled={loading}
                   className="btn-primary w-full justify-center"
                 >
-                  {loading ? <><Loader2 size={18} className="animate-spin" /> Submitting...</> : <><Star size={18} /> Submit for Review</>}
+                  {loading ? <><Loader2 size={18} className="animate-spin mr-2" /> Submitting...</> : <><Star size={18} className="mr-2" /> Submit for Review</>}
                 </button>
               </form>
             </div>

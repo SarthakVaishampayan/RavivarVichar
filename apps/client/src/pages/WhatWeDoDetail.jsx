@@ -24,127 +24,127 @@ const contentMap = {
     color: 'text-primary-500',
     bgColor: 'bg-primary-50',
     heroDescription:
-      'We support women in starting, strengthening, and growing their businesses. Our focus is on helping women move from ideas and informal livelihoods towards sustainable and independent enterprises. We work with women entrepreneurs, aspiring entrepreneurs, Self Help Groups, artisans, and grassroots businesses across different sectors.',
+      'We document, investigate, and amplify the stories of women building independent enterprises. Our editorial coverage chronicles the transition from informal livelihoods to sustainable, thriving businesses across grassroots India.',
     sections: {
       intro:
-        "Our approach to women entrepreneurship is holistic and hands-on. We don't just share information — we actively connect, mentor, and create pathways that help women turn their ideas into thriving enterprises. From building foundational skills to accessing markets and funding, we're with them at every stage of their journey.",
+        'Our journalism delves deep into the realities of women entrepreneurs. We examine the barriers they navigate, spotlight innovative grassroots business models, and demystify government schemes, market linkages, and institutional support systems to inform and empower our readership.',
       items: [
         {
-          heading: 'Mentorship & Market Access',
-          body: 'We connect women entrepreneurs with experienced mentors, industry networks, financial institutions, and potential markets. These connections open doors to new opportunities, partnerships, and customers that help businesses grow and scale.',
+          heading: 'Field Reporting & Entrepreneur Profiles',
+          body: 'We conduct on-the-ground interviews and write detailed profiles of women entrepreneurs, documenting their operational strategies, financial resilience, and lessons learned to inspire peers and inform policymakers.',
         },
         {
-          heading: 'Awareness & Opportunities',
-          body: 'We create awareness about government schemes, funding opportunities, loans, grants, and entrepreneurship programmes. Many women miss out simply because they don\'t know what\'s available — we bridge that gap.',
+          heading: 'Scheme & Policy Analysis',
+          body: 'We investigate government grants, micro-credit programs, and public subsidies, publishing accessible, analytical explainers that show how women can navigate and claim available resources.',
         },
         {
-          heading: 'Networking & Collaboration',
-          body: 'We facilitate networking and collaboration among women-led businesses, creating a community of support where entrepreneurs can share experiences, learn from each other, and collaborate on new initiatives.',
+          heading: 'Market Access & Value Chains',
+          body: 'We report on supply chain bottlenecks, digital marketplace adoption, and direct-to-consumer models, highlighting how rural and small-town enterprises are reaching wider audiences.',
         },
         {
-          heading: 'Visibility & Promotion',
-          body: 'We promote women-owned businesses through our platform, helping them gain visibility among potential customers, partners, and investors. Every business deserves to be seen and celebrated.',
+          heading: 'Grassroots Visibility & Amplification',
+          body: 'We provide nationwide media visibility to women-led micro-enterprises and artisan clusters, bringing their innovations to the attention of institutions, consumers, and potential partners.',
         },
         {
-          heading: 'Skill Development',
-          body: 'We support skill development in areas such as branding, digital marketing, financial management, technology adoption, and business growth strategies. These practical skills empower women to run their businesses more effectively.',
+          heading: 'Digital & Financial Tools Journalism',
+          body: 'We publish actionable guides on digital payments, inventory tracking, brand building, and formal credit, bridging information gaps for first-generation women business owners.',
         },
         {
-          heading: 'Partnerships',
-          body: 'We build partnerships with chambers of commerce, corporates, NGOs, government bodies, and other institutions to create a supportive ecosystem for women entrepreneurs.',
+          heading: 'Ecosystem & Institutional Dialogue',
+          body: 'We facilitate informed public discourse by engaging chambers of commerce, developmental agencies, and industry leaders in discussions on removing structural barriers for female founders.',
         },
         {
-          heading: 'Showcase Platforms',
-          body: 'We create platforms where women entrepreneurs can showcase their work, products, and stories — giving them the recognition they deserve and connecting them with wider audiences.',
-        },
-      ],
-    },
-    impact: [],
-    goal: 'To help more women move from earning a livelihood to building sustainable enterprises.',
-    goalVision:
-      'We believe every woman has the potential to build a sustainable enterprise. Our mission is to remove barriers, create opportunities, and provide the support systems women need to thrive as entrepreneurs and community leaders.',
-    goalPillars: [
-      {
-        icon: 'Users',
-        heading: 'Mentorship & Networks',
-        body: 'Connecting women with mentors, industry networks, and peer communities that fuel growth and open doors.',
-      },
-      {
-        icon: 'PiggyBank',
-        heading: 'Access & Awareness',
-        body: 'Creating pathways to capital, government schemes, funding, and market opportunities for women-led businesses.',
-      },
-      {
-        icon: 'Award',
-        heading: 'Skills & Visibility',
-        body: 'Building capabilities in branding, digital tools, financial management, and amplifying women-owned businesses.',
-      },
-    ],
-  },
-  'shgs': {
-    title: 'SHGs',
-    icon: HeartHandshake,
-    color: 'text-secondary-500',
-    bgColor: 'bg-secondary-50',
-    heroDescription:
-      "We work with Self Help Groups as important engines of women's economic empowerment and community development. Our focus is not only on highlighting SHG stories, but on helping strengthen their visibility, knowledge, leadership, and access to opportunities.",
-    sections: {
-      intro:
-        'Our work with Self Help Groups goes beyond recognition — we actively strengthen their capabilities, connect them to wider networks, and create opportunities for growth. We believe SHGs are powerful engines of grassroots change, and we are committed to helping them evolve and thrive.',
-      items: [
-        {
-          heading: 'Documentation & Amplification',
-          body: 'We document and amplify successful SHG models and community-led initiatives, sharing their stories to inspire others and attract support from partners and institutions.',
-        },
-        {
-          heading: 'Market & Partner Connections',
-          body: 'We connect SHGs with markets, institutions, brands, and potential partners who can help them scale their products and services beyond local boundaries.',
-        },
-        {
-          heading: 'Capacity Building',
-          body: 'We support capacity building in entrepreneurship, digital skills, financial literacy, leadership, and business management — equipping SHG members with the tools they need to succeed.',
-        },
-        {
-          heading: 'Awareness & Opportunities',
-          body: 'We create awareness about government schemes, support programmes, and market opportunities that can benefit SHGs and their members.',
-        },
-        {
-          heading: 'Showcase & Visibility',
-          body: 'We help showcase SHG products, businesses, and local enterprises through our platform, giving them the visibility they deserve among wider audiences.',
-        },
-        {
-          heading: 'Network Facilitation',
-          body: 'We facilitate connections between SHGs, entrepreneurs, NGOs, corporates, and government institutions to create a collaborative ecosystem for growth.',
-        },
-        {
-          heading: 'Knowledge Sharing',
-          body: 'We promote knowledge-sharing between different communities and SHG networks, creating a culture of learning and mutual support.',
+          heading: 'Documentary Storytelling',
+          body: 'Our multimedia reporting team produces high-impact video documentaries showcasing the grit and triumph of women navigating competitive markets from remote corners of the country.',
         },
       ],
     },
     impact: [
-      { value: 250, suffix: '+', label: 'SHGs Strengthened' },
-      { value: 1500, suffix: '+', label: 'Women SHG Members' },
-      { value: 100, suffix: '+', label: 'SHG Brand Integration' },
+      { value: 450, suffix: '+', label: 'Entrepreneurs Profiled' },
+      { value: 85, suffix: '+', label: 'Field Video Reports' },
+      { value: 25, suffix: '+', label: 'States & UTs Covered' },
     ],
-    goal: 'To help Self Help Groups evolve from savings and credit collectives into stronger, sustainable, and market-connected community enterprises.',
+    goal: 'To document, inspire, and advocate for an economic environment where every woman can build a thriving enterprise.',
     goalVision:
-      'We believe Self Help Groups are powerful engines of grassroots change. Our mission is to strengthen their capabilities, amplify their impact, and connect them to markets, networks, and opportunities that drive sustainable growth.',
+      'We believe rigorous journalism has the power to shift narratives and drive policy reform. Our mission is to shine a relentless spotlight on women-led enterprises and the structural changes needed to support their long-term growth.',
     goalPillars: [
       {
         icon: 'Users',
-        heading: 'Visibility & Storytelling',
-        body: 'Documenting and amplifying SHG success stories, models, and community-led initiatives to inspire and inform.',
-      },
-      {
-        icon: 'HeartHandshake',
-        heading: 'Capacity & Connections',
-        body: 'Building skills in entrepreneurship, digital literacy, and financial management while connecting SHGs to markets and partners.',
+        heading: 'In-Depth Storytelling',
+        body: 'Highlighting unsung entrepreneurs and sharing practical roadmaps of grassroots business success.',
       },
       {
         icon: 'PiggyBank',
-        heading: 'Markets & Growth',
-        body: 'Creating pathways for SHG products and enterprises to reach wider markets, access funding, and achieve sustainability.',
+        heading: 'Policy & Scheme Insights',
+        body: 'Translating complex economic policies and financial schemes into actionable ground-level reporting.',
+      },
+      {
+        icon: 'Award',
+        heading: 'Public Discourse & Advocacy',
+        body: 'Fostering informed dialogues between policymakers, financial institutions, and grassroots business leaders.',
+      },
+    ],
+  },
+  'shgs': {
+    title: 'Self Help Groups (SHGs)',
+    icon: HeartHandshake,
+    color: 'text-secondary-500',
+    bgColor: 'bg-secondary-50',
+    heroDescription:
+      'Self Help Groups are the backbone of rural economic transformation. We provide exhaustive, on-the-ground reporting on SHG federations, collective enterprise, and community leadership across Central India.',
+    sections: {
+      intro:
+        'Our coverage of Self Help Groups goes beyond superficial accounts. We report on the financial mechanics, collective decision-making, and systemic challenges of SHG federations, giving voice to millions of women transforming their local economies.',
+      items: [
+        {
+          heading: 'Grassroots Documentation & Case Studies',
+          body: 'We travel to village panchayats to chronicle how women-led savings groups evolve into thriving producer companies and resilient community institutions.',
+        },
+        {
+          heading: 'Credit Linkage & Banking Investigations',
+          body: 'We investigate banking accessibility, credit delivery rates, and interest burdens, bringing transparency to how formal finance serves grassroots collectives.',
+        },
+        {
+          heading: 'Showcasing Community Enterprises',
+          body: 'We spotlight indigenous handicrafts, agricultural value-addition, and local manufacturing spearheaded by SHG collectives across Central India.',
+        },
+        {
+          heading: 'Amplifying Rural Federation Leaders',
+          body: 'We give women federation leaders a prominent media platform to share systemic hurdles, best practices, and policy recommendations directly with national audiences.',
+        },
+        {
+          heading: 'Cross-Regional Knowledge Exchange',
+          body: 'We produce comparative reports showcasing innovative SHG governance models across different states to foster cross-pollination of community ideas.',
+        },
+        {
+          heading: 'Documenting Institutional Partnerships',
+          body: 'We analyze the intersection of government livelihoods missions, CSR collaborations, and grassroots SHGs to highlight what works and where gaps persist.',
+        },
+      ],
+    },
+    impact: [
+      { value: 500, suffix: '+', label: 'SHG Collectives Documented' },
+      { value: 15000, suffix: '+', label: 'Women Voices Amplified' },
+      { value: 120, suffix: '+', label: 'In-Depth Case Studies' },
+    ],
+    goal: 'To chronicle and champion the evolution of Self Help Groups into formidable economic and social institutions.',
+    goalVision:
+      'SHGs represent one of the world\'s largest collective empowerment movements. Our mission is to ensure their achievements, challenges, and insights receive serious, persistent journalistic scrutiny and celebration.',
+    goalPillars: [
+      {
+        icon: 'Users',
+        heading: 'Field Investigations',
+        body: 'Ground-truthing government initiatives and chronicling real-world impact across village clusters.',
+      },
+      {
+        icon: 'HeartHandshake',
+        heading: 'Collective Visibility',
+        body: 'Giving national prominence to artisan collectives and rural producer enterprises.',
+      },
+      {
+        icon: 'PiggyBank',
+        heading: 'Policy & Credit Focus',
+        body: 'Scrutinizing financial delivery systems to advocate for equitable rural banking access.',
       },
     ],
   },
@@ -154,127 +154,123 @@ const contentMap = {
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
     heroDescription:
-      "Economic independence begins with the ability to understand, manage, and control one\u2019s finances. We work to make financial knowledge more accessible to women and communities, particularly those who may not have easy access to formal financial education.",
+      'Economic independence begins with financial autonomy and rights awareness. We produce investigative reports, explainer guides, and field stories on banking access, digital finance safety, and welfare schemes.',
     sections: {
       intro:
-        'Financial literacy is the foundation of economic independence. Our approach is practical, accessible, and tailored to the real needs of women and communities. We break down complex financial concepts into simple, actionable knowledge that empowers women to take control of their financial futures.',
+        'Financial systems can be intimidating without transparent information. Through investigative articles, explainer guides, and video tutorials, we break down banking protocols, credit access, and digital payments for women striving for self-reliance.',
       items: [
         {
-          heading: 'Financial Resources',
-          body: 'We create simple and accessible resources on saving, budgeting, banking, credit, insurance, and digital payments — making financial knowledge available to everyone, regardless of their educational background.',
+          heading: 'Demystifying Banking & Credit',
+          body: 'We publish clear, accessible explainers on formal banking procedures, interest calculations, credit scores, collateral rights, and insurance products.',
         },
         {
-          heading: 'Scheme Awareness',
-          body: 'We build awareness about government schemes, loans, grants, and financial support available to women, ensuring they can access the benefits and opportunities they are entitled to.',
+          heading: 'Digital Finance Safety & Cyber Hygiene',
+          body: 'We educate our readership on digital payment safety, UPI transactions, fraud prevention, and navigating the digital economy with security.',
         },
         {
-          heading: 'Business Finance',
-          body: 'We promote understanding of business finances, pricing, bookkeeping, and cash flow — essential skills for women entrepreneurs who want to build sustainable enterprises.',
+          heading: 'Welfare Scheme Navigators',
+          body: 'We track, analyze, and report on state and central welfare schemes, detailing eligibility criteria, documentation checklists, and application workflows.',
         },
         {
-          heading: 'Banking Access',
-          body: 'We encourage women to access formal banking and financial services, helping them open accounts, use digital banking, and build a formal financial identity.',
+          heading: 'Business Finance Journalism',
+          body: 'We report on pricing strategies, working capital management, and cash flow fundamentals tailored for grassroots entrepreneurs and small businesses.',
         },
         {
-          heading: 'Digital Finance Education',
-          body: 'We create educational content on digital financial tools and safe digital transactions, helping women navigate the digital economy with confidence.',
+          heading: 'Investigating Predatory Lending',
+          body: 'We shine a light on informal debt traps, high-interest microloans, and fraudulent investment schemes to protect vulnerable rural communities.',
         },
         {
-          heading: 'Institutional Connections',
-          body: 'We connect women entrepreneurs and SHGs with relevant financial institutions and support networks that can provide the resources they need to grow.',
-        },
-        {
-          heading: 'Financial Independence',
-          body: "We promote the importance of independent income and financial decision-making, empowering women to take charge of their economic lives and build a secure future.",
-        },
-      ],
-    },
-    impact: [],
-    goal: 'To help women make informed financial decisions, build independent incomes, and participate more confidently in the formal economy.',
-    goalVision:
-      'We believe financial literacy is the foundation of economic independence. Our mission is to make financial knowledge accessible, practical, and actionable for every woman \u2014 enabling her to take control of her financial future.',
-    goalPillars: [
-      {
-        icon: 'PiggyBank',
-        heading: 'Knowledge & Resources',
-        body: 'Creating simple, accessible resources on saving, budgeting, banking, credit, insurance, and digital payments tailored for women.',
-      },
-      {
-        icon: 'Users',
-        heading: 'Access & Inclusion',
-        body: 'Building awareness of government schemes, banking services, and financial support while connecting women to formal financial systems.',
-      },
-      {
-        icon: 'Award',
-        heading: 'Income & Independence',
-        body: 'Empowering women to understand business finances, build independent incomes, and make confident financial decisions.',
-      },
-    ],
-  },
-  'leadership-skill-development': {
-    title: 'Leadership & Skill Development',
-    icon: Award,
-    color: 'text-amber-600',
-    bgColor: 'bg-amber-50',
-    heroDescription:
-      'Empowerment is not only about earning. It is also about having the confidence, skills, and opportunity to lead. We work to build the capabilities of women and young people so they can lead businesses, communities, institutions, and social change.',
-    sections: {
-      intro:
-        'Leadership is built, not born. Our approach focuses on creating opportunities for women to discover and develop their leadership potential. Through training, mentorship, and real-world experiences, we equip women with the skills, confidence, and networks they need to lead effectively in every sphere of life.',
-      items: [
-        {
-          heading: 'Training & Workshops',
-          body: 'We organise training programmes, workshops, and learning initiatives that build practical skills and knowledge — from communication and public speaking to project management and community organising.',
-        },
-        {
-          heading: 'Skill Building',
-          body: 'We build skills in communication, leadership, entrepreneurship, digital technology, and business management — creating well-rounded leaders who can navigate complex challenges.',
-        },
-        {
-          heading: 'Mentorship & Expert Connect',
-          body: 'We connect women with mentors, professionals, trainers, and industry experts who can guide, inspire, and support them on their leadership journey.',
-        },
-        {
-          heading: 'Knowledge Sharing',
-          body: 'We create opportunities for women to share their knowledge and experiences with peers and communities, building confidence and reinforcing learning through teaching.',
-        },
-        {
-          heading: 'Community Leadership',
-          body: 'We support leadership development within communities and Self Help Groups, nurturing grassroots leaders who can drive change from within.',
-        },
-        {
-          heading: 'Peer Networks',
-          body: 'We promote networking and peer-to-peer learning as powerful tools for growth and confidence building, creating communities of mutual support and accountability.',
-        },
-        {
-          heading: 'Public Participation',
-          body: 'We build platforms where women can participate in conversations, decision-making, and public life — ensuring their voices are heard and their perspectives shape the decisions that affect them.',
+          heading: 'Economic Autonomy Narratives',
+          body: 'We share real-life case studies of women who broke cycles of financial dependency to achieve independent asset ownership and financial dignity.',
         },
       ],
     },
     impact: [
-      { value: 500, suffix: '+', label: 'Women Trained in Leadership' },
-      { value: 100, suffix: '+', label: 'Women in Leadership Roles' },
-      { value: 400, suffix: '+', label: 'Women in STEM' },
+      { value: 200, suffix: '+', label: 'Financial Explainers Published' },
+      { value: 50, suffix: 'K+', label: 'Readers Reached Monthly' },
+      { value: 40, suffix: '+', label: 'Welfare Schemes Analyzed' },
     ],
-    goal: 'To equip women with the knowledge, skills, confidence, and networks needed to lead and create change.',
+    goal: 'To equip every reader with the critical knowledge needed to manage finances safely, independently, and confidently.',
     goalVision:
-      'We believe leadership is not defined by position, but by the ability to inspire, influence, and create change. Our mission is to build a pipeline of women leaders who can drive transformation in their communities, businesses, and institutions.',
+      'Information is the first step toward economic freedom. We strive to eliminate information asymmetry so women and rural communities can participate equally and safely in the formal financial system.',
     goalPillars: [
       {
-        icon: 'Award',
-        heading: 'Training & Skill Building',
-        body: 'Organising workshops, training programmes, and learning initiatives that build communication, leadership, entrepreneurship, and digital skills.',
+        icon: 'PiggyBank',
+        heading: 'Clear Financial Guides',
+        body: 'Translating complex banking regulations and financial products into simple, accessible language.',
       },
       {
         icon: 'Users',
-        heading: 'Mentorship & Connections',
-        body: 'Connecting women with mentors, professionals, trainers, and industry experts while promoting networking and peer-to-peer learning.',
+        heading: 'Digital Safety Awareness',
+        body: 'Investigating financial fraud and equipping readers with preventative cyber hygiene practices.',
+      },
+      {
+        icon: 'Award',
+        heading: 'Financial Autonomy Stories',
+        body: 'Chronicling inspiring journeys of women achieving independent income and asset ownership.',
+      },
+    ],
+  },
+  'leadership-skill-development': {
+    title: 'Leadership & Community Voices',
+    icon: Award,
+    color: 'text-amber-600',
+    bgColor: 'bg-amber-50',
+    heroDescription:
+      'Empowerment is incomplete without the agency to lead and govern. We chronicle the journeys of grassroots women and youth rising into positions of influence across panchayats, community institutions, and social enterprise.',
+    sections: {
+      intro:
+        'Leadership flourishes in village halls, community meetings, and agricultural cooperatives. We provide dedicated coverage to the changemakers challenging social norms, demanding administrative accountability, and steering grassroots governance.',
+      items: [
+        {
+          heading: 'Panchayat & Local Governance Reporting',
+          body: 'We profile women Sarpanches, ward members, and local administrators who are transforming village governance, education, and public sanitation.',
+        },
+        {
+          heading: 'Youth Innovators & Changemakers',
+          body: 'We report on young pioneers leveraging technology, education, and social enterprise to solve community bottlenecks in rural India.',
+        },
+        {
+          heading: 'Systemic Barriers & Gender Discourse',
+          body: 'We investigate the patriarchal norms, administrative resistance, and cultural barriers women overcome to assert their leadership.',
+        },
+        {
+          heading: 'Thought Leadership & Podcasts',
+          body: 'We host in-depth video interviews and podcast discussions where grassroots leaders engage directly with civil society experts and policymakers.',
+        },
+        {
+          heading: 'Grassroots Best Practices',
+          body: 'We document innovative community mobilization methods, conflict resolution strategies, and collaborative development models.',
+        },
+        {
+          heading: 'Amplifying Unheard Perspectives',
+          body: 'We serve as a national sounding board for grassroots women whose achievements and governance innovations deserve wider recognition.',
+        },
+      ],
+    },
+    impact: [
+      { value: 350, suffix: '+', label: 'Grassroots Leaders Profiled' },
+      { value: 120, suffix: '+', label: 'Documentary Video Episodes' },
+      { value: 55, suffix: '+', label: 'Districts Covered in MP & CG' },
+    ],
+    goal: 'To document, celebrate, and amplify the voices of grassroots leaders who are transforming communities from within.',
+    goalVision:
+      'Every village and community has leaders whose courage reshapes society. Our journalistic mission is to ensure their leadership is documented, celebrated, and preserved in the public record.',
+    goalPillars: [
+      {
+        icon: 'Award',
+        heading: 'Leadership Profiling',
+        body: 'Documenting individual courage, governance reforms, and transformative community initiatives.',
+      },
+      {
+        icon: 'Users',
+        heading: 'Policy & Structural Reporting',
+        body: 'Examining the social and policy structures that impact female leadership in local governance.',
       },
       {
         icon: 'HeartHandshake',
-        heading: 'Platforms & Opportunities',
-        body: 'Creating platforms for women to participate in conversations, decision-making, and public life while sharing their knowledge and experiences.',
+        heading: 'Public Discourse Platforms',
+        body: 'Providing video and podcast forums for emerging rural changemakers to share their visions.',
       },
     ],
   },
@@ -495,13 +491,13 @@ export default function WhatWeDoDetail() {
           <FloatingDots count={4} />
           <div className="container-content relative z-10">
             <h2 className="text-3xl lg:text-4xl font-heading font-bold text-white">
-              Want to Support {content.title}?
+              Have a Story on {content.title}?
             </h2>
             <p className="text-lg text-white/80 mt-4 max-w-xl mx-auto">
-              Join us in our mission to empower rural communities.
+              Share your grassroots initiative, pitch an investigative feature, or collaborate with our newsroom.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
-              <Button variant="secondary" to="/join-our-initiative" arrow>Join Our Initiative</Button>
+              <Button variant="secondary" to="/get-featured" arrow>Pitch Your Story</Button>
               <Button variant="outline" to="/partner-with-us" className="border-white text-white hover:bg-white hover:text-primary-500">Partner With Us</Button>
             </div>
           </div>

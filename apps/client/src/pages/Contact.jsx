@@ -26,27 +26,63 @@ const topFaqs = [
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
     try {
       await api.post('/contact', form);
       setSubmitted(true);
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to send message. Please try again.');
+      setError(err.response?.data?.message || 'Failed to send message. Please check your inputs and try again.');
     } finally {
       setLoading(false);
     }
+  };
+
+  const renderContactValue = (label, value) => {
+    if (label === 'Phone') {
+      return (
+        <a
+          href="tel:+917470527279"
+          className="hover:text-primary-600 focus:outline-none focus-visible:underline transition-colors"
+        >
+          {value}
+        </a>
+      );
+    }
+    if (label === 'Alternate') {
+      return (
+        <a
+          href="tel:07314073804"
+          className="hover:text-primary-600 focus:outline-none focus-visible:underline transition-colors"
+        >
+          {value}
+        </a>
+      );
+    }
+    if (label === 'Email') {
+      return (
+        <a
+          href={`mailto:${value}`}
+          className="hover:text-primary-600 focus:outline-none focus-visible:underline transition-colors"
+        >
+          {value}
+        </a>
+      );
+    }
+    return value;
   };
 
   return (
     <>
       <Helmet>
         <title>Contact Us — Ravivar Vichar</title>
-        <meta name="description" content="Get in touch with Ravivar Vichar. Reach out for partnerships, volunteering, donations, or general inquiries." />
-      <link rel="preload" as="image" href="/contact-hero.jpg" />
+        <meta name="description" content="Get in touch with the Ravivar Vichar editorial team for inquiries, story tips, collaborations, or visits to our Indore office." />
+        <link rel="preload" as="image" href="/contact-hero.webp" type="image/webp" />
       </Helmet>
 
       <PageLayout>
@@ -80,17 +116,17 @@ export default function Contact() {
                 {contactInfo.map((item) => {
                   const Icon = item.icon;
                   const alternate = contactInfo.find((i) => i.label === 'Alternate');
-                  // 'Alternate' shows as its own row on desktop, but is merged into
-                  // the Phone row (same line) below 1150px.
                   if (item.label === 'Alternate') {
                     return (
                       <div key={item.label} className="hidden lg:flex items-start gap-4">
                         <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
-                          <Icon size={22} />
+                          <Icon size={22} aria-hidden="true" />
                         </div>
                         <div className="min-w-0">
                           <h4 className="text-sm font-semibold text-ink-primary uppercase tracking-wider">{item.label}</h4>
-                          <p className="text-body text-ink-secondary mt-1 break-words">{item.value}</p>
+                          <p className="text-body text-ink-secondary mt-1 break-words">
+                            {renderContactValue(item.label, item.value)}
+                          </p>
                         </div>
                       </div>
                     );
@@ -98,17 +134,22 @@ export default function Contact() {
                   return (
                     <div key={item.label} className="flex items-start gap-4">
                       <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-500">
-                        <Icon size={22} />
+                        <Icon size={22} aria-hidden="true" />
                       </div>
                       <div className="min-w-0">
                         <h4 className="text-sm font-semibold text-ink-primary uppercase tracking-wider">{item.label}</h4>
                         <p className="text-body text-ink-secondary mt-1 break-words">
-                          {item.value}
+                          {renderContactValue(item.label, item.value)}
                           {item.label === 'Phone' && alternate && (
                             <span className="ml-2 lg:hidden">
                               <span className="text-gray-300">|</span>{' '}
                               <span className="uppercase text-xs font-semibold text-ink-primary tracking-wider">Alternate:</span>{' '}
-                              {alternate.value}
+                              <a
+                                href="tel:07314073804"
+                                className="hover:text-primary-600 focus:outline-none focus-visible:underline transition-colors"
+                              >
+                                {alternate.value}
+                              </a>
                             </span>
                           )}
                         </p>
@@ -122,7 +163,7 @@ export default function Contact() {
               <div>
                 <div className="card p-8 lg:p-10">
                   {submitted ? (
-                    <div className="text-center py-12">
+                    <div role="status" aria-live="polite" className="text-center py-12">
                       <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-green-50 text-green-600 mb-6">
                         <Check size={32} />
                       </div>
@@ -134,33 +175,92 @@ export default function Contact() {
                     </div>
                   ) : (
                     <form onSubmit={handleSubmit} className="space-y-6">
+                      {error && (
+                        <div
+                          role="alert"
+                          aria-live="assertive"
+                          className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg"
+                        >
+                          {error}
+                        </div>
+                      )}
                       <div className="grid grid-cols-1 gap-6">
                         <div>
-                          <label className="label">Full Name *</label>
-                          <input type="text" className="input-field" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required placeholder="Your name" />
+                          <label htmlFor="contact-name" className="label">
+                            Full Name <span className="text-red-500" aria-hidden="true">*</span>
+                          </label>
+                          <input
+                            id="contact-name"
+                            name="name"
+                            type="text"
+                            autoComplete="name"
+                            className="input-field"
+                            value={form.name}
+                            onChange={(e) => setForm({ ...form, name: e.target.value })}
+                            required
+                            aria-required="true"
+                            placeholder="Your name"
+                          />
                         </div>
                         <div>
-                          <label className="label">Email Address *</label>
-                          <input type="email" className="input-field" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required placeholder="you@example.com" />
+                          <label htmlFor="contact-email" className="label">
+                            Email Address <span className="text-red-500" aria-hidden="true">*</span>
+                          </label>
+                          <input
+                            id="contact-email"
+                            name="email"
+                            type="email"
+                            autoComplete="email"
+                            className="input-field"
+                            value={form.email}
+                            onChange={(e) => setForm({ ...form, email: e.target.value })}
+                            required
+                            aria-required="true"
+                            placeholder="you@example.com"
+                          />
                         </div>
                       </div>
                       <div>
-                        <label className="label">Subject *</label>
-                        <select className="input-field" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} required>
+                        <label htmlFor="contact-subject" className="label">
+                          Subject <span className="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <select
+                          id="contact-subject"
+                          name="subject"
+                          className="input-field"
+                          value={form.subject}
+                          onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                          required
+                          aria-required="true"
+                        >
                           <option value="">Select a subject</option>
+                          <option value="Story Lead">Story Lead / Editorial Tip</option>
                           <option value="Partnership">Partnership Inquiry</option>
                           <option value="Volunteering">Volunteering</option>
-                          <option value="Donation">Donation</option>
                           <option value="General">General Inquiry</option>
                           <option value="Media">Media & Press</option>
                         </select>
                       </div>
                       <div>
-                        <label className="label">Message *</label>
-                        <textarea className="input-field min-h-[150px] resize-y" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required placeholder="Tell us how you'd like to connect..." />
+                        <label htmlFor="contact-message" className="label">
+                          Message <span className="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <textarea
+                          id="contact-message"
+                          name="message"
+                          className="input-field min-h-[150px] resize-y"
+                          value={form.message}
+                          onChange={(e) => setForm({ ...form, message: e.target.value })}
+                          required
+                          aria-required="true"
+                          placeholder="Tell us how you'd like to connect..."
+                        />
                       </div>
-                      <Button type="submit" variant="primary" className="w-full" disabled={loading}>
-                        {loading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                      <p className="text-xs text-ink-secondary/70">
+                        We respect your privacy. Your information is only used to respond to your inquiry and is never shared.
+                      </p>
+                      <Button type="submit" variant="primary" className="w-full justify-center" disabled={loading}>
+                        {loading ? <Loader2 size={18} className="animate-spin mr-2" /> : <Send size={18} className="mr-2" />}
                         {loading ? 'Sending...' : 'Send Message'}
                       </Button>
                     </form>

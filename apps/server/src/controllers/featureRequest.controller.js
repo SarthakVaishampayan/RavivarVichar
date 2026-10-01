@@ -5,12 +5,18 @@ const paginate = require('../utils/paginate');
 
 // POST /api/v1/feature-requests — public
 const submit = catchAsync(async (req, res) => {
-  const { name, placeOfWork, typeOfWork, phoneNo } = req.body;
+  const { name, placeOfWork, typeOfWork, phoneNo, storySummary } = req.body;
   if (!name || !placeOfWork || !typeOfWork || !phoneNo) {
-    return sendError(res, 'All fields are required', 400);
+    return sendError(res, 'Name, place of work, type of work, and phone number are required', 400);
   }
 
-  await FeatureRequest.create({ name, placeOfWork, typeOfWork, phoneNo });
+  await FeatureRequest.create({
+    name,
+    placeOfWork,
+    typeOfWork,
+    phoneNo,
+    storySummary: storySummary || '',
+  });
   sendSuccess(res, null, 'Your story has been submitted! We will review it and get back to you.', 201);
 });
 
@@ -28,7 +34,7 @@ const getAll = catchAsync(async (req, res) => {
     limit: req.query.limit,
     sort: req.query.sort || '-createdAt',
     search: req.query.search,
-    searchFields: ['name', 'placeOfWork', 'typeOfWork', 'phoneNo'],
+    searchFields: ['name', 'placeOfWork', 'typeOfWork', 'phoneNo', 'storySummary'],
   });
   sendSuccess(res, result.data, 'Feature requests fetched', 200, result.meta);
 });

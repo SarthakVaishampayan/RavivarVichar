@@ -9,28 +9,28 @@ const whatWeDoItems = [
     title: 'Women Entrepreneurship',
     icon: Briefcase,
     color: 'bg-primary-50 text-primary-500',
-    description: 'Helping women build, grow, and sustain successful businesses through knowledge, mentorship, market access, and partnerships.',
+    description: 'Documenting and amplifying the journeys of women transitioning from informal livelihoods to resilient, independent enterprises.',
   },
   {
     slug: 'shgs',
-    title: 'SHGs',
+    title: 'Self Help Groups (SHGs)',
     icon: HeartHandshake,
     color: 'bg-secondary-50 text-secondary-500',
-    description: 'Strengthening Self Help Groups through capacity building, financial inclusion, market linkages, and community-led development.',
+    description: 'Field reporting on rural credit collectives, community-led enterprises, and the transformative impact of SHG federations.',
   },
   {
     slug: 'financial-literacy',
-    title: 'Financial Literacy & Economic Independence',
+    title: 'Financial Literacy & Inclusion',
     icon: PiggyBank,
     color: 'bg-blue-50 text-blue-600',
-    description: 'Promoting financial awareness, entrepreneurship, digital payments, government schemes, and sustainable livelihoods for women.',
+    description: 'Demystifying banking, digital payments, government welfare schemes, and economic rights for grassroots communities.',
   },
   {
     slug: 'leadership-skill-development',
-    title: 'Leadership & Skill Development',
+    title: 'Leadership & Community Voices',
     icon: Award,
     color: 'bg-amber-50 text-amber-600',
-    description: 'Equipping women and young leaders with the skills, confidence, and opportunities needed to lead businesses, communities, and institutions.',
+    description: 'Spotlighting women panchayat leaders, rural innovators, and youth pioneers reshaping grassroots governance and society.',
   },
 ];
 
@@ -39,9 +39,9 @@ export default function ProgramsGrid({ bgClass = 'bg-surface-white' }) {
     <section className={`section-lg ${bgClass} section-separator`}>
       <div className="container-site">
         <SectionHeading
-          label="What We Do"
-          title="Ravivar's Focus"
-          description="We drive change through four interconnected pillars of community development."
+          label="EDITORIAL FOCUS"
+          title="What We Cover"
+          description="Investigative reporting and documentary storytelling across four core pillars of grassroots empowerment."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">

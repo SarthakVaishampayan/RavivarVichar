@@ -9,41 +9,39 @@ import { Play, Image, FileText, Calendar, ArrowRight } from 'lucide-react';
 const tabs = ['Gallery', 'Videos', 'Press Releases'];
 
 const galleryItems = [
-  { caption: 'Women Entrepreneurship Workshop in Bhilwara', category: 'Workshops' },
-  { caption: 'SHG Meeting in Chittorgarh District', category: 'Community' },
-  { caption: 'Health Camp at Udaipur Village', category: 'Health' },
-  { caption: 'Financial Literacy Training Session', category: 'Education' },
-  { caption: 'Annual Conference 2025 Group Photo', category: 'Events' },
-  { caption: 'Research Team Conducting Field Survey', category: 'Research' },
-  { caption: 'Organic Farming Training Program', category: 'Livelihood' },
-  { caption: 'Children\'s Education Initiative', category: 'Education' },
-  { caption: 'Community Festival Celebration', category: 'Community' },
+  { caption: 'Community gathering of women leaders in Central India', category: 'Field Reports', image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80' },
+  { caption: 'Women entrepreneurs creating handloom micro-enterprises', category: 'Enterprises', image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80' },
+  { caption: 'SHG federation meeting on collective savings and credit', category: 'Collectives', image: 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=800&q=80' },
+  { caption: 'Editorial field reporting team interviewing village artisans', category: 'Newsroom', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80' },
+  { caption: 'Showcasing indigenous crafts and rural production', category: 'Culture', image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&q=80' },
+  { caption: 'Grassroots dialogue on financial literacy and rights', category: 'Advocacy', image: 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=800&q=80' },
+  { caption: 'Documenting village outreach and women-led initiatives', category: 'Community', image: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600&q=80' },
+  { caption: 'Field survey on banking accessibility and digital payments', category: 'Research', image: 'https://images.unsplash.com/photo-1604881991720-f91add269bed?w=800&q=80' },
+  { caption: 'Honoring outstanding community changemakers and rural reporters', category: 'Recognition', image: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&q=80' },
 ];
 
 const videos = [
-  { title: 'Ravivar Vichar: Our Story', duration: '4:32', date: 'Jan 2025' },
-  { title: 'Women Entrepreneurs: Stories of Change', duration: '8:15', date: 'Nov 2024' },
-  { title: 'SHG Success Story: From Savings to Enterprise', duration: '6:45', date: 'Sep 2024' },
-  { title: 'Annual Conference 2025 Highlights', duration: '3:50', date: 'Mar 2025' },
+  { title: 'Ravivar Vichar: Three Decades from Print to Digital Journalism', duration: '5:40', date: 'Jan 2025', thumbnail: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80' },
+  { title: 'Women of Central India: Building Resilient Micro-Enterprises', duration: '8:15', date: 'Nov 2024', thumbnail: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&q=80' },
+  { title: 'The SHG Revolution: How Women Transformed Village Economies', duration: '6:45', date: 'Sep 2024', thumbnail: 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=800&q=80' },
+  { title: 'Panchayat Pioneers: Women Transforming Local Governance', duration: '7:20', date: 'Mar 2025', thumbnail: 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=800&q=80' },
 ];
 
 const pressReleases = [
-  { title: 'Ravivar Vichar Launches New Financial Literacy Program in 50 Villages', date: 'Feb 20, 2025', source: 'Press Trust of India' },
-  { title: 'NGO\'s Women Entrepreneurship Model Recognized by NITI Aayog', date: 'Jan 15, 2025', source: 'The Hindu' },
-  { title: 'Rural SHG Network Crosses 200 Groups Milestone', date: 'Dec 5, 2024', source: 'Times of India' },
-  { title: 'Research Report on Rural Financial Inclusion Launched', date: 'Oct 22, 2024', source: 'Indian Express' },
+  { title: "Ravivar Vichar's Field Investigation on Rural Credit Access Quoted in National Media", date: 'Feb 20, 2025', source: 'Press Trust of India' },
+  { title: "Ground Reporting on Rural Women Enterprises Recognized by Media Foundation", date: 'Jan 15, 2025', source: 'The Hindu' },
+  { title: "Digital Video Series on Women Changemakers Crosses 50 Million Digital Impressions", date: 'Dec 5, 2024', source: 'Times of India' },
+  { title: "Special Investigation: How Grassroots SHGs Weathered Economic Shifts in Central India", date: 'Oct 22, 2024', source: 'Indian Express' },
 ];
 
 export default function Media() {
   const [activeTab, setActiveTab] = useState('Gallery');
 
-
-
   return (
     <>
       <Helmet>
         <title>Media — Ravivar Vichar</title>
-        <meta name="description" content="Browse photos, videos, and press releases from Ravivar Vichar's rural development programs and events." />
+        <meta name="description" content="Browse photos, video documentaries, and press coverage from Ravivar Vichar's field reporting and storytelling across India." />
         <link rel="preload" as="image" href="/hero-image.webp" type="image/webp" />
       </Helmet>
 
@@ -61,7 +59,7 @@ export default function Media() {
                 <span className="text-primary-500">Impact</span>
               </h1>
               <p className="text-lg text-white/70 mt-6 leading-relaxed max-w-[550px]">
-                Browse through photos, videos, and press coverage showcasing our work and the communities we serve.
+                Browse through field photography, video documentaries, and press coverage showcasing our ground reporting and the communities we chronicle.
               </p>
 
               {/* Tabs */}
@@ -92,17 +90,25 @@ export default function Media() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {galleryItems.map((item, i) => (
                   <div key={i} className={`group relative overflow-hidden rounded-card cursor-pointer${i === galleryItems.length - 1 ? ' md:col-span-2 md:max-w-[calc((100%-1.5rem)/2)] md:mx-auto lg:col-span-1 lg:max-w-none' : ''}`}>
-                    <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">
-                      <Image size={40} className="text-gray-300" />
+                    <div className="aspect-[4/3] bg-gray-100 overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt={item.caption}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-black/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="absolute top-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-5">
-                        <span className="text-xs font-semibold text-white/80 bg-primary-500 px-2.5 py-1 rounded-full inline-block mb-2">{item.category}</span>
-                        <p className="text-white text-sm font-medium text-center leading-tight">{item.caption}</p>
-                      </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                      <span className="text-xs font-semibold text-white/90 bg-primary-500 px-2.5 py-1 rounded-full self-start mb-2">{item.category}</span>
+                      <p className="text-white text-sm font-medium leading-snug">{item.caption}</p>
                     </div>
                   </div>
                 ))}
+              </div>
+              <div className="text-center mt-12">
+                <Button variant="primary" to="/gallery" arrow>
+                  View Full Interactive Gallery
+                </Button>
               </div>
             </div>
           </section>
@@ -115,16 +121,24 @@ export default function Media() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {videos.map((video) => (
                   <div key={video.title} className="card-hover overflow-hidden group">
-                    <div className="aspect-video bg-gray-900 flex items-center justify-center relative">
-                      <div className="h-16 w-16 rounded-full bg-primary-500/90 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <Play size={24} className="text-white ml-1" />
+                    <div className="aspect-video bg-gray-900 flex items-center justify-center relative overflow-hidden">
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-75 group-hover:scale-105 transition-all duration-500"
+                      />
+                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                        <div className="h-16 w-16 rounded-full bg-primary-500/90 flex items-center justify-center group-hover:scale-110 shadow-lg transition-transform duration-300">
+                          <Play size={24} className="text-white ml-1" />
+                        </div>
                       </div>
-                      <span className="absolute bottom-3 right-3 text-xs font-medium px-2 py-1 rounded bg-black/60 text-white">
+                      <span className="absolute bottom-3 right-3 text-xs font-medium px-2 py-1 rounded bg-black/70 text-white">
                         {video.duration}
                       </span>
                     </div>
                     <div className="p-5">
-                      <h3 className="font-bold font-heading text-ink-primary">{video.title}</h3>
+                      <h3 className="font-bold font-heading text-ink-primary text-base group-hover:text-primary-600 transition-colors">{video.title}</h3>
                       <span className="text-sm text-ink-secondary mt-1 block">{video.date}</span>
                     </div>
                   </div>
