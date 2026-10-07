@@ -36,6 +36,15 @@ const toAbsoluteUrl = (url) => {
   return `${siteUrl()}${path}`;
 };
 
+const getMimeType = (url = '') => {
+  const clean = String(url).split('?')[0].toLowerCase();
+  if (clean.endsWith('.png')) return 'image/png';
+  if (clean.endsWith('.webp')) return 'image/webp';
+  if (clean.endsWith('.gif')) return 'image/gif';
+  if (clean.endsWith('.jpg') || clean.endsWith('.jpeg')) return 'image/jpeg';
+  return null;
+};
+
 const escapeHtml = (str = '') =>
   String(str)
     .replace(/&/g, '&amp;')
@@ -100,7 +109,7 @@ const buildArticleHeadTags = (article, canonicalUrl) => {
     ogImage && ogImage.startsWith('https://') ? `<meta property="og:image:secure_url" content="${escapeHtml(ogImage)}">` : null,
     ogImage ? '<meta property="og:image:width" content="1200">' : null,
     ogImage ? '<meta property="og:image:height" content="630">' : null,
-    ogImage ? '<meta property="og:image:type" content="image/jpeg">' : null,
+    ogImage && getMimeType(ogImage) ? `<meta property="og:image:type" content="${getMimeType(ogImage)}">` : null,
     // Twitter Card
     `<meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}">`,
     `<meta name="twitter:title" content="${escapeHtml(seo.twitterTitle || seo.ogTitle || article.title)}">`,
@@ -120,16 +129,16 @@ const renderWithTemplate = (headTags) => {
   let html = indexTemplate;
 
   // 1. Strip default title
-  html = html.replace(/<title>[^<]*<\/title>/gi, '');
+  html = html.replace(/<title[^>]*>[\s\S]*?<\/title>/gi, '');
 
   // 2. Strip default meta description
-  html = html.replace(/<meta\s+name=["']description["'][^>]*>/gi, '');
+  html = html.replace(/<meta\b[^>]*?\bname=["']description["'][^>]*>/gi, '');
 
   // 3. Strip all default Open Graph meta tags to eliminate duplicate/conflicting tags
-  html = html.replace(/<meta\s+property=["']og:[^"']*["'][^>]*>/gi, '');
+  html = html.replace(/<meta\b[^>]*?\bproperty=["']og:[^"']*["'][^>]*>/gi, '');
 
   // 4. Strip all default Twitter card meta tags
-  html = html.replace(/<meta\s+name=["']twitter:[^"']*["'][^>]*>/gi, '');
+  html = html.replace(/<meta\b[^>]*?\bname=["']twitter:[^"']*["'][^>]*>/gi, '');
 
   // 5. Insert all article-specific tags right before </head>
   html = html.replace('</head>', `    ${headTags}\n  </head>`);
@@ -321,7 +330,7 @@ router.get('/recognitions/:slug', async (req, res) => {
       ogImage && ogImage.startsWith('https://') ? `<meta property="og:image:secure_url" content="${escapeHtml(ogImage)}">` : null,
       ogImage ? '<meta property="og:image:width" content="1200">' : null,
       ogImage ? '<meta property="og:image:height" content="630">' : null,
-      ogImage ? '<meta property="og:image:type" content="image/jpeg">' : null,
+      ogImage && getMimeType(ogImage) ? `<meta property="og:image:type" content="${getMimeType(ogImage)}">` : null,
       `<meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}">`,
       `<meta name="twitter:title" content="${escapeHtml(recognition.title)}">`,
       `<meta name="twitter:description" content="${escapeHtml(description)}">`,
