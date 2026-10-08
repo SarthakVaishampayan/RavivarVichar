@@ -193,23 +193,36 @@ export default function ArticleDetail() {
   // Plain 'Article' by default — NewsArticle is only correct for genuine news
   const schemaType = seo.schemaType || 'Article';
 
-  // Sharing needs the DECODED canonical URL. window.location.href and
-  // window.location.pathname are percent-encoded (Devanagari → %E0%A4...),
-  // and putting the encoded form in the message makes WhatsApp show it as
-  // plain text instead of generating a Rich Link Preview. Decoding restores
-  // the clean Hindi URL; WhatsApp re-encodes it at the HTTP level when it
-  // fetches the page for preview metadata. The same clean URL is what we
-  // copy to the clipboard for pasting anywhere else.
-  const shareUrl = (() => {
-    const url = canonicalUrl || window.location.href;
-    try {
-      return decodeURIComponent(url);
-    } catch {
-      return url;
-    }
-  })();
+  // Share URL preserves the valid percent-encoded path (e.g. Hindi/Unicode slugs remain encoded)
+  // so external social crawlers and messaging apps receive RFC-compliant URLs.
+  const shareUrl = typeof window !== 'undefined' ? (canonicalUrl || window.location.href) : '';
 
-  // Copy the clean article URL to the clipboard (with a legacy fallback for
+  const handleShareWhatsApp = async () => {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: article.title,
+          text: article.excerpt || '',
+          url: shareUrl,
+        });
+        return;
+      } catch (error) {
+        if (error?.name === 'AbortError') {
+          return;
+        }
+        console.error('Share failed:', error);
+        return;
+      }
+    }
+
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(shareUrl)}`,
+      '_blank',
+      'noopener,noreferrer,width=600,height=400'
+    );
+  };
+
+  // Copy the article URL to the clipboard (with a legacy fallback for
   // browsers that don't support navigator.clipboard).
   const handleCopyLink = async () => {
     try {
@@ -406,13 +419,9 @@ export default function ArticleDetail() {
                   label="Share on Facebook"
                   onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank', 'noopener,noreferrer,width=600,height=400')}
                 ><Facebook size={16} /></ShareButton>
-                {/* WhatsApp — message contains ONLY the clean (decoded) article
-                    URL so WhatsApp fetches it and renders the Rich Link Preview
-                    card (image, Hindi title, description, domain) from the
-                    page's server-rendered Open Graph tags. */}
                 <ShareButton
                   label="Share via WhatsApp"
-                  onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(shareUrl)}`, '_blank', 'noopener,noreferrer,width=600,height=400')}
+                  onClick={handleShareWhatsApp}
                 ><WhatsAppIcon size={16} /></ShareButton>
                 {/* Copy link — puts the clean article URL on the clipboard */}
                 <ShareButton
@@ -446,7 +455,7 @@ export default function ArticleDetail() {
               ><Facebook size={18} /></ShareButton>
               <ShareButton
                 label="Share via WhatsApp"
-                onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(shareUrl)}`, '_blank', 'noopener,noreferrer,width=600,height=400')}
+                onClick={handleShareWhatsApp}
               ><WhatsAppIcon size={18} /></ShareButton>
               <ShareButton
                 label={copied ? 'Copied!' : 'Copy article link'}
