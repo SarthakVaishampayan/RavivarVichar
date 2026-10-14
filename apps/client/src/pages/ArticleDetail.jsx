@@ -197,28 +197,11 @@ export default function ArticleDetail() {
   // so external social crawlers and messaging apps receive RFC-compliant URLs.
   const shareUrl = typeof window !== 'undefined' ? (canonicalUrl || window.location.href) : '';
 
-  const handleShareWhatsApp = async () => {
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      try {
-        await navigator.share({
-          title: article.title,
-          text: article.excerpt || '',
-          url: shareUrl,
-        });
-        return;
-      } catch (error) {
-        if (error?.name === 'AbortError') {
-          return;
-        }
-        console.error('Share failed:', error);
-        return;
-      }
-    }
-
+  const handleShareWhatsApp = () => {
     window.open(
-      `https://wa.me/?text=${encodeURIComponent(shareUrl)}`,
+      `https://api.whatsapp.com/send?text=${encodeURIComponent(shareUrl)}`,
       '_blank',
-      'noopener,noreferrer,width=600,height=400'
+      'noopener,noreferrer'
     );
   };
 
